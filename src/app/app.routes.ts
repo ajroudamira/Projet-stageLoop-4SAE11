@@ -10,6 +10,7 @@ import { PasswordComponent } from './password/password.component';
 import { RegisterComponent } from './register/register.component';
 import { LayoutStaticComponent } from './back-office/layout-static/layout-static.component';
 import { LayoutSidenavLightComponent } from './back-office/layout-sidenav-light/layout-sidenav-light.component';
+import { HomeComponent } from './home/home.component';
 
 export const routes: Routes = [
   {path:"back-office", children:[
@@ -19,6 +20,9 @@ export const routes: Routes = [
     {path:"layout-static", component:LayoutStaticComponent},
     {path:"layout-sidenav-ligh", component:LayoutSidenavLightComponent},
   ]},
+  {path : "home", component:HomeComponent},
+  {path : "", redirectTo:"home", pathMatch: 'full'},
+
   {path:"401", component:Error401Component},
   {path:"404", component:Error404Component},
   {path:"500", component:Error500Component},
