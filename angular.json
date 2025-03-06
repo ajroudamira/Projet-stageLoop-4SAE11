@@ -3,7 +3,7 @@
   "version": 1,
   "newProjectRoot": "projects",
   "projects": {
-    "StageLoop_4SAE11": {
+    "gestion-formation-evenement": {
       "projectType": "application",
       "schematics": {},
       "root": "",
@@ -11,11 +11,11 @@
       "prefix": "app",
       "architect": {
         "build": {
-          "builder": "@angular-devkit/build-angular:application",
+          "builder": "@angular-devkit/build-angular:browser",
           "options": {
-            "outputPath": "dist/stage-loop-4-sae11",
+            "outputPath": "dist/gestion-formation-evenement",
             "index": "src/index.html",
-            "browser": "src/main.ts",
+            "main": "src/main.ts",
             "polyfills": [
               "zone.js"
             ],
@@ -25,16 +25,9 @@
               "src/assets"
             ],
             "styles": [
-              "src/styles.css",
-              "node_modules/datatables.net-dt/css/dataTables.dataTables.min.css",
-              "node_modules/bootstrap/dist/css/bootstrap.min.css"
+              "src/styles.css"
             ],
-            "scripts": [
-            "node_modules/jquery/dist/jquery.min.js",
-            "node_modules/datatables.net/js/dataTables.min.js",
-            "node_modules/datatables.net-dt/js/dataTables.dataTables.min.js",
-            "node_modules/bootstrap/dist/js/bootstrap.bundle.min.js"
-          ]
+            "scripts": []
           },
           "configurations": {
             "production": {
@@ -53,9 +46,12 @@
               "outputHashing": "all"
             },
             "development": {
+              "buildOptimizer": false,
               "optimization": false,
+              "vendorChunk": true,
               "extractLicenses": false,
-              "sourceMap": true
+              "sourceMap": true,
+              "namedChunks": true
             }
           },
           "defaultConfiguration": "production"
@@ -64,10 +60,10 @@
           "builder": "@angular-devkit/build-angular:dev-server",
           "configurations": {
             "production": {
-              "buildTarget": "StageLoop_4SAE11:build:production"
+              "browserTarget": "gestion-formation-evenement:build:production"
             },
             "development": {
-              "buildTarget": "StageLoop_4SAE11:build:development"
+              "browserTarget": "gestion-formation-evenement:build:development"
             }
           },
           "defaultConfiguration": "development"
@@ -75,7 +71,7 @@
         "extract-i18n": {
           "builder": "@angular-devkit/build-angular:extract-i18n",
           "options": {
-            "buildTarget": "StageLoop_4SAE11:build"
+            "browserTarget": "gestion-formation-evenement:build"
           }
         },
         "test": {
@@ -98,5 +94,8 @@
         }
       }
     }
+  },
+  "cli": {
+    "analytics": "d146a0b7-071f-42b0-a614-5fe079ab3304"
   }
 }
