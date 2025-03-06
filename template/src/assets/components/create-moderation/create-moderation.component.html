@@ -1,0 +1,40 @@
+<div class="container">
+    <h2>Créer une Modération</h2>
+    
+    <form (ngSubmit)="createModeration()" #moderationForm="ngForm">
+        <div class="form-group">
+            <label for="content">Contenu :</label>
+            <textarea 
+                id="content" 
+                [(ngModel)]="moderation.content" 
+                name="content" 
+                required 
+                minlength="5" 
+                maxlength="500" 
+                #contentInput="ngModel"></textarea>
+            <div *ngIf="contentInput.invalid && (contentInput.dirty || contentInput.touched)">
+                <div *ngIf="contentInput.errors?.['required']" class="error-message">Le contenu est requis.</div>
+                <div *ngIf="contentInput.errors?.['minlength']" class="error-message">Le contenu doit contenir au moins 5 caractères.</div>
+                <div *ngIf="contentInput.errors?.['maxlength']" class="error-message">Le contenu ne peut pas dépasser 500 caractères.</div>
+            </div>
+        </div>
+  
+        <div class="form-group">
+            <label for="approved">Approuvé :</label>
+            <select 
+                id="approved" 
+                [(ngModel)]="moderation.approved" 
+                name="approved" 
+                required 
+                #approvedInput="ngModel">
+                <option [value]="true">Oui</option>
+                <option [value]="false">Non</option>
+            </select>
+            <div *ngIf="approvedInput.invalid && (approvedInput.dirty || approvedInput.touched)" class="error-message">
+                L'approbation est requise.
+            </div>
+        </div>
+  
+        <button type="submit" class="btn-submit" [disabled]="moderationForm.invalid">Créer</button>
+    </form>
+</div>

@@ -1,0 +1,37 @@
+<div class="container">
+    <h2>Créer une Évaluation</h2>
+    <form (submit)="createEvaluation()" #evaluationForm="ngForm">
+        <div>
+            <label for="studentName">Nom de l'étudiant :</label>
+            <input id="studentName" [(ngModel)]="evaluation.studentName" name="studentName" required />
+            <div *ngIf="evaluationForm.submitted && !evaluation.studentName" class="error">
+                Le nom de l'étudiant est requis.
+            </div>
+        </div>
+
+        <div>
+            <label for="score">Score :</label>
+            <input
+                id="score"
+                type="number"
+                [(ngModel)]="evaluation.score"
+                name="score"
+                required
+                min="0"
+                max="100"
+            />
+            <div *ngIf="evaluationForm.submitted && (evaluation.score < 0 || evaluation.score > 100)" class="error">
+                Le score doit être entre 0 et 100.
+            </div>
+        </div>
+
+        <div>
+            <label for="comments">Commentaires :</label>
+            <textarea id="comments" [(ngModel)]="evaluation.comments" name="comments"></textarea>
+        </div>
+
+        <button type="submit" [disabled]="!evaluationForm.valid">Créer</button>
+    </form>
+
+  
+</div>

@@ -1,0 +1,34 @@
+<h2 mat-dialog-title>{{ data?.idFormation ? 'Modifier une formation' : 'Ajouter une formation' }}</h2>
+<form [formGroup]="formationForm" (ngSubmit)="submit()">
+  <mat-form-field class="full-width">
+    <mat-label>ID Formation</mat-label>
+    <input matInput formControlName="idFormation" [disabled]="true">
+  </mat-form-field>
+
+  <mat-form-field class="full-width">
+    <mat-label>Date Début</mat-label>
+    <input matInput type="date" formControlName="dateDebut" required>
+  </mat-form-field>
+
+  <mat-form-field class="full-width">
+    <mat-label>Date Fin</mat-label>
+    <input matInput type="date" formControlName="dateFin" required>
+  </mat-form-field>
+
+  <mat-form-field class="full-width">
+    <mat-label>Description</mat-label>
+    <input matInput formControlName="description" required>
+  </mat-form-field>
+
+  <mat-form-field class="full-width">
+    <mat-label>Formateur</mat-label>
+    <input matInput formControlName="formateur" required>
+  </mat-form-field>
+
+  <mat-form-field class="full-width">
+    <mat-label>Titre</mat-label>
+    <input matInput formControlName="titre" required>
+  </mat-form-field>
+
+  <button mat-raised-button color="primary" type="submit" [disabled]="formationForm.invalid">Enregistrer</button>
+</form>

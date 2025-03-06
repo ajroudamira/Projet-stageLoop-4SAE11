@@ -1,0 +1,29 @@
+<div class="container">
+    <h2>Calcul des frais de transport</h2>
+  
+    <div>
+      <label for="homeLocation">Emplacement de départ :</label>
+      <input type="text" id="homeLocation" [(ngModel)]="homeLocation" placeholder="Paris, France" />
+    </div>
+  
+    <div>
+      <label for="companyLocation">Emplacement de destination :</label>
+      <input type="text" id="companyLocation" [(ngModel)]="companyLocation" placeholder="Lyon, France" />
+    </div>
+  
+    <button (click)="calculateFee()">Calculer les frais</button>
+  
+    <div *ngIf="errorMessage" class="error-message">
+      <p>{{ errorMessage }}</p>
+    </div>
+  
+    <div *ngIf="transportFee" class="result">
+      <h3>Détails du frais de transport :</h3>
+      <p>ID: {{ transportFee.id }}</p>
+      <p>Emplacement de départ: {{ transportFee.homeLocation }}</p>
+      <p>Emplacement de destination: {{ transportFee.companyLocation }}</p>
+      <p>Distance: {{ transportFee.distance }} km</p>
+      <p>Frais mensuel: {{ (transportFee.fee * 30) | number:'1.2-2' }} DT</p>
+    </div>
+  </div>
+  

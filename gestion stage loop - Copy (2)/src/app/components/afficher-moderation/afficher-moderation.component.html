@@ -1,0 +1,58 @@
+<div class="container">
+  <h2>Liste des Modérations</h2>
+
+  <!-- Barre de recherche -->
+  <input type="text" [(ngModel)]="searchQuery" (input)="filterModerations()" 
+         placeholder="Rechercher par contenu ou statut..." class="search-bar"/>
+
+  <table border="1" class="table">
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>Contenu</th>
+        <th>Statut</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let moderation of filteredModerations">
+        <td>{{ moderation.id }}</td>
+
+        <!-- Contenu -->
+        <td>
+          <div *ngIf="!moderation.editMode">{{ moderation.content }}</div>
+          <div *ngIf="moderation.editMode">
+            <input [(ngModel)]="moderation.content" class="edit-input" required #contentInput="ngModel" />
+            <div *ngIf="contentInput.invalid && contentInput.touched" class="error">
+              ⚠️ Le contenu est obligatoire !
+            </div>
+          </div>
+        </td>
+
+        <!-- Statut -->
+        <td>
+          <span *ngIf="!moderation.editMode" [ngClass]="{'approved': moderation.approved, 'not-approved': !moderation.approved}">
+            {{ moderation.approved ? '✅ Approuvé' : '❌ Non approuvé' }}
+          </span>
+          <select *ngIf="moderation.editMode" [(ngModel)]="moderation.approved" class="edit-select">
+            <option [value]="true">✅ Approuvé</option>
+            <option [value]="false">❌ Non approuvé</option>
+          </select>
+        </td>
+
+        <!-- Actions -->
+        <td>
+          <button *ngIf="!moderation.editMode" (click)="editModeration(moderation)" class="btn-edit">Éditer</button>
+          <button *ngIf="moderation.editMode" (click)="updateModeration(moderation)" class="btn-save"
+                  [disabled]="!moderation.content">
+            💾 Sauvegarder
+          </button>
+          <button (click)="deleteModeration(moderation.id)" class="btn-delete">🗑️ Supprimer</button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<!-- Bouton Ajouter en bas à droite -->
+<a routerLink="/create-evaluation" class="btn-add">+ Ajouter une modération</a>
