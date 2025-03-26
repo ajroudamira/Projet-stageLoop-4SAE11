@@ -1,0 +1,170 @@
+/* ✅ Style global de la page */
+.container-fluid {
+  background: linear-gradient(135deg, #eef2f3, #d1d8e0);
+  min-height: 100vh;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+}
+
+/* ✅ Titres stylisés */
+h1 {
+  font-size: 2.2rem;
+  font-weight: bold;
+  color: #2c3e50;
+  text-shadow: 2px 2px 6px rgba(0, 0, 0, 0.2);
+}
+
+/* ✅ Style pour la liste des stages */
+.card {
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+}
+
+.card:hover {
+  transform: scale(1.05);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+}
+
+/* ✅ Effet 3D pour les boutons */
+.btn-3d {
+  position: relative;
+  display: inline-block;
+  padding: 12px 24px;
+  font-size: 16px;
+  font-weight: bold;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: all 0.2s ease-in-out;
+  box-shadow: 0 6px 0 rgba(0, 0, 0, 0.2), 
+              0 10px 20px rgba(0, 0, 0, 0.3);
+}
+
+/* 🎯 Effet 3D au clic */
+.btn-3d:active {
+  transform: translateY(4px);
+  box-shadow: 0 2px 0 rgba(0, 0, 0, 0.2), 
+              0 6px 10px rgba(0, 0, 0, 0.3);
+}
+
+/* 🔵 Bouton Modifier */
+.btn-warning-3d {
+  background: linear-gradient(135deg, #f39c12, #e67e22);
+}
+
+.btn-warning-3d:hover {
+  background: linear-gradient(135deg, #d35400, #e67e22);
+  transform: translateY(-2px);
+}
+
+/* 🛑 Bouton Supprimer */
+.btn-danger-3d {
+  background: linear-gradient(135deg, #ff6b6b, #ff4757);
+}
+
+.btn-danger-3d:hover {
+  background: linear-gradient(135deg, #e84118, #c23616);
+  transform: translateY(-2px);
+}
+
+/* ✅ Bouton Ajouter */
+.btn-success-3d {
+  background: linear-gradient(135deg, #2ed573, #1e90ff);
+}
+
+.btn-success-3d:hover {
+  background: linear-gradient(135deg, #1dd1a1, #0abde3);
+  transform: translateY(-2px);
+}
+
+/* ✅ Champ de recherche */
+.input-group {
+  max-width: 500px;
+  margin: 0 auto 20px;
+}
+
+.input-group input {
+  border-radius: 8px;
+  padding: 10px;
+  box-shadow: inset 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+/* ✅ Graphique des stages */
+.card-body canvas {
+  max-width: 100%;
+  height: auto;
+}
+
+/* ✅ Ajustement responsive */
+@media (max-width: 768px) {
+  .card {
+      margin-bottom: 15px;
+  }
+  .btn-3d {
+      width: 100%;
+      text-align: center;
+  }
+}
+
+/* Notification Container */
+.notification-container {
+position: fixed;
+top: 20px;
+right: 20px;
+z-index: 1000; /* Ensure it appears above all other components */
+}
+
+/* Notification Banner Styles */
+.notification-banner {
+background-color: #ffffff;
+border: 2px solid #1a73e8; /* Dark blue border */
+border-radius: 8px;
+box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+padding: 15px;
+margin-bottom: 10px; /* Space between banners */
+max-width: 300px;
+animation: slideIn 0.5s ease-out; /* Slide-in animation */
+transition: opacity 0.5s ease-out; /* Fade-out transition */
+}
+/* Slide-in animation */
+@keyframes slideIn {
+from {
+  transform: translateX(100%);
+  opacity: 0;
+}
+to {
+  transform: translateX(0);
+  opacity: 1;
+}
+}
+.notification-content h5 {
+margin-bottom: 10px;
+font-size: 16px;
+color: #333;
+}
+
+.notification-content p {
+margin: 0;
+font-size: 14px;
+color: #555;
+}
+/* Fade-out effect */
+.notification-banner.fade-out {
+opacity: 0;
+}
+/* Optional: Slide-in animation */
+@keyframes slideIn {
+from {
+  transform: translateX(100%);
+  opacity: 0;
+}
+to {
+  transform: translateX(0);
+  opacity: 1;
+}
+}
