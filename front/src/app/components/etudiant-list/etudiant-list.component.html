@@ -1,0 +1,96 @@
+<body class="sb-nav-fixed">
+    <app-navbar></app-navbar>
+
+     <!-- Notification Banner for new Etudiant creation -->
+
+
+  <div class="notification-container">
+    <div *ngIf="newEtudiantNotification" class="notification-banner">
+        <div class="notification-content">
+          <h5>Nouveau étudiant créé :</h5>
+          <p>{{ newEtudiantNotification.prenom }} {{ newEtudiantNotification.nom }}</p>
+        </div>
+      </div>
+  </div>
+    <div id="layoutSidenav">
+        <app-layout-static></app-layout-static>
+        <div id="layoutSidenav_content">
+            <main>
+                <div class="container-fluid px-4">
+                    <h1 class="mt-4"> 📋 Liste des Etudiants</h1>
+                    <ol class="breadcrumb mb-4">
+                        <li class="breadcrumb-item"><a href="index.html">Dashboard</a></li>
+                        <li class="breadcrumb-item active"> 📋Students</li>
+                    </ol>
+
+                    <!-- Carte contenant le tableau des étudiants -->
+                    <div class="card mb-4">
+                        <div class="card-header">
+                            <i class="fas fa-table me-1"></i>
+                            Liste des étudiants
+                        </div>
+                        <div class="card-body">
+<!-- Statistiques des étudiants -->
+<app-statistiques [etudiants]="listEtudiant"></app-statistiques>
+                            <!-- Champ de recherche amélioré -->
+                            <div class="mb-3">
+                                <input
+                                    type="text"
+                                    class="form-control"
+                                    [(ngModel)]="keyword"
+                                    (input)="searchEtudiants()"
+                                    placeholder=" 🔍Rechercher par nom, prénom, email ou compétences..."
+                                />
+                            </div>
+
+                            <!-- Affichage des étudiants filtrés -->
+                            <div class="row justify-content-center">
+                                <div *ngIf="listEtudiant.length === 0" class="text-center text-muted">
+                                    Aucun étudiant ne correspond à votre recherche.
+                                </div>
+
+                                <div class="col-md-6 col-lg-4" *ngFor="let etudiant of listEtudiant">
+                                    <div class="card shadow-lg rounded-lg mb-4 p-3" style="background-color: #ffffff;">
+                                        <div class="card-body text-center">
+                                            <h5 class="card-title font-weight-bold text-primary">
+                                                👤{{ etudiant.nom }} {{ etudiant.prenom }}
+                                            </h5>
+                                            <p class="card-text"><i class="fas fa-envelope"></i> {{ etudiant.email }}</p>
+                                            <p class="card-text">📞{{ etudiant.telephone }}</p>
+                                            <p class="card-text">📍 {{ etudiant.adresse }}</p>
+                                            <p class="card-text"> 🛠️<strong>Compétences:</strong> {{ etudiant.competences }}</p>
+
+                                            <!-- Boutons d'actions -->
+                                            <button class="btn btn-danger mt-2" (click)="deleteEtudiant(etudiant.id)">
+                                                <i class="fas fa-trash"></i> Supprimer
+                                            </button>
+                                            <button class="btn btn-warning mt-2" (click)="editEtudiant(etudiant.id)">
+                                                <i class="fas fa-edit"></i> Modifier
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+
+                </div>
+            </main>
+
+            <!-- Footer -->
+            <footer class="py-4 bg-light mt-auto">
+                <div class="container-fluid px-4">
+                    <div class="d-flex align-items-center justify-content-between small">
+                        <div class="text-muted">Copyright &copy; Your Website 2023</div>
+                        <div>
+                            <a href="#">Privacy Policy</a>
+                            &middot;
+                            <a href="#">Terms &amp; Conditions</a>
+                        </div>
+                    </div>
+                </div>
+            </footer>
+        </div>
+    </div>
+</body>

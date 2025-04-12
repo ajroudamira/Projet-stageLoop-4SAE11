@@ -1,0 +1,6 @@
+<div *ngIf="cvUrl; else noCv">
+    <iframe [src]="cvUrl" width="100%" height="600px" frameborder="0"></iframe>
+</div>
+<ng-template #noCv>
+    <p>Aucun CV disponible.</p>
+</ng-template>

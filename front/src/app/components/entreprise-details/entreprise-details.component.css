@@ -1,0 +1,193 @@
+/* Main Container */
+.entreprise-details-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+    background-color: #f8f9fa;
+    min-height: 100vh;
+  }
+  
+  /* Loading State */
+  .loading-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 300px;
+  }
+  
+  .spinner {
+    border: 5px solid #f3f3f3;
+    border-top: 5px solid #3498db;
+    border-radius: 50%;
+    width: 50px;
+    height: 50px;
+    animation: spin 1s linear infinite;
+  }
+  
+  @keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+  }
+  
+  /* Error State */
+  .error-container {
+    text-align: center;
+    padding: 20px;
+    background-color: #ffecec;
+    border-radius: 8px;
+    margin: 20px 0;
+  }
+  
+  .error-icon {
+    font-size: 40px;
+    margin-bottom: 15px;
+  }
+  
+  /* Breadcrumb Navigation */
+  .breadcrumb {
+    display: flex;
+    align-items: center;
+    margin-bottom: 20px;
+    font-size: 14px;
+  }
+  
+  .breadcrumb-link {
+    color: #4e54c8;
+    text-decoration: none;
+    transition: color 0.2s;
+  }
+  
+  .breadcrumb-link:hover {
+    color: #3c40c6;
+    text-decoration: underline;
+  }
+  
+  .breadcrumb-separator {
+    margin: 0 8px;
+    color: #6c757d;
+  }
+  
+  .breadcrumb-current {
+    color: #495057;
+    font-weight: 500;
+  }
+  
+  /* Entreprise Header */
+  .entreprise-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 30px;
+  }
+  
+  .entreprise-header h1 {
+    color: #343a40;
+    font-size: 28px;
+    margin: 0;
+  }
+  
+  .entreprise-header i {
+    margin-right: 10px;
+    color: #4e54c8;
+  }
+  
+  /* Entreprise Card */
+  .entreprise-card {
+    background-color: white;
+    border-radius: 10px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    padding: 25px;
+    margin-bottom: 30px;
+  }
+  
+  .entreprise-info {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 20px;
+  }
+  
+  .info-item {
+    display: flex;
+    align-items: center;
+    margin-bottom: 15px;
+  }
+  
+  .info-item i {
+    margin-right: 10px;
+    color: #4e54c8;
+    width: 20px;
+    text-align: center;
+  }
+  
+  /* Stages Section */
+  .stages-section {
+    background-color: white;
+    border-radius: 10px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    padding: 25px;
+  }
+  
+  .stages-section h2 {
+    color: #343a40;
+    font-size: 24px;
+    margin-top: 0;
+    margin-bottom: 20px;
+  }
+  
+  .stages-section h2 i {
+    margin-right: 10px;
+    color: #4e54c8;
+  }
+  
+  .no-stages {
+    text-align: center;
+    padding: 30px;
+    color: #6c757d;
+  }
+  
+  /* Stages Grid */
+  .stages-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 20px;
+  }
+  
+  .stage-card {
+    background-color: #f8f9fa;
+    border-radius: 8px;
+    padding: 20px;
+    border-left: 4px solid #4e54c8;
+    transition: transform 0.2s, box-shadow 0.2s;
+  }
+  
+  .stage-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+  }
+  
+  .stage-card h3 {
+    margin-top: 0;
+    color: #343a40;
+  }
+  
+  .stage-details p {
+    margin: 8px 0;
+  }
+  
+  /* Responsive Design */
+  @media (max-width: 768px) {
+    .entreprise-header {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 15px;
+    }
+  
+    .entreprise-info {
+      grid-template-columns: 1fr;
+    }
+  
+    .stages-grid {
+      grid-template-columns: 1fr;
+    }
+  }

@@ -1,0 +1,60 @@
+<body class="sb-nav-fixed">
+    <app-navbar></app-navbar>
+    <div id="layoutSidenav">
+      <app-layout-static></app-layout-static>
+      <div id="layoutSidenav_content">
+        <main>
+          <div class="container-fluid px-4">
+            <h1 class="mt-4">Modifier la Candidature</h1>
+            <div class="card mb-4">
+              <div class="card-header">
+                <i class="fas fa-edit me-1"></i> Modifier candidature
+              </div>
+              <div class="card-body">
+                <div class="container">
+                  <form (ngSubmit)="updateCandidature()" #candidatureForm="ngForm" novalidate>
+                    <!-- Sélecteur d'Étudiant -->
+                    <div class="form-group">
+                      <label for="etudiant">Étudiant :</label>
+                      <select id="etudiant" name="etudiant" [(ngModel)]="candidature.etudiant" class="form-control" required>
+                        <option *ngFor="let etudiant of etudiants" [ngValue]="etudiant">{{ etudiant.nom }} {{ etudiant.prenom }}</option>
+                      </select>
+                    </div>
+  
+                    <!-- Date de candidature -->
+                    <div class="form-group">
+                      <label for="dateCandidature">Date :</label>
+                      <input type="date" id="dateCandidature" name="dateCandidature" [(ngModel)]="candidature.dateCandidature" class="form-control" required />
+                    </div>
+  
+                    <!-- Statut -->
+                    <div class="form-group">
+                      <label for="statut">Statut :</label>
+                      <select id="statut" name="statut" [(ngModel)]="candidature.statut" class="form-control" required>
+                        <option *ngFor="let statut of statutOptions" [ngValue]="statut">{{ statut }}</option>
+                      </select>
+                    </div>
+  
+                    <!-- Lettre de motivation -->
+                    <div class="form-group">
+                      <label for="lettreMotivation">Lettre de motivation :</label>
+                      <textarea id="lettreMotivation" name="lettreMotivation" [(ngModel)]="candidature.lettreMotivation" class="form-control" required></textarea>
+                    </div>
+  
+                    <!-- CV (URL) -->
+                    <div class="form-group">
+                      <label for="cvUrl">Lien du CV :</label>
+                      <input type="text" id="cvUrl" name="cvUrl" [(ngModel)]="candidature.cvUrl" class="form-control" required placeholder="Entrez le lien du CV"/>
+                    </div>
+  
+                    <!-- Bouton Mettre à Jour -->
+                    <button type="submit" class="btn btn-primary" [disabled]="candidatureForm.invalid">Mettre à Jour</button>
+                  </form>
+                </div>
+              </div>
+            </div>
+          </div>
+        </main>
+      </div>
+    </div>
+  </body>

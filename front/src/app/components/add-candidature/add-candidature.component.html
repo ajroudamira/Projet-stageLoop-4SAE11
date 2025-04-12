@@ -1,0 +1,70 @@
+<body class="sb-nav-fixed">
+    <app-navbar></app-navbar>
+    <div id="layoutSidenav">
+      <app-layout-static></app-layout-static>
+      <div id="layoutSidenav_content">
+        <main>
+          <div class="container-fluid px-4">
+            <h1 class="mt-4">Ajouter une Candidature</h1>
+            <div class="card mb-4">
+              <div class="card-header">
+                <i class="fas fa-plus me-1"></i> Nouvelle candidature
+              </div>
+              <div class="card-body">
+                <div class="container">
+                  <form #candidatureForm="ngForm" (ngSubmit)="addCandidature()" novalidate>
+                    <!-- Sélecteur d'Étudiant -->
+                    <div class="form-group">
+                      <label for="etudiant">Étudiant :</label>
+                      <select id="etudiant" name="etudiant" [(ngModel)]="candidature.etudiant" class="form-control" required>
+                        <option value="" disabled selected>Sélectionnez un étudiant</option>
+                        <option *ngFor="let etudiant of etudiants" [ngValue]="etudiant">{{ etudiant.nom }} {{ etudiant.prenom }}</option>
+                      </select>
+                      <div *ngIf="submissionAttempted && !candidature.etudiant" class="text-danger">Ce champ est obligatoire.</div>
+                    </div>
+                    
+                    <!-- Date de candidature -->
+                    <div class="form-group">
+                      <label for="dateCandidature">Date :</label>
+                      <input type="date" id="dateCandidature" name="dateCandidature" [(ngModel)]="candidature.dateCandidature" class="form-control" required />
+                      <div *ngIf="submissionAttempted && !candidature.dateCandidature" class="text-danger">Ce champ est obligatoire.</div>
+                    </div>
+                    
+                    <!-- Statut -->
+                    <div class="form-group">
+                      <label for="statut">Statut :</label>
+                      <select id="statut" name="statut" [(ngModel)]="candidature.statut" class="form-control" required>
+                        <option value="" disabled selected>Sélectionnez un statut</option>
+                        <option *ngFor="let statut of statutOptions" [ngValue]="statut">{{ statut }}</option>
+                      </select>
+                      <div *ngIf="submissionAttempted && !candidature.statut" class="text-danger">Ce champ est obligatoire.</div>
+                    </div>
+                    
+                    <!-- Lettre de motivation -->
+                    <div class="form-group">
+                      <label for="lettreMotivation">Lettre de motivation :</label>
+                      <textarea id="lettreMotivation" name="lettreMotivation" [(ngModel)]="candidature.lettreMotivation" class="form-control" required placeholder="Rédigez votre lettre de motivation"></textarea>
+                      <div *ngIf="submissionAttempted && !candidature.lettreMotivation" class="text-danger">Ce champ est obligatoire.</div>
+                    </div>
+                    
+                  <!-- CV (URL) -->
+
+<div class="form-group">
+    <label for="cvFile">Télécharger le CV : </label>
+    <input type="file" id="cvFile" name="cvFile" (change)="onFileSelected($event)" class="form-control" required />
+    <div *ngIf="submissionAttempted && !cvFile" class="text-danger">Ce champ est obligatoire.</div>
+    <button class="btn btn-link" (click)="goToCvPage()" [disabled]="!cvFile">Voir le CV</button>
+</div>
+
+
+                    <!-- Bouton Ajouter -->
+                    <button type="submit" class="btn btn-primary" [disabled]="candidatureForm.invalid">Ajouter</button>
+                  </form>
+                </div>
+              </div>
+            </div>
+          </div>
+        </main>
+      </div>
+    </div>
+</body>

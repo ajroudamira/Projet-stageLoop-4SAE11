@@ -1,0 +1,193 @@
+<body class="sb-nav-fixed">
+  <app-navbar></app-navbar>
+  <div id="layoutSidenav">
+    <app-layout-static></app-layout-static>
+    <div id="layoutSidenav_content">
+      <div class="container">
+        <h2 class="mt-4">
+          {{ isEditMode ? "Modifier le stage" : "Ajouter un stage" }}
+        </h2>
+
+        <form (ngSubmit)="submitStage()" #stageForm="ngForm">
+          <div class="mb-3">
+            <label for="titre" class="form-label">Titre du stage</label>
+            <input
+              type="text"
+              id="titre"
+              class="form-control"
+              [(ngModel)]="stage.titre"
+              name="titre"
+              required
+              minlength="3"
+              #titre="ngModel"
+            />
+            <div
+              *ngIf="titre.invalid && (titre.dirty || submissionAttempted)"
+              class="text-danger"
+            >
+              Le titre est obligatoire et doit contenir au moins 3 caractères.
+            </div>
+          </div>
+
+          <div class="mb-3">
+            <label for="description" class="form-label">Description</label>
+            <textarea
+              id="description"
+              class="form-control"
+              [(ngModel)]="stage.description"
+              name="description"
+              required
+              minlength="10"
+              #description="ngModel"
+            ></textarea>
+            <div
+              *ngIf="
+                description.invalid &&
+                (description.dirty || submissionAttempted)
+              "
+              class="text-danger"
+            >
+              La description est obligatoire et doit contenir au moins 10
+              caractères.
+            </div>
+          </div>
+
+          <!-- Champ pour la date de début -->
+          <div class="mb-3">
+            <label for="dateDebut" class="form-label">Date de début</label>
+            <input
+              type="date"
+              id="dateDebut"
+              class="form-control"
+              [(ngModel)]="stage.dateDebut"
+              name="dateDebut"
+              required
+              #dateDebut="ngModel"
+            />
+            <div *ngIf="dateDebut.invalid" class="text-danger">
+              La date de début est obligatoire.
+            </div>
+          </div>
+
+          <!-- Champ pour la date de fin -->
+          <div class="mb-3">
+            <label for="dateFin" class="form-label">Date de fin</label>
+            <input
+              type="date"
+              id="dateFin"
+              class="form-control"
+              [(ngModel)]="stage.dateFin"
+              name="dateFin"
+              required
+              #dateFin="ngModel"
+            />
+            <div *ngIf="dateFin.invalid " class="text-danger">
+              La date de fin est obligatoire.
+            </div>
+          </div>
+
+          <div class="mb-3">
+            <label for="competencesRequises" class="form-label"
+              >Compétences requises</label
+            >
+            <input
+              type="text"
+              id="competencesRequises"
+              class="form-control"
+              [(ngModel)]="stage.competencesRequises"
+              name="competencesRequises"
+              required
+              minlength="5"
+              #competences="ngModel"
+            />
+            <div
+              *ngIf="
+                competences.invalid &&
+                (competences.dirty || submissionAttempted)
+              "
+              class="text-danger"
+            >
+              Les compétences requises sont obligatoires et doivent contenir au
+              moins 5 caractères.
+            </div>
+          </div>
+
+          <div class="mb-3">
+            <label for="typeStage" class="form-label">Type de Stage</label>
+            <select
+              id="typeStage"
+              class="form-control"
+              [(ngModel)]="stage.typeStage"
+              name="typeStage"
+              required
+              #type="ngModel"
+            >
+              <option *ngFor="let type of typeStages" [ngValue]="type">
+                {{ type }}
+              </option>
+            </select>
+            <div
+              *ngIf="type.invalid && (type.dirty || submissionAttempted)"
+              class="text-danger"
+            >
+              Le type de stage est obligatoire.
+            </div>
+          </div>
+
+          <div class="mb-3" *ngIf="!isEditMode">
+            <label for="entreprise" class="form-label">Entreprise</label>
+            <select
+              id="entreprise"
+              class="form-control"
+              [(ngModel)]="stage.entreprise"
+              name="entreprise"
+              required
+              #entreprise="ngModel"
+            >
+              <option
+                *ngFor="let entreprise of entreprises"
+                [ngValue]="entreprise"
+              >
+                {{ entreprise.nom }}
+              </option>
+            </select>
+            <div
+              *ngIf="
+                entreprise.invalid && (entreprise.dirty || submissionAttempted)
+              "
+              class="text-danger"
+            >
+              L'entreprise est obligatoire.
+            </div>
+          </div>
+
+          <!-- Afficher l'email seulement si on est en mode ajout (isEditMode est false) -->
+          <div class="mb-3" *ngIf="!isEditMode">
+            <label for="emailDestinataire" class="form-label"
+              >Email Destinataire</label
+            >
+            <input
+              type="email"
+              id="emailDestinataire"
+              class="form-control"
+              [(ngModel)]="emailDestinataire"
+              name="emailDestinataire"
+              required
+              #email="ngModel"
+            />
+            <div
+              *ngIf="email.invalid && (email.dirty || submissionAttempted)"
+              class="text-danger"
+            >
+              L'email destinataire est obligatoire.
+            </div>
+          </div>
+
+          <button type="submit" class="btn btn-primary">
+            {{ isEditMode ? "Mettre à jour" : "Ajouter" }}
+          </button>
+        </form>
+      </div>
+    </div>
+  </div>
+</body>

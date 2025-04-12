@@ -1,0 +1,370 @@
+/* Global styles */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background-color: #f4f6f9;
+  color: #333;
+}
+
+.container-fluid {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 40px;
+}
+
+/* Navbar */
+.sb-nav-fixed {
+  background-color: #6c5ce7;
+  color: white;
+  padding: 20px 0;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+.sb-nav-fixed .navbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 30px;
+}
+
+.sb-nav-fixed .navbar a {
+  color: white;
+  text-decoration: none;
+  margin: 0 15px;
+  font-size: 16px;
+  text-transform: uppercase;
+}
+
+.sb-nav-fixed .navbar a:hover {
+  text-decoration: underline;
+}
+
+.sb-nav-fixed .navbar .navbar-brand {
+  font-weight: bold;
+  font-size: 24px;
+  letter-spacing: 1px;
+}
+
+/* Sidebar */
+#layoutSidenav {
+  display: flex;
+}
+
+#layoutSidenav_content {
+  flex-grow: 1;
+  padding: 20px;
+}
+
+#layoutSidenav .app-layout-static {
+  background-color: #2d3436;
+  color: white;
+  width: 250px;
+  padding: 30px;
+  border-radius: 10px;
+}
+
+#layoutSidenav .app-layout-static a {
+  color: white;
+  text-decoration: none;
+  display: block;
+  padding: 15px;
+  font-size: 16px;
+  border-radius: 8px;
+  margin-bottom: 10px;
+  transition: background-color 0.3s ease;
+}
+
+#layoutSidenav .app-layout-static a:hover {
+  background-color: #6c5ce7;
+  transform: translateX(10px);
+}
+
+/* Breadcrumb */
+.breadcrumb {
+  background-color: transparent;
+  margin: 20px 0;
+  padding: 0;
+  list-style: none;
+  font-size: 14px;
+}
+
+.breadcrumb-item {
+  display: inline-block;
+}
+
+.breadcrumb-item + .breadcrumb-item::before {
+  content: '>';
+  margin: 0 10px;
+}
+
+.breadcrumb-item a {
+  color: #6c5ce7;
+  text-decoration: none;
+}
+
+.breadcrumb-item a:hover {
+  text-decoration: underline;
+}
+
+/* Card components for student display */
+.card {
+  background-color: white;
+  border-radius: 15px;
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+  margin-bottom: 30px;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.card:hover {
+  transform: translateY(-10px);
+  box-shadow: 0 15px 30px rgba(0, 0, 0, 0.2);
+}
+
+.card-header {
+  background-color: #6c5ce7;
+  color: white;
+  padding: 20px;
+  font-weight: bold;
+  border-top-left-radius: 15px;
+  border-top-right-radius: 15px;
+}
+
+.card-body {
+  padding: 25px;
+}
+
+.card-body p {
+  margin-bottom: 15px;
+}
+
+.card-body h5 {
+  font-size: 18px;
+  font-weight: 600;
+  color: #2d3436;
+}
+
+.card-footer {
+  background-color: #f8f9fa;
+  padding: 15px;
+  display: flex;
+  justify-content: flex-end;
+  border-bottom-left-radius: 15px;
+  border-bottom-right-radius: 15px;
+}
+/* Statistiques */
+.app-statistiques {
+  background-color: #ffffff; /* Couleur de fond blanc pour correspondre aux autres cartes */
+  color: #333; /* Couleur du texte */
+  border-radius: 15px;
+  padding: 20px;
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1); /* Ajouter un effet d'ombre pour correspondre aux cartes */
+  margin-bottom: 30px;
+}
+
+/* Si vous souhaitez également styliser les éléments internes des statistiques */
+/* Statistiques */
+.app-statistiques {
+  background-color: #6c5ce7; /* Couleur de fond des statistiques identique à celle des boutons */
+  color: white; /* Changer la couleur du texte en blanc pour correspondre à l'effet visuel des boutons */
+  border-radius: 15px;
+  padding: 20px;
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1); /* Ajouter un effet d'ombre pour correspondre aux cartes */
+  margin-bottom: 30px;
+}
+
+/* Si vous souhaitez également styliser les éléments internes des statistiques */
+.app-statistiques h3 {
+  font-size: 22px;
+  font-weight: 600;
+  color: white; /* Couleur du titre en blanc */
+  margin-bottom: 20px;
+}
+
+.app-statistiques .stat-item {
+  font-size: 18px;
+  margin: 10px 0;
+  color: white; /* Couleur du texte des éléments en blanc */
+}
+
+.app-statistiques .stat-item span {
+  font-weight: bold;
+  color: #f8f9fa; /* Une couleur complémentaire claire pour mettre en valeur certaines données */
+}
+
+
+/* Boutons */
+button {
+  background-color: #6c5ce7;
+  color: white;
+  border: none;
+  padding: 10px 20px; /* Ajuster les espacements internes pour un bouton plus petit */
+  border-radius: 25px;
+  font-size: 14px;
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.3s ease;
+  margin: 5px; /* Espacement entre les boutons */
+  width: auto; /* Ajuste la largeur du bouton selon son contenu */
+  display: inline-block; /* Afficher les boutons sur la même ligne */
+}
+
+/* Espacement entre les boutons pour aligner correctement */
+button:not(:last-child) {
+  margin-right: 10px; /* Ajouter un espacement à droite de chaque bouton sauf le dernier */
+}
+
+button:hover {
+  background-color: #5c4db1;
+  transform: translateY(-5px);
+}
+
+button:active {
+  background-color: #3e2a85;
+}
+
+button:focus {
+  outline: none;
+}
+
+
+/* Input search */
+input[type="text"] {
+  padding: 12px 20px;
+  font-size: 14px;
+  width: 100%;
+  border-radius: 25px;
+  border: 1px solid #ddd;
+  background-color: #f1f2f6;
+  transition: border-color 0.3s ease;
+}
+
+input[type="text"]:focus {
+  border-color: #6c5ce7;
+  outline: none;
+}
+
+/* Loader */
+.text-center i {
+  font-size: 32px;
+  color: #6c5ce7;
+}
+
+/* Chart */
+canvas {
+  max-width: 100%;
+  height: auto;
+}
+
+/* Cards within rows */
+.row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+}
+
+.col-md-6,
+.col-lg-4 {
+  flex: 1;
+  max-width: calc(33.333% - 20px);
+}
+
+@media (max-width: 768px) {
+  .col-md-6,
+  .col-lg-4 {
+      max-width: 100%;
+  }
+
+  .sb-nav-fixed .navbar {
+      flex-direction: column;
+      align-items: flex-start;
+  }
+
+  .card-body h5 {
+      font-size: 16px;
+  }
+
+  .card-body p {
+      font-size: 14px;
+  }
+}
+
+
+.notification-banner {
+  background-color: #d4edda;
+  border: 1px solid #c3e6cb;
+  color: #155724;
+  padding: 15px;
+  margin: 10px auto;
+  text-align: center;
+  border-radius: 5px;
+  animation: fadeIn 0.5s ease;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+
+/* Notification Container */
+.notification-container {
+  position: fixed;
+  top: 65px;
+  right: 20px;
+  z-index: 1000; /* Ensure it appears above all other components */
+  }
+  
+  /* Notification Banner Styles */
+  .notification-banner {
+  background-color: #ffffff;
+  border: 2px solid #1a73e8; /* Dark blue border */
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  padding: 15px;
+  margin-bottom: 10px; /* Space between banners */
+  max-width: 300px;
+  animation: slideIn 0.5s ease-out; /* Slide-in animation */
+  transition: opacity 0.5s ease-out; /* Fade-out transition */
+  }
+  /* Slide-in animation */
+  @keyframes slideIn {
+  from {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+  }
+  .notification-content h5 {
+  margin-bottom: 10px;
+  font-size: 16px;
+  color: #333;
+  }
+  
+  .notification-content p {
+  margin: 0;
+  font-size: 14px;
+  color: #555;
+  }
+  /* Fade-out effect */
+  .notification-banner.fade-out {
+  opacity: 0;
+  }
+  /* Optional: Slide-in animation */
+  @keyframes slideIn {
+  from {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+  }
+  

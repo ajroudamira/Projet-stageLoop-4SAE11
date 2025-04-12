@@ -1,0 +1,198 @@
+/* Main Container */
+.qcm-container {
+    max-width: 800px;
+    margin: 2rem auto;
+    padding: 2rem;
+    background: linear-gradient(135deg, #f5f7fa, #e4e8f0);
+    border-radius: 12px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+  }
+  
+  /* Question Header */
+  .qcm-container h2 {
+    font-size: 1.8rem;
+    color: #2c3e50;
+    margin-bottom: 1.5rem;
+    text-align: center;
+    position: relative;
+    padding-bottom: 10px;
+  }
+  
+  .qcm-container h2::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 80px;
+    height: 3px;
+    background: linear-gradient(90deg, #4e54c8, #8f94fb);
+  }
+  
+  /* Question Content */
+  .qcm-container p {
+    font-size: 1.1rem;
+    line-height: 1.6;
+    color: #34495e;
+    margin-bottom: 1.5rem;
+  }
+  
+  .qcm-container p strong {
+    color: #2c3e50;
+  }
+  
+  /* Answer List */
+  .qcm-container ul {
+    list-style-type: none;
+    padding: 0;
+    margin: 2rem 0;
+  }
+  
+  .qcm-container li {
+    margin: 1rem 0;
+    padding: 1.2rem;
+    background-color: white;
+    border-radius: 8px;
+    border: 2px solid #e0e0e0;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-size: 1rem;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
+  }
+  
+  .qcm-container li:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
+    border-color: #8f94fb;
+  }
+  
+  .qcm-container li.selected {
+    background-color: #f0f4ff;
+    border-color: #4e54c8;
+    box-shadow: 0 4px 12px rgba(78, 84, 200, 0.2);
+    font-weight: 500;
+  }
+  
+  /* Buttons */
+  .qcm-container button {
+    position: relative;
+    display: inline-block;
+    padding: 12px 24px;
+    font-size: 1rem;
+    font-weight: bold;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.2s ease-in-out;
+    box-shadow: 0 6px 0 rgba(0, 0, 0, 0.2), 
+                0 10px 20px rgba(0, 0, 0, 0.3);
+    margin-right: 15px;
+    margin-top: 20px;
+  }
+  
+  .qcm-container button:active {
+    transform: translateY(4px);
+    box-shadow: 0 2px 0 rgba(0, 0, 0, 0.2), 
+                0 6px 10px rgba(0, 0, 0, 0.3);
+  }
+  
+  /* Next Button */
+  .qcm-container button:first-of-type {
+    background: linear-gradient(135deg, #4e54c8, #8f94fb);
+  }
+  
+  .qcm-container button:first-of-type:hover {
+    background: linear-gradient(135deg, #3c40c6, #575fcf);
+    transform: translateY(-2px);
+  }
+  
+  /* Result Buttons */
+  .qcm-container button:nth-of-type(2) {
+    background: linear-gradient(135deg, #2ed573, #1e90ff);
+  }
+  
+  .qcm-container button:nth-of-type(2):hover {
+    background: linear-gradient(135deg, #1dd1a1, #0abde3);
+    transform: translateY(-2px);
+  }
+  
+  .qcm-container button:last-of-type {
+    background: linear-gradient(135deg, #ff6b6b, #ff4757);
+  }
+  
+  .qcm-container button:last-of-type:hover {
+    background: linear-gradient(135deg, #e84118, #c23616);
+    transform: translateY(-2px);
+  }
+  
+  /* Result Section */
+  .qcm-container div[ngIf="score !== null"] {
+    text-align: center;
+    padding: 2rem;
+  }
+  
+  .qcm-container div[ngIf="score !== null"] h2 {
+    color: #4e54c8;
+    margin-bottom: 2rem;
+  }
+  
+  .qcm-container div[ngIf="score !== null"] p {
+    font-size: 1.3rem;
+    font-weight: bold;
+    margin-bottom: 2rem;
+  }
+  
+  /* No QCM Message */
+  .qcm-container + div {
+    text-align: center;
+    padding: 2rem;
+    font-size: 1.2rem;
+    color: #7f8c8d;
+  }
+  
+  /* Responsive Design */
+  @media (max-width: 768px) {
+    .qcm-container {
+      padding: 1.5rem;
+      margin: 1rem;
+    }
+    
+    .qcm-container button {
+      width: 100%;
+      margin-bottom: 15px;
+    }
+    
+    .qcm-container li {
+      padding: 1rem;
+    }
+  }
+
+
+  .popup {
+    text-align: center;
+    padding: 20px;
+    margin: 20px auto;
+    width: fit-content;
+    border-radius: 10px;
+    font-size: 18px;
+    animation: fadeIn 0.5s ease-in;
+  }
+  
+  .success-popup {
+    background-color: #d4edda;
+    color: #155724;
+    border: 2px solid #c3e6cb;
+  }
+  
+  .fail-popup {
+    background-color: #f8d7da;
+    color: #721c24;
+    border: 2px solid #f5c6cb;
+  }
+  
+  @keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+  }
+  

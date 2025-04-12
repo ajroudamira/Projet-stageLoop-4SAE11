@@ -1,0 +1,73 @@
+/* 🌟 Styles globaux pour le formulaire */
+.container {
+    max-width: 600px; /* Limite la largeur du formulaire */
+    margin: 20px auto; /* Centre le formulaire */
+    padding: 20px; /* Ajoute de l'espace intérieur */
+    border-radius: 10px; /* Coins arrondis */
+    background-color: #ffffff; /* Fond blanc */
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1); /* Ombre légère */
+}
+
+/* 📋 En-tête de carte */
+.card-header {
+    background-color: #28a745; /* Couleur d'arrière-plan */
+    color: white; /* Couleur du texte */
+    font-weight: bold; /* Met le texte en gras */
+    border-top-left-radius: 10px; /* Arrondit le coin supérieur gauche */
+    border-top-right-radius: 10px; /* Arrondit le coin supérieur droit */
+}
+
+/* 🔍 Éléments de formulaire */
+.form-group {
+    margin-bottom: 15px; /* Espace entre les groupes de formulaires */
+}
+
+/* 📄 Sélecteurs et entrées */
+.form-control {
+    border: 2px solid #28a745; /* Bordure verte */
+    border-radius: 5px; /* Coins arrondis */
+    padding: 10px; /* Espacement interne */
+    transition: border-color 0.3s; /* Animation de transition */
+}
+
+.form-control:focus {
+    outline: none; /* Enlève le contour par défaut */
+    border-color: #218838; /* Bordure plus foncée au focus */
+    box-shadow: 0 0 5px rgba(40, 167, 69, 0.5); /* Ombre légère au focus */
+}
+
+/* ⚠️ Message d'erreur */
+.text-danger {
+    font-size: 0.875rem; /* Taille de la police */
+    margin-top: 5px; /* Espace au-dessus du message d'erreur */
+}
+
+/* 🔘 Bouton Ajouter */
+.btn-primary {
+    background-color: #28a745; /* Couleur de fond */
+    border: none; /* Enlève la bordure */
+    padding: 10px 15px; /* Espacement interne */
+    border-radius: 25px; /* Coins arrondis */
+    font-weight: bold; /* Met le texte en gras */
+    transition: background-color 0.3s; /* Animation de transition */
+}
+
+.btn-primary:hover {
+    background-color: #218838; /* Couleur au survol */
+}
+
+/* 📜 Style pour le champ de compétences */
+textarea {
+    border: 2px solid #28a745; /* Bordure verte */
+    border-radius: 5px; /* Coins arrondis */
+    padding: 10px; /* Espacement interne */
+    width: 100%; /* Largeur complète */
+    height: 100px; /* Hauteur fixe */
+    transition: border-color 0.3s; /* Animation de transition */
+}
+
+textarea:focus {
+    outline: none; /* Enlève le contour par défaut */
+    border-color: #218838; /* Bordure plus foncée au focus */
+    box-shadow: 0 0 5px rgba(40, 167, 69, 0.5); /* Ombre légère au focus */
+}

@@ -1,0 +1,88 @@
+/* Styles généraux */
+form {
+    width: 50%;
+    margin: 20px auto;
+    padding: 20px;
+    background: #f8f9fa;
+    border-radius: 8px;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+  }
+  
+  /* Style des labels */
+  label {
+    display: block;
+    font-weight: bold;
+    margin-top: 10px;
+    color: #333;
+  }
+  
+  /* Style des champs de saisie */
+  input {
+    width: 100%;
+    padding: 10px;
+    margin-top: 5px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 16px;
+    transition: border-color 0.3s ease-in-out;
+  }
+  
+  /* Effet de focus sur les champs de saisie */
+  input:focus {
+    border-color: #007bff;
+    outline: none;
+    box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
+  }
+  
+  /* Style du bouton */
+  button {
+    width: 100%;
+    padding: 10px;
+    margin-top: 15px;
+    background: #007bff;
+    border: 2px solid transparent; /* Bordure transparente par défaut */
+    color: white;
+    font-size: 16px;
+    cursor: pointer;
+    border-radius: 4px;
+    transition: background 0.3s ease-in-out, transform 0.2s ease, border-color 0.3s ease-in-out;
+  }
+  
+  /* Effet au survol du bouton */
+  button:hover {
+    background: #0056b3;
+    transform: translateY(-2px);
+    border-color: #004099; /* Ajout d'un cadre lors du survol */
+  }
+  
+  /* Effet lors de l'activation du bouton (clic) */
+  button:active {
+    background: #003366; /* Changement de couleur au clic */
+    border-color: #002244; /* Cadre plus sombre au clic */
+  }
+  
+  /* Gestion des erreurs */
+  input.ng-invalid.ng-touched {
+    border-color: #dc3545;
+    background-color: #f8d7da;
+  }
+  
+  /* Message d'erreur */
+  .error-message {
+    color: #dc3545;
+    font-size: 14px;
+    margin-top: 5px;
+  }
+  
+  /* Style des boutons supplémentaires */
+  .btn-secondary {
+    background: #6c757d;
+    border: 2px solid transparent; /* Bordure transparente par défaut */
+    color: white;
+  }
+  
+  .btn-secondary:hover {
+    background: #5a6268;
+    border-color: #4e555b; /* Ajout d'un cadre lors du survol */
+  }
+  

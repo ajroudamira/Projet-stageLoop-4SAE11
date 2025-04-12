@@ -1,0 +1,94 @@
+<div class="entreprise-details-container">
+    <!-- Loading State -->
+    <div *ngIf="isLoading" class="loading-container">
+      <div class="spinner"></div>
+      <p>Chargement en cours...</p>
+    </div>
+  
+    <!-- Error State -->
+    <div *ngIf="errorMessage" class="error-container">
+      <div class="error-icon">⚠️</div>
+      <p>{{ errorMessage }}</p>
+      <a routerLink="/back-office" class="btn-3d btn-primary-3d">Retour à la liste</a>
+    </div>
+  
+    <!-- Success State -->
+    <div *ngIf="entreprise && !isLoading && !errorMessage">
+      <!-- Breadcrumb Navigation -->
+      <div class="breadcrumb">
+        <a routerLink="/back-office" class="breadcrumb-link">Accueil</a>
+        <span class="breadcrumb-separator">/</span>
+        <a routerLink="/back-office/entreprises" class="breadcrumb-link">Entreprises</a>
+        <span class="breadcrumb-separator">/</span>
+        <span class="breadcrumb-current">{{ entreprise.nom }}</span>
+      </div>
+  
+      <!-- Entreprise Header -->
+      <div class="entreprise-header">
+        <h1>
+          <i class="fas fa-building"></i>
+          {{ entreprise.nom }}
+        </h1>
+        <div class="entreprise-actions">
+          <a 
+            [routerLink]="['/back-office/entreprises/update', entreprise.idEntreprise]" 
+            class="btn-3d btn-primary-3d"
+          >
+            <i class="fas fa-edit"></i> Modifier
+          </a>
+        </div>
+      </div>
+  
+      <!-- Entreprise Details Card -->
+      <div class="entreprise-card">
+        <div class="entreprise-info">
+          <div class="info-item">
+            <i class="fas fa-map-marker-alt"></i>
+            <span><strong>Adresse:</strong> {{ entreprise.adresse }}</span>
+          </div>
+          <div class="info-item">
+            <i class="fas fa-phone"></i>
+            <span><strong>Téléphone:</strong> {{ entreprise.telephone }}</span>
+          </div>
+          <div class="info-item">
+            <i class="fas fa-envelope"></i>
+            <span><strong>Email:</strong> {{ entreprise.email }}</span>
+          </div>
+          <div class="info-item">
+            <i class="fas fa-industry"></i>
+            <span><strong>Secteur d'activité:</strong> {{ entreprise.secteurActivite }}</span>
+          </div>
+        </div>
+      </div>
+  
+      <!-- Stages Section -->
+      <div class="stages-section">
+        <h2>
+          <i class="fas fa-briefcase"></i>
+          Stages proposés ({{ stages.length }})
+        </h2>
+  
+        <div *ngIf="stages.length === 0" class="no-stages">
+          <p>Aucun stage disponible pour cette entreprise.</p>
+        </div>
+  
+        <div *ngIf="stages.length > 0" class="stages-grid">
+          <div *ngFor="let stage of stages" class="stage-card">
+            <h3>{{ stage.titre }}</h3>
+            <div class="stage-details">
+              <p><strong>Description:</strong> {{ stage.description }}</p>
+              <p><strong>Domaine:</strong> {{ stage.competencesRequises }}</p>
+              <p><strong>Date début:</strong> {{ stage.dateDebut | date }}</p>
+              <p><strong>Date fin:</strong> {{ stage.dateFin | date }}</p>
+              <p><strong>Nombre de places:</strong> {{ stage.statusStage }}</p>
+            </div>
+            <a [routerLink]="['/entreprises-qcm']" 
+            [queryParams]="{ competences: stage.competencesRequises, stageId: stage.idStage }" 
+            class="btn-3d btn-success-3d">
+                Postuler
+              </a>              
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>

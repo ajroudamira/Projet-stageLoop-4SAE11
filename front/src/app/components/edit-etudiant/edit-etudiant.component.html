@@ -1,0 +1,62 @@
+<body class="sb-nav-fixed">
+    <app-navbar></app-navbar>
+    <div id="layoutSidenav">
+        <app-layout-static></app-layout-static>
+        <div id="layoutSidenav_content">
+            <main>
+                <div class="container-fluid px-4">
+                    <h1 class="mt-4">Modifier l'Étudiant</h1>
+                    <div class="card mb-4">
+                        <div class="card-header">
+                            <i class="fas fa-edit me-1"></i> Modifier Étudiant
+                        </div>
+                        <div class="card-body">
+                            <div class="container">
+                                <form (ngSubmit)="updateEtudiant()" #etudiantForm="ngForm" novalidate>
+
+                                    <!-- Nom -->
+                                    <div class="form-group">
+                                        <label for="nom">Nom :</label>
+                                        <input type="text" id="nom" name="nom" [(ngModel)]="etudiant.nom" class="form-control" required />
+                                    </div>
+
+                                    <!-- Prénom -->
+                                    <div class="form-group">
+                                        <label for="prenom">Prénom :</label>
+                                        <input type="text" id="prenom" name="prenom" [(ngModel)]="etudiant.prenom" class="form-control" required />
+                                    </div>
+
+                                    <!-- Email -->
+                                    <div class="form-group">
+                                        <label for="email">Email :</label>
+                                        <input type="email" id="email" name="email" [(ngModel)]="etudiant.email" class="form-control" required />
+                                    </div>
+
+                                    <!-- Numéro de téléphone -->
+                                    <div class="form-group">
+                                        <label for="telephone">Téléphone :</label>
+                                        <input type="tel" id="telephone" name="telephone" [(ngModel)]="etudiant.telephone" class="form-control" required />
+                                    </div>
+
+                                    <!-- Adresse -->
+                                    <div class="form-group">
+                                        <label for="adresse">Adresse :</label>
+                                        <input type="text" id="adresse" name="adresse" [(ngModel)]="etudiant.adresse" class="form-control" required />
+                                    </div>
+                                     <!-- Compétences -->
+                                     <div class="form-group">
+                                        <label for="competences">Compétences :</label>
+                                        <textarea id="competences" name="competences" [(ngModel)]="etudiant.competences" class="form-control" required placeholder="Ex: Java, Angular, Spring Boot"></textarea>
+                                    </div>
+
+                                    <!-- Bouton Mettre à Jour -->
+                                    <button type="submit" class="btn btn-primary" [disabled]="etudiantForm.invalid">Mettre à Jour</button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </main>
+        </div>
+    </div>
+</body>

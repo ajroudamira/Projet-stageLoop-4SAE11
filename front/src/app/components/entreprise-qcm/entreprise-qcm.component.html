@@ -1,0 +1,51 @@
+<div class="qcm-container" *ngIf="qcms.length > 0">
+    <div *ngIf="score === null">
+      <h2>QCM {{ currentStep + 1 }} sur {{ qcms.length }}</h2>
+      <p><strong>Compétence :</strong> {{ qcms[currentStep].competence }}</p>
+      <p>{{ qcms[currentStep].question }}</p>
+  
+      <ul>
+        <li (click)="selectAnswer('A')" [class.selected]="answers[currentStep] === 'A'">
+          A) {{ qcms[currentStep].reponseA }}
+        </li>
+        <li (click)="selectAnswer('B')" [class.selected]="answers[currentStep] === 'B'">
+          B) {{ qcms[currentStep].reponseB }}
+        </li>
+        <li (click)="selectAnswer('C')" [class.selected]="answers[currentStep] === 'C'">
+          C) {{ qcms[currentStep].reponseC }}
+        </li>
+      </ul>
+  
+      <button (click)="nextStep()">Suivant</button>
+    </div>
+  
+    <div *ngIf="score !== null">
+      <h2>Résultat</h2>
+      <p>Vous avez obtenu {{ score }} / {{ qcms.length }}</p>
+      <button (click)="restart()">Recommencer</button>
+      <button (click)="router.navigate(['/entreprises'])">Retour</button>
+    </div>
+    
+  </div>
+
+  <!-- Success Popup -->
+<div *ngIf="showSuccessPopup" class="popup success-popup">
+    🎉 <strong>Félicitations !</strong> Vous avez réussi le test.
+    <br />
+    Votre candidature est en cours de traitement...
+    <br />
+    <small>Redirection dans 5 secondes...</small>
+  </div>
+  
+  <!-- Failure Message -->
+  <div *ngIf="showFailMessage" class="popup fail-popup">
+    ❌ Désolé, vous n'avez pas réussi toutes les réponses.
+    <br />
+    Merci de réessayer plus tard.
+  </div>
+  
+  
+  <div *ngIf="qcms.length === 0">
+    <p>Aucun QCM trouvé pour les compétences fournies.</p>
+  </div>
+  

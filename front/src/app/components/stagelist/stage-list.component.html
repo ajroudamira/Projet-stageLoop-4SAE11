@@ -1,0 +1,97 @@
+
+  
+  <app-navbar></app-navbar>
+  <body class="sb-nav-fixed">
+    <!-- Notification Banners -->
+    <div class="notification-container">
+      <div *ngFor="let stage of notifications" class="notification-banner" [attr.data-id]="stage.idStage">
+        <div class="notification-content">
+          <h5>Stage à terminer dans 14 jours :</h5>
+          <p>{{ stage.titre }}</p>
+        </div>
+      </div>
+    </div>
+  <div id="layoutSidenav">
+    <app-layout-static></app-layout-static>
+    <div id="layoutSidenav_content">
+      <main>
+        <div class="container-fluid px-4">
+          <h1 class="mt-4">Liste des stages</h1>
+          <ol class="breadcrumb mb-4">
+            <li class="breadcrumb-item"><a routerLink="/back-office">Dashboard</a></li>
+            <li class="breadcrumb-item active">Liste des stages</li>
+          </ol>
+
+          <!-- ✅ SECTION DU GRAPHIQUE -->
+          <div class="card mb-4">
+            <div class="card-header">
+              <i class="fas fa-chart-pie me-1"></i>
+              Statistiques des Stages
+            </div>
+            <div class="card-body text-center">
+              <canvas id="stageChart" style="max-width: 400px; height: 300px;"></canvas> 
+            </div>
+          </div>
+
+          <!-- ✅ SECTION DE LA LISTE DES STAGES -->
+          <div class="card mb-4">
+            <div class="card-header">
+              <i class="fas fa-list me-1"></i>
+              Liste des stages
+            </div>
+            <div class="card-body">
+              <ng-container *ngIf="listStages && listStages.length > 0; else noStages">
+                <div class="container py-5">
+                  <h2 class="text-center mb-4">Stages Enregistrés</h2>
+                  <div class="row justify-content-center">
+                    <div class="col-md-6 col-lg-4" *ngFor="let stage of listStages">
+                      <div class="card shadow-lg rounded-lg mb-4 p-3" style="background-color: #ffffff;">
+                        <div class="card-body text-center">
+                          <h5 class="card-title font-weight-bold text-primary">
+                            {{ stage.titre }}
+                          </h5>
+                          <p class="card-text"><strong>Entreprise:</strong> {{ stage.entreprise ? stage.entreprise.nom : 'Entreprise non attribuée' }}</p>
+                          <p class="card-text"><strong>Status:</strong> {{ stage.statusStage }}</p>
+                          <p class="card-text"><strong>Description:</strong> {{ stage.description }}</p>
+                          <p class="card-text"><strong>Compétences requises:</strong> {{ stage.competencesRequises }}</p>
+                          <p class="card-text"><strong>Période:</strong> {{ stage.periode }}</p>
+                          <p class="card-text"><strong>Type de stage:</strong> {{ stage.typeStage }}</p>
+
+                          <!-- ✅ Boutons d'action avec effet 3D -->
+                          <div class="d-flex justify-content-center mt-2">
+                            <button class="btn btn-danger-3d me-2" (click)="deleteStage(stage.idStage)">
+                              <i class="fas fa-trash"></i> Supprimer
+                            </button>
+                            <button class="btn btn-warning-3d" (click)="editStage(stage.idStage)">
+                              <i class="fas fa-edit"></i> Modifier
+                            </button>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </ng-container>
+              <ng-template #noStages>
+                <p class="text-center">Aucun stage disponible.</p>
+              </ng-template>
+            </div>
+          </div>
+        </div>
+      </main>
+
+      <footer class="py-4 bg-light mt-auto">
+        <div class="container-fluid px-4">
+          <div class="d-flex align-items-center justify-content-between small">
+            <div class="text-muted">Copyright &copy; Your Website 2023</div>
+            <div>
+              <a href="#">Privacy Policy</a>
+              &middot;
+              <a href="#">Terms &amp; Conditions</a>
+            </div>
+          </div>
+        </div>
+      </footer>
+    </div>
+  </div>
+</body>

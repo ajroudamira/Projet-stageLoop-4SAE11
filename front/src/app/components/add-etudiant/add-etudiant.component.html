@@ -1,0 +1,109 @@
+<body class="sb-nav-fixed">
+  <app-navbar />
+  <div id="layoutSidenav">
+    <app-layout-static />
+    <div id="layoutSidenav_content">
+      <main>
+        <div class="container-fluid px-4">
+          <h1 class="mt-4">Tables</h1>
+          <ol class="breadcrumb mb-4">
+            <li class="breadcrumb-item"><a href="index.html">Dashboard</a></li>
+            <li class="breadcrumb-item active">Tables</li>
+          </ol>
+          <div class="card mb-4">
+            <div class="card-body">
+              DataTables is a third party plugin that is used to generate the demo table below. 
+              For more information about DataTables, please visit the
+              <a target="_blank" href="https://datatables.net/">official DataTables documentation</a>.
+            </div>
+          </div>
+
+          <div class="card mb-4">
+            <div class="card-header">
+              <i class="fas fa-plus me-1"></i> Ajouter un étudiant
+            </div>
+            <div class="card-body">
+              <div class="container">
+                <form #etudiantForm="ngForm" (ngSubmit)="addRessource()" novalidate>
+                 <!-- Nom -->
+<div class="form-group">
+  <label for="nom">Nom :</label>
+  <input type="text" id="nom" name="nom" [(ngModel)]="etudiant.nom" #nom="ngModel" required minlength="2" class="form-control" placeholder="Entrez le nom" />
+  <div *ngIf="nom.invalid && nom.touched">
+    <small *ngIf="nom.errors?.['required']" class="text-danger">Le nom est obligatoire.</small>
+    <small *ngIf="nom.errors?.['minlength']" class="text-danger">Minimum 2 caractères.</small>
+  </div>
+</div>
+
+<!-- Prénom -->
+<div class="form-group">
+  <label for="prenom">Prénom :</label>
+  <input type="text" id="prenom" name="prenom" [(ngModel)]="etudiant.prenom" #prenom="ngModel" required minlength="2" class="form-control" placeholder="Entrez le prénom" />
+  <div *ngIf="prenom.invalid && prenom.touched">
+    <small *ngIf="prenom.errors?.['required']" class="text-danger">Le prénom est obligatoire.</small>
+    <small *ngIf="prenom.errors?.['minlength']" class="text-danger">Minimum 2 caractères.</small>
+  </div>
+</div>
+
+<!-- Email -->
+<div class="form-group">
+  <label for="email">Email :</label>
+  <input type="email" id="email" name="email" [(ngModel)]="etudiant.email" #email="ngModel" required class="form-control" placeholder="Entrez l'email" />
+  <div *ngIf="email.invalid && email.touched">
+    <small *ngIf="email.errors?.['required']" class="text-danger">L'email est obligatoire.</small>
+    <small *ngIf="email.errors?.['email']" class="text-danger">Format d'email invalide.</small>
+  </div>
+</div>
+
+<!-- Téléphone -->
+<div class="form-group">
+  <label for="telephone">Téléphone :</label>
+  <input type="text" id="telephone" name="telephone" [(ngModel)]="etudiant.telephone" #telephone="ngModel" required pattern="^[0-9]{8}$" class="form-control" placeholder="Entrez le numéro de téléphone" />
+  <div *ngIf="telephone.invalid && telephone.touched">
+    <small *ngIf="telephone.errors?.['required']" class="text-danger">Le téléphone est obligatoire.</small>
+    <small *ngIf="telephone.errors?.['pattern']" class="text-danger">Le numéro doit comporter exactement 8 chiffres.</small>
+  </div>
+</div>
+
+<!-- Adresse -->
+<div class="form-group">
+  <label for="adresse">Adresse :</label>
+  <input type="text" id="adresse" name="adresse" [(ngModel)]="etudiant.adresse" #adresse="ngModel" required class="form-control" placeholder="Entrez l'adresse" />
+  <div *ngIf="adresse.invalid && adresse.touched">
+    <small *ngIf="adresse.errors?.['required']" class="text-danger">L'adresse est obligatoire.</small>
+  </div>
+</div>
+
+<!-- Compétences -->
+<div class="form-group">
+  <label for="competences">Compétences :</label>
+  <textarea id="competences" name="competences" [(ngModel)]="etudiant.competences" #competences="ngModel" required class="form-control" placeholder="Entrez les compétences"></textarea>
+  <div *ngIf="competences.invalid && competences.touched">
+    <small *ngIf="competences.errors?.['required']" class="text-danger">Les compétences sont obligatoires.</small>
+  </div>
+</div>
+
+                  <!-- Bouton Ajouter -->
+                  <button type="submit" class="btn btn-primary" [disabled]="etudiantForm.invalid">Ajouter</button>
+                </form>
+              </div>
+            </div>
+          </div>
+        </div>
+      </main>
+
+      <footer class="py-4 bg-light mt-auto">
+        <div class="container-fluid px-4">
+          <div class="d-flex align-items-center justify-content-between small">
+            <div class="text-muted">Copyright &copy; Your Website 2023</div>
+            <div>
+              <a href="#">Privacy Policy</a>
+              &middot;
+              <a href="#">Terms &amp; Conditions</a>
+            </div>
+          </div>
+        </div>
+      </footer>
+    </div>
+  </div>
+</body>
