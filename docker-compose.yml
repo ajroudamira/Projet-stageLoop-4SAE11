@@ -1,0 +1,95 @@
+version: '3.9'
+
+services:
+
+  front:
+    image: front:v2
+    container_name: front
+    ports:
+      - "4200:4200"
+    networks:
+      - project
+
+  eureka:
+    image: eureka:v1
+    container_name: eureka
+    ports:
+      - "8761:8761"
+    networks:
+      - project
+
+  apigateway:
+    image: apigateway:v1
+    container_name: apigateway
+    depends_on:
+      - eureka
+    environment:
+      APIGATEWAY_PORT: 8093
+      EUREKA_CONTAINER: http://eureka:8761/eureka/
+      ENTREPRISE_SERVICE_URI: http://ms-louay:8089
+      STAGE_SERVICE_URI: http://ms-louay:8089
+      ETUDIANT_SERVICE_URI: http://ms-aziz:8089
+      CANDIDATURE_SERVICE_URI: http://ms-aziz:8089 # Replace if you have a second microservice
+    ports:
+      - "8093:8093"
+    networks:
+      - project
+
+  mysql:
+    image: mysql:latest
+    container_name: mysql
+    environment:
+      MYSQL_DATABASE: pidatabase
+      MYSQL_USER: msuser
+      MYSQL_PASSWORD: msuser
+      MYSQL_ROOT_PASSWORD: rootpass
+    ports:
+      - "3306:3306"
+    networks:
+      - project
+
+
+  ms-louay:
+    image: ms-louay:v2
+    container_name: ms-louay
+    depends_on:
+      - mysql
+      - eureka
+    environment:
+      MICROSERVICE_PORT: 8089
+      DATABASE_CONTAINER: mysql
+      DATABASE_PORT: 3306
+      DATABASE_NAME: pidatabase
+      DATABASE_USERNAME: msuser
+      DATABASE_PASSWORD: msuser
+      EUREKA_CLIENT_ADDRESS: http://eureka:8761/eureka/
+      spring.cloud.config.import-check.enabled: "false"
+      spring.cloud.config.fail-fast: "true"
+    networks:
+      - project
+
+  ms-aziz:
+    image: ms-aziz:v1
+    container_name: ms-aziz
+    depends_on:
+      - mysql
+      - eureka
+    environment:
+      MICROSERVICE_PORT: 8089
+      DATABASE_CONTAINER: mysql
+      DATABASE_PORT: 3306
+      DATABASE_NAME: pidatabase
+      DATABASE_USERNAME: msuser
+      DATABASE_PASSWORD: msuser
+      EUREKA_CLIENT_ADDRESS: http://eureka:8761/eureka/
+      spring.cloud.config.import-check.enabled: "false"
+      spring.cloud.config.fail-fast: "true"
+    networks:
+      - project
+
+
+networks:
+  project:
+
+#volumes:
+#  mysql-data:
