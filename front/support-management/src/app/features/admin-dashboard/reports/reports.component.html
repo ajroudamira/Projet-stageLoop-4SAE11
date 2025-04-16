@@ -1,0 +1,199 @@
+<div class="container-fluid">
+  <div class="row mb-4">
+    <div class="col">
+      <h1 class="h3 mb-3">Reports & Analytics</h1>
+      <p class="text-muted">View detailed system reports and analytics</p>
+    </div>
+    <div class="col-auto">
+      <button class="btn btn-outline-secondary" (click)="loadReportData()">
+        <i class="material-icons me-1">refresh</i> Refresh
+      </button>
+    </div>
+  </div>
+
+  <div *ngIf="error" class="alert alert-danger mb-4">{{ error }}</div>
+
+  <div *ngIf="isLoading" class="d-flex justify-content-center my-5">
+    <div class="spinner-border text-primary" role="status">
+      <span class="visually-hidden">Loading...</span>
+    </div>
+  </div>
+
+  <!-- Response Time Metrics -->
+  <div *ngIf="!isLoading" class="row mb-4">
+    <!-- Total Tickets Overview -->
+    <div class="col-xl-3 col-md-6 mb-4">
+      <div class="card border-left-primary shadow h-100 py-2">
+        <div class="card-body">
+          <div class="row no-gutters align-items-center">
+            <div class="col mr-2">
+              <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
+                Total Tickets
+              </div>
+              <div class="h5 mb-0 font-weight-bold text-gray-800">
+                {{ticketAnalytics?.totalElements || 0}}
+              </div>
+            </div>
+            <div class="col-auto">
+              <i class="material-icons text-gray-300 display-4">confirmation_number</i>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <!-- Average Response Time -->
+    <div class="col-xl-5 col-md-6 mb-4">
+      <div class="card border-left-danger shadow h-100 py-2">
+        <div class="card-body">
+          <div class="row no-gutters align-items-center">
+            <div class="col mr-2">
+              <div class="text-xs font-weight-bold text-danger text-uppercase mb-1">
+                Avg. First Response Time
+              </div>
+              <div class="h5 mb-0 font-weight-bold text-gray-800">
+                {{avgResponseTime}} hours
+              </div>
+              <div class="small text-muted mt-2">
+                Average time until a ticket receives its first response
+              </div>
+            </div>
+            <div class="col-auto">
+              <i class="material-icons text-gray-300 display-4">timer</i>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Average Resolution Time -->
+    <div class="col-xl-4 col-md-6 mb-4">
+      <div class="card border-left-success shadow h-100 py-2">
+        <div class="card-body">
+          <div class="row no-gutters align-items-center">
+            <div class="col mr-2">
+              <div class="text-xs font-weight-bold text-success text-uppercase mb-1">
+                Avg. Resolution Time
+              </div>
+              <div class="h5 mb-0 font-weight-bold text-gray-800">
+                {{avgResolutionTime}} hours
+              </div>
+              <div class="small text-muted mt-2">
+                Average time until a ticket is resolved
+              </div>
+            </div>
+            <div class="col-auto">
+              <i class="material-icons text-gray-300 display-4">check_circle</i>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Distribution Charts -->
+  <div *ngIf="!isLoading" class="row mb-4">
+    <!-- Status Distribution Chart -->
+    <div class="col-lg-6 mb-4">
+      <div class="card shadow h-100">
+        <div class="card-header bg-white">
+          <h5 class="card-title mb-0">Ticket Status Distribution</h5>
+        </div>
+        <div class="card-body">
+          <div style="height: 300px;">
+            <canvas baseChart
+              [data]="statusChartData"
+              [options]="statusChartOptions"
+              [type]="'pie'">
+            </canvas>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Priority Distribution Chart -->
+    <div class="col-lg-6 mb-4">
+      <div class="card shadow h-100">
+        <div class="card-header bg-white">
+          <h5 class="card-title mb-0">Ticket Priority Distribution</h5>
+        </div>
+        <div class="card-body">
+          <div style="height: 300px;">
+            <canvas baseChart
+              [data]="priorityChartData"
+              [options]="priorityChartOptions"
+              [type]="'pie'">
+            </canvas>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Detailed Metrics -->
+  <div *ngIf="!isLoading" class="row">
+    <!-- Status Breakdown -->
+    <div class="col-lg-6 mb-4">
+      <div class="card shadow mb-4">
+        <div class="card-header bg-white">
+          <h5 class="card-title mb-0">Status Breakdown</h5>
+        </div>
+        <div class="card-body">
+          <div class="mb-4">
+            <div *ngFor="let status of ['OPEN', 'IN_PROGRESS', 'RESOLVED', 'CLOSED']" class="mb-3">
+              <div class="d-flex justify-content-between align-items-center mb-1">
+                <h6 class="mb-0 text-capitalize">
+                  {{status.replace('_', ' ').toLowerCase()}}
+                </h6>
+                <span class="font-weight-bold">{{ticketsByStatus[status] || 0}}</span>
+              </div>
+              <div class="progress">
+                <div 
+                  class="progress-bar" 
+                  [ngClass]="{'bg-primary': status === 'OPEN',
+                    'bg-warning': status === 'IN_PROGRESS',
+                    'bg-info': status === 'RESOLVED',
+                    'bg-success': status === 'CLOSED'}"
+                  role="progressbar" 
+                  [style.width.%]="(ticketsByStatus[status] / (ticketAnalytics?.totalElements || 1)) * 100">
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Priority Breakdown -->
+    <div class="col-lg-6 mb-4">
+      <div class="card shadow mb-4">
+        <div class="card-header bg-white">
+          <h5 class="card-title mb-0">Priority Breakdown</h5>
+        </div>
+        <div class="card-body">
+          <div class="mb-4">
+            <div *ngFor="let priority of ['LOW', 'MEDIUM', 'HIGH', 'CRITICAL']" class="mb-3">
+              <div class="d-flex justify-content-between align-items-center mb-1">
+                <h6 class="mb-0 text-capitalize">
+                  {{priority.toLowerCase()}}
+                </h6>
+                <span class="font-weight-bold">{{ticketsByPriority[priority] || 0}}</span>
+              </div>
+              <div class="progress">
+                <div 
+                  class="progress-bar" 
+                  [ngClass]="{'bg-success': priority === 'LOW',
+                    'bg-info': priority === 'MEDIUM',
+                    'bg-warning': priority === 'HIGH',
+                    'bg-danger': priority === 'CRITICAL'}"
+                  role="progressbar" 
+                  [style.width.%]="(ticketsByPriority[priority] / (ticketAnalytics?.totalElements || 1)) * 100">
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div> 

@@ -1,0 +1,81 @@
+<div class="container">
+  <div class="row mb-4">
+    <div class="col">
+      <h1 class="h3 mb-3">My Profile</h1>
+      <p class="text-muted">View and update your profile information</p>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-md-8 mx-auto">
+      <div class="card">
+        <div class="card-header">
+          <h5 class="card-title mb-0">Profile Information</h5>
+        </div>
+        <div class="card-body">
+          <div *ngIf="profileUpdateSuccess" class="alert alert-success mb-4">
+            Your profile has been updated successfully.
+          </div>
+          <div *ngIf="profileUpdateError" class="alert alert-danger mb-4">
+            {{ profileUpdateError }}
+          </div>
+
+          <form [formGroup]="profileForm" (ngSubmit)="updateProfile()">
+            <div class="row mb-3">
+              <div class="col-md-6">
+                <label for="firstName" class="form-label">First Name *</label>
+                <input type="text" class="form-control" id="firstName" formControlName="firstName">
+                <div *ngIf="profileForm.get('firstName')?.touched && profileForm.get('firstName')?.invalid" class="text-danger">
+                  First name is required
+                </div>
+              </div>
+              <div class="col-md-6">
+                <label for="lastName" class="form-label">Last Name *</label>
+                <input type="text" class="form-control" id="lastName" formControlName="lastName">
+                <div *ngIf="profileForm.get('lastName')?.touched && profileForm.get('lastName')?.invalid" class="text-danger">
+                  Last name is required
+                </div>
+              </div>
+            </div>
+
+            <div class="mb-3">
+              <label for="email" class="form-label">Email Address *</label>
+              <input type="email" class="form-control" id="email" formControlName="email">
+              <div *ngIf="profileForm.get('email')?.touched && profileForm.get('email')?.errors?.['required']" class="text-danger">
+                Email is required
+              </div>
+              <div *ngIf="profileForm.get('email')?.touched && profileForm.get('email')?.errors?.['email']" class="text-danger">
+                Please enter a valid email address
+              </div>
+            </div>
+
+            <div class="mb-3">
+              <label for="num_tel" class="form-label">Phone Number</label>
+              <input type="tel" class="form-control" id="num_tel" formControlName="num_tel">
+            </div>
+
+            <div class="mb-3">
+              <label for="login" class="form-label">Username</label>
+              <input type="text" class="form-control" id="login" formControlName="login">
+              <small class="form-text text-muted">Username cannot be changed</small>
+            </div>
+
+            <div class="mb-3">
+              <label for="role" class="form-label">Role</label>
+              <input type="text" class="form-control" id="role" [value]="currentUser?.role" disabled>
+              <small class="form-text text-muted">Role cannot be changed</small>
+            </div>
+
+            <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+              <a routerLink="/user" class="btn btn-outline-secondary me-2">Back to Dashboard</a>
+              <button type="submit" class="btn btn-primary" [disabled]="profileForm.invalid || isUpdatingProfile">
+                <span *ngIf="isUpdatingProfile" class="spinner-border spinner-border-sm me-1" role="status" aria-hidden="true"></span>
+                Update Profile
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div> 

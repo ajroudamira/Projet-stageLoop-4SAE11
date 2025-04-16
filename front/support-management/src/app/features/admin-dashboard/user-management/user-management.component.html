@@ -1,0 +1,114 @@
+<div class="container-fluid">
+  <div class="row mb-4">
+    <div class="col">
+      <h1 class="h3 mb-3">User Management</h1>
+      <p class="text-muted">Manage users in the system</p>
+    </div>
+    <div class="col-auto">
+      <button class="btn btn-primary me-2" (click)="navigateToAddUser()">
+        <i class="material-icons me-1">add</i> Add User
+      </button>
+      <button class="btn btn-outline-secondary me-2" (click)="loadUsers()">
+        <i class="material-icons me-1">refresh</i> Refresh
+      </button>
+      <button class="btn btn-outline-primary" [disabled]="isSyncing" (click)="syncUsersFromKeycloak()">
+        <i class="material-icons me-1">sync</i> Sync from Keycloak
+        <span *ngIf="isSyncing" class="spinner-border spinner-border-sm ms-1" role="status" aria-hidden="true"></span>
+      </button>
+    </div>
+  </div>
+
+  <div *ngIf="syncMessage" class="alert alert-success mb-4">{{ syncMessage }}</div>
+  <div *ngIf="deleteMessage" class="alert alert-success mb-4">{{ deleteMessage }}</div>
+  <div *ngIf="error" class="alert alert-danger mb-4">{{ error }}</div>
+
+  <div *ngIf="isLoading" class="d-flex justify-content-center my-5">
+    <div class="spinner-border text-primary" role="status">
+      <span class="visually-hidden">Loading...</span>
+    </div>
+  </div>
+
+  <div *ngIf="!isLoading" class="card">
+    <div class="card-header bg-white">
+      <div class="row align-items-center">
+        <div class="col">
+          <h5 class="mb-0">Users ({{ users.length }})</h5>
+        </div>
+        <div class="col-auto">
+          <input type="text" class="form-control" placeholder="Search users..." 
+            [(ngModel)]="searchTerm" (input)="applyFilter()" />
+        </div>
+      </div>
+    </div>
+
+    <div class="card-body p-0">
+      <div *ngIf="filteredUsers.length === 0" class="text-center text-muted py-5">
+        <div *ngIf="users.length === 0; else noSearchResults">
+          <i class="material-icons" style="font-size: 48px;">people_alt</i>
+          <p class="mt-2">No users found in the system</p>
+          <button class="btn btn-sm btn-primary" (click)="syncUsersFromKeycloak()">
+            Sync users from Keycloak
+          </button>
+        </div>
+        <ng-template #noSearchResults>
+          <i class="material-icons" style="font-size: 48px;">search_off</i>
+          <p class="mt-2">No users match your search criteria</p>
+        </ng-template>
+      </div>
+      <div *ngIf="filteredUsers.length > 0" class="table-responsive">
+        <table class="table table-hover mb-0">
+          <thead class="table-light">
+            <tr>
+              <th class="text-center" style="width: 70px;">ID</th>
+              <th>Username</th>
+              <th>Email</th>
+              <th>Name</th>
+              <th>Role</th>
+              <th class="text-end" style="width: 120px;">Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let user of filteredUsers">
+              <td class="text-center">{{ user.id_User }}</td>
+              <td><strong>{{ user.login }}</strong></td>
+              <td>
+                <a [href]="'mailto:' + user.email">{{ user.email }}</a>
+              </td>
+              <td>{{ user.firstName }} {{ user.lastName }}</td>
+              <td>
+                <span class="badge" [ngClass]="{
+                  'bg-danger': user.role === 'admin', 
+                  'bg-primary': user.role === 'user',
+                  'bg-success': user.role === 'support',
+                  'bg-info': user.role === 'student',
+                  'bg-warning': user.role === 'partner',
+                  'bg-secondary': !user.role
+                }">
+                  {{ user.role || 'unknown' }}
+                </span>
+              </td>
+              <td class="text-end">
+                <button class="btn btn-sm btn-outline-primary me-1" title="Edit user" (click)="navigateToEditUser(user)">
+                  <i class="material-icons small">edit</i>
+                </button>
+                <button class="btn btn-sm btn-outline-danger" title="Delete user" (click)="deleteUser(user.login)" [disabled]="isDeleting">
+                  <i class="material-icons small">delete</i>
+                </button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+    <div class="card-footer bg-white d-flex justify-content-between align-items-center">
+      <div>
+        <span class="text-muted">Showing {{ filteredUsers.length }} of {{ users.length }} users</span>
+      </div>
+      <div>
+        <button class="btn btn-sm btn-outline-secondary" (click)="loadUsers()">
+          <i class="material-icons me-1 small">refresh</i> Refresh
+        </button>
+      </div>
+    </div>
+  </div>
+</div> 

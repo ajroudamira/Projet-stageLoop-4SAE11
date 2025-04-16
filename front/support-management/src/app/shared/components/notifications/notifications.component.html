@@ -1,0 +1,68 @@
+<div class="notification-container">
+  <button class="notification-bell" (click)="toggleDropdown()">
+    <mat-icon [matBadge]="unreadCount" [matBadgeHidden]="unreadCount === 0" matBadgeColor="warn">notifications</mat-icon>
+  </button>
+
+  <div class="notification-dropdown" *ngIf="showDropdown">
+    <div class="notification-header">
+      <h3>Notifications</h3>
+      <div class="notification-actions">
+        <button class="action-btn filter-btn" (click)="toggleReadFilter($event)" title="Toggle unread only">
+          <mat-icon>{{ showOnlyUnread ? 'visibility' : 'visibility_off' }}</mat-icon>
+          <span class="filter-text">{{ showOnlyUnread ? 'Show All' : 'Unread Only' }}</span>
+        </button>
+        <button *ngIf="notifications.length > 0" class="action-btn" (click)="markAllAsRead($event)" title="Mark all as read">
+          <mat-icon>done_all</mat-icon>
+        </button>
+        <button *ngIf="notifications.length > 0" class="action-btn" (click)="deleteAllNotifications($event)" title="Delete all">
+          <mat-icon>delete</mat-icon>
+        </button>
+      </div>
+    </div>
+    
+    <div class="notification-body">
+      <div *ngIf="loading" class="loading-spinner">
+        <mat-spinner [diameter]="30"></mat-spinner>
+      </div>
+      
+      <div *ngIf="!loading && filteredNotifications.length === 0" class="no-notifications">
+        <p>{{ showOnlyUnread ? 'No unread notifications' : 'No notifications to display' }}</p>
+      </div>
+      
+      <div *ngFor="let notification of filteredNotifications" 
+          [class.unread]="!notification.isRead"
+          [class.read]="notification.isRead"
+          class="notification-item"
+          (click)="navigateToTicket(notification)">
+        <div class="notification-icon" [ngClass]="notification.type | lowercase">
+          <mat-icon>
+            {{ 
+              notification.type === 'COMMENT' ? 'comment' : 
+              notification.type === 'STATUS_CHANGE' ? 'sync' :
+              notification.type === 'CRITICAL_TICKET' ? 'priority_high' :
+              notification.type === 'ASSIGNMENT' ? 'person_add' :
+              notification.type === 'UNASSIGNMENT' ? 'person_remove' :
+              notification.type === 'PRIORITY_CHANGE' ? 'low_priority' : 'notifications'
+            }}
+          </mat-icon>
+        </div>
+        <div class="notification-content">
+          <div class="notification-message">{{ notification.message }}</div>
+          <div class="notification-time">{{ notification.createdAt | date:'MMM d, y h:mm a' }}</div>
+        </div>
+        <div class="notification-actions">
+          <button *ngIf="!notification.isRead" class="action-btn" (click)="markAsRead(notification, $event)" title="Mark as read">
+            <mat-icon>done</mat-icon>
+          </button>
+          <button class="action-btn" (click)="deleteNotification(notification, $event)" title="Delete">
+            <mat-icon>close</mat-icon>
+          </button>
+        </div>
+      </div>
+      
+      <div *ngIf="!loading && notifications.length < totalNotifications" class="load-more">
+        <button mat-button color="primary" (click)="loadMore()">Load More</button>
+      </div>
+    </div>
+  </div>
+</div> 

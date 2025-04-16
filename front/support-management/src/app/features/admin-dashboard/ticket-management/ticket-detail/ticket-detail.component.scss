@@ -1,0 +1,76 @@
+// Ticket detail styling
+.whitespace-pre-wrap {
+  white-space: pre-wrap;
+}
+
+// Comment avatars
+.avatar-circle {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background-color: #f8f9fa;
+  color: #0d6efd;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+}
+
+.avatar-circle-sm {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 14px;
+}
+
+// Status badges
+.status-open {
+  background-color: #0d6efd;
+  color: white;
+}
+
+.status-inprogress {
+  background-color: #ffc107;
+  color: #212529;
+}
+
+.status-resolved {
+  background-color: #198754;
+  color: white;
+}
+
+.status-closed {
+  background-color: #6c757d;
+  color: white;
+}
+
+// Priority badges
+.priority-low {
+  background-color: #20c997;
+  color: white;
+}
+
+.priority-medium {
+  background-color: #0dcaf0;
+  color: white;
+}
+
+.priority-high {
+  background-color: #fd7e14;
+  color: white;
+}
+
+.priority-critical {
+  background-color: #dc3545;
+  color: white;
+}
+
+// Responsive fixes
+@media (max-width: 768px) {
+  .card {
+    margin-bottom: 1.5rem;
+  }
+} 

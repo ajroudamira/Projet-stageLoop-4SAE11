@@ -1,0 +1,171 @@
+<div class="container-fluid mt-4">
+  <div class="d-sm-flex align-items-center justify-content-between mb-4">
+    <h1 class="h3 mb-0 text-gray-800">Dashboard Overview</h1>
+    <button class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm" (click)="loadDashboardData()">
+      <i class="material-icons align-text-bottom me-1">refresh</i> Refresh Data
+    </button>
+  </div>
+
+  <!-- Loading and error states -->
+  <div *ngIf="isLoading" class="d-flex justify-content-center my-5">
+    <div class="spinner-border text-primary" role="status">
+      <span class="visually-hidden">Loading...</span>
+    </div>
+  </div>
+
+  <div *ngIf="error" class="alert alert-danger">{{error}}</div>
+
+  <!-- Dashboard Content -->
+  <div *ngIf="!isLoading" class="row">
+    <!-- Ticket Summary Card -->
+    <div class="col-xl-3 col-md-6 mb-4">
+      <div class="card border-left-primary shadow h-100 py-2">
+        <div class="card-body">
+          <div class="row no-gutters align-items-center">
+            <div class="col mr-2">
+              <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
+                Total Tickets
+              </div>
+              <div class="h5 mb-0 font-weight-bold text-gray-800">
+                {{ticketAnalytics?.totalElements || 0}}
+              </div>
+            </div>
+            <div class="col-auto">
+              <i class="material-icons text-gray-300 display-4">confirmation_number</i>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Open Tickets Card -->
+    <div class="col-xl-3 col-md-6 mb-4">
+      <div class="card border-left-success shadow h-100 py-2">
+        <div class="card-body">
+          <div class="row no-gutters align-items-center">
+            <div class="col mr-2">
+              <div class="text-xs font-weight-bold text-success text-uppercase mb-1">
+                Open Tickets
+              </div>
+              <div class="h5 mb-0 font-weight-bold text-gray-800">
+                {{ticketsByStatus?.OPEN || 0}}
+              </div>
+            </div>
+            <div class="col-auto">
+              <i class="material-icons text-gray-300 display-4">pending_actions</i>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Critical Priority Card (changed from High Priority) -->
+    <div class="col-xl-3 col-md-6 mb-4">
+      <div class="card border-left-danger shadow h-100 py-2">
+        <div class="card-body">
+          <div class="row no-gutters align-items-center">
+            <div class="col mr-2">
+              <div class="text-xs font-weight-bold text-danger text-uppercase mb-1">
+                Critical Priority
+              </div>
+              <div class="h5 mb-0 font-weight-bold text-gray-800">
+                {{ticketsByPriority?.CRITICAL || 0}}
+              </div>
+            </div>
+            <div class="col-auto">
+              <i class="material-icons text-gray-300 display-4">priority_high</i>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- User Count Card -->
+    <div class="col-xl-3 col-md-6 mb-4">
+      <div class="card border-left-info shadow h-100 py-2">
+        <div class="card-body">
+          <div class="row no-gutters align-items-center">
+            <div class="col mr-2">
+              <div class="text-xs font-weight-bold text-info text-uppercase mb-1">
+                Total Users
+              </div>
+              <div class="h5 mb-0 font-weight-bold text-gray-800">
+                {{userCount}}
+              </div>
+              <div class="mt-2">
+                <a routerLink="/admin/users" class="btn btn-sm btn-outline-primary">
+                  Manage Users
+                </a>
+              </div>
+            </div>
+            <div class="col-auto">
+              <i class="material-icons text-gray-300 display-4">people</i>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Ticket Status Distribution -->
+  <div *ngIf="!isLoading" class="row">
+    <div class="col-lg-6 mb-4">
+      <div class="card shadow mb-4">
+        <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+          <h6 class="m-0 font-weight-bold text-primary">Tickets by Status</h6>
+        </div>
+        <div class="card-body">
+          <div class="mb-4">
+            <div *ngFor="let status of ['OPEN', 'IN_PROGRESS', 'RESOLVED', 'CLOSED']" class="mb-1">
+              <h4 class="small font-weight-bold">
+                {{status.replace('_', ' ')}} 
+                <span class="float-end">{{ticketsByStatus[status] || 0}}</span>
+              </h4>
+              <div class="progress mb-4">
+                <div 
+                  class="progress-bar" 
+                  [ngClass]="{'bg-primary': status === 'OPEN',
+                    'bg-warning': status === 'IN_PROGRESS',
+                    'bg-info': status === 'RESOLVED',
+                    'bg-success': status === 'CLOSED'}"
+                  role="progressbar" 
+                  [style.width.%]="(ticketsByStatus[status] / (ticketAnalytics?.totalElements || 1)) * 100">
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Ticket Priority Distribution -->
+    <div class="col-lg-6 mb-4">
+      <div class="card shadow mb-4">
+        <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+          <h6 class="m-0 font-weight-bold text-primary">Tickets by Priority</h6>
+        </div>
+        <div class="card-body">
+          <div class="mb-4">
+            <div *ngFor="let priority of ['LOW', 'MEDIUM', 'HIGH', 'CRITICAL']" class="mb-1">
+              <h4 class="small font-weight-bold">
+                {{priority}} 
+                <span class="float-end">{{ticketsByPriority[priority] || 0}}</span>
+              </h4>
+              <div class="progress mb-4">
+                <div 
+                  class="progress-bar" 
+                  [ngClass]="{'bg-success': priority === 'LOW',
+                    'bg-info': priority === 'MEDIUM',
+                    'bg-warning': priority === 'HIGH',
+                    'bg-danger': priority === 'CRITICAL'}"
+                  role="progressbar" 
+                  [style.width.%]="(ticketsByPriority[priority] / (ticketAnalytics?.totalElements || 1)) * 100">
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div> 

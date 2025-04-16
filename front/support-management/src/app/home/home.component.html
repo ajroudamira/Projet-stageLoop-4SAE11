@@ -1,0 +1,61 @@
+<div class="landing-page">
+  <div class="container">
+    <div class="row justify-content-center">
+      <div class="col-md-8 col-lg-6">
+        <div class="text-center mt-5 mb-4">
+          <h1 class="display-4 fw-bold">Internship Management System</h1>
+          <p class="lead text-muted">Manage support tickets efficiently and effectively</p>
+        </div>
+
+        <div *ngIf="error" class="alert alert-danger mb-4">
+          {{ error }}
+          <button type="button" class="btn-close float-end" aria-label="Close" (click)="error = ''"></button>
+        </div>
+
+        <div class="card shadow-lg border-0">
+          <div class="card-body p-5">
+            <div class="text-center mb-4">
+              <i class="material-icons primary-color" style="font-size: 64px;">support_agent</i>
+              <h2 class="h3 mt-3">Welcome to Internship Management</h2>
+              <p class="text-muted">Please login to access the dashboard</p>
+            </div>
+
+            <div *ngIf="!isLoggedIn" class="d-grid gap-2">
+              <button class="btn btn-primary btn-lg" (click)="login()" [disabled]="loading">
+                <span *ngIf="loading" class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>
+                <i *ngIf="!loading" class="material-icons me-2">login</i> 
+                {{ loading ? 'Connecting...' : 'Login' }}
+              </button>
+              <p class="text-center text-muted small mt-3">
+                You will be redirected to authentication server
+              </p>
+            </div>
+
+            <div *ngIf="isLoggedIn" class="text-center">
+              <p class="alert alert-success">
+                You are logged in as <strong>{{ userProfile?.firstName }} {{ userProfile?.lastName }}</strong>
+              </p>
+              <div class="d-grid gap-2">
+                <button *ngIf="userRoles.includes('admin')" class="btn btn-primary mb-2" routerLink="/admin">
+                  <i class="material-icons me-2">dashboard</i> Go to Admin Dashboard
+                </button>
+                <button *ngIf="!userRoles.includes('admin')" class="btn btn-primary mb-2" routerLink="/user">
+                  <i class="material-icons me-2">dashboard</i> Go to User Dashboard
+                </button>
+                <button class="btn btn-outline-secondary" (click)="logout()">
+                  <i class="material-icons me-2">logout</i> Logout
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="text-center mt-4">
+          <p class="text-muted small">
+            &copy; 2025 Internship Management System. All rights reserved.
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div> 

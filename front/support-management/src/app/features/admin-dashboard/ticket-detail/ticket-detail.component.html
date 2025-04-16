@@ -1,0 +1,11 @@
+                  <div class="mb-3">
+                    <label class="form-label text-muted">Assigned To</label>
+                    <div>
+                      {{ ticket.assignee?.firstName }} {{ ticket.assignee?.lastName }}
+                      <span *ngIf="!ticket.assignee" class="text-muted">Unassigned</span>
+                    </div>
+                  </div>
+
+                  <td>{{ attachment.uploadedBy?.firstName }} {{ attachment.uploadedBy?.lastName }}</td>
+
+                      <strong>{{ comment.author?.firstName }} {{ comment.author?.lastName }}</strong> 

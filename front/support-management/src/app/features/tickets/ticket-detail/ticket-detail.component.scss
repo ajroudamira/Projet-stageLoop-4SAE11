@@ -1,0 +1,57 @@
+.status-badge {
+  display: inline-block;
+  padding: 0.25em 0.6em;
+  font-size: 0.75em;
+  font-weight: 700;
+  line-height: 1;
+  text-align: center;
+  white-space: nowrap;
+  vertical-align: baseline;
+  border-radius: 0.25rem;
+}
+
+.status-open {
+  background-color: #ffc107;
+  color: #212529;
+}
+
+.status-in-progress {
+  background-color: #0d6efd;
+  color: #fff;
+}
+
+.status-resolved {
+  background-color: #198754;
+  color: #fff;
+}
+
+.status-closed {
+  background-color: #6c757d;
+  color: #fff;
+}
+
+.text-pre-wrap {
+  white-space: pre-wrap;
+}
+
+.comment {
+  border-bottom: 1px solid #eee;
+  padding-bottom: 1rem;
+}
+
+.comment:last-child {
+  border-bottom: none;
+}
+
+.avatar .material-icons {
+  font-size: 2rem;
+  color: #6c757d;
+}
+
+.attachment-list .material-icons {
+  font-size: 1.2rem;
+}
+
+.btn-group .btn {
+  padding: 0.25rem 0.5rem;
+} 

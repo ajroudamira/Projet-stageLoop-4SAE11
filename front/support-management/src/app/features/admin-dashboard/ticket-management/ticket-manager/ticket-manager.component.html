@@ -1,0 +1,44 @@
+<div class="ticket-manager-container">
+  <div class="ticket-manager-header">
+    <h2>Ticket Manager Management</h2>
+  </div>
+
+  <div class="ticket-manager-form">
+    <div class="form-group">
+      <h3>Current Ticket Manager</h3>
+      <div *ngIf="currentTicketManager">
+        <p>
+          <strong>{{ currentTicketManager.firstName }} {{ currentTicketManager.lastName }}</strong>
+        </p>
+        <p>
+          <small>{{ currentTicketManager.email }}</small>
+        </p>
+      </div>
+      <div *ngIf="!currentTicketManager">
+        <p>No ticket manager assigned</p>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <h3>Assign New Ticket Manager</h3>
+      <div class="mb-3">
+        <select class="form-control" [(ngModel)]="selectedAdmin" name="adminSelect">
+          <option [ngValue]="''">Select Admin</option>
+          <option *ngFor="let admin of admins" [ngValue]="admin.login">
+            {{ admin.firstName }} {{ admin.lastName }} ({{ admin.email }})
+          </option>
+        </select>
+      </div>
+      <button class="btn btn-primary" (click)="assignTicketManager()" [disabled]="!selectedAdmin || isLoading">
+        Assign Ticket Manager
+      </button>
+    </div>
+
+    <div class="form-group" *ngIf="isCurrentUserTicketManager()">
+      <h3>Resign as Ticket Manager</h3>
+      <button class="btn btn-danger" (click)="resignAsTicketManager()" [disabled]="isLoading">
+        Resign as Ticket Manager
+      </button>
+    </div>
+  </div>
+</div> 

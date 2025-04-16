@@ -1,0 +1,298 @@
+<div class="container">
+  <!-- Loading Indicator -->
+  <div *ngIf="isLoading" class="d-flex justify-content-center my-5">
+    <div class="spinner-border text-primary" role="status">
+      <span class="visually-hidden">Loading...</span>
+    </div>
+  </div>
+
+  <!-- Error Message -->
+  <div *ngIf="error && !isLoading" class="alert alert-danger mb-4">
+    {{ error }}
+  </div>
+
+  <div *ngIf="!isLoading && ticket">
+    <!-- Ticket Header -->
+    <div class="d-flex justify-content-between align-items-center mb-4">
+      <div>
+        <h1 class="h3 mb-2">Ticket #{{ ticket.id }}</h1>
+        <p class="text-muted">{{ ticket.title }}</p>
+      </div>
+      <div>
+        <button class="btn btn-outline-secondary me-2" (click)="goBack()">
+          <i class="material-icons me-1">arrow_back</i> Back
+        </button>
+        <button *ngIf="canModifyTicket()" class="btn btn-primary" (click)="editTicket()">
+          <i class="material-icons me-1">edit</i> Edit
+        </button>
+      </div>
+    </div>
+
+    <!-- Ticket Details -->
+    <div class="row mb-4">
+      <div class="col-md-8">
+        <div class="card">
+          <div class="card-header">
+            <h5 class="card-title mb-0">Ticket Details</h5>
+          </div>
+          <div class="card-body">
+            <div class="row mb-3">
+              <div class="col-md-3 fw-bold">Status:</div>
+              <div class="col-md-9">
+                <span class="status-badge" 
+                  [ngClass]="{
+                    'status-open': ticket.status === 'OPEN',
+                    'status-in-progress': ticket.status === 'IN_PROGRESS',
+                    'status-resolved': ticket.status === 'RESOLVED',
+                    'status-closed': ticket.status === 'CLOSED'
+                  }">
+                  {{ ticket.status }}
+                </span>
+              </div>
+            </div>
+            <div class="row mb-3">
+              <div class="col-md-3 fw-bold">Priority:</div>
+              <div class="col-md-9">
+                <span class="badge rounded-pill" 
+                  [ngClass]="{
+                    'bg-danger': ticket.priority === 'CRITICAL',
+                    'bg-warning text-dark': ticket.priority === 'HIGH',
+                    'bg-primary': ticket.priority === 'MEDIUM',
+                    'bg-info text-dark': ticket.priority === 'LOW'
+                  }">
+                  {{ ticket.priority }}
+                </span>
+              </div>
+            </div>
+            <div class="row mb-3">
+              <div class="col-md-3 fw-bold">Category:</div>
+              <div class="col-md-9">
+                <span class="badge rounded-pill" 
+                  [ngClass]="{
+                    'bg-info text-dark': ticket.category === 'TECHNICAL',
+                    'bg-secondary': ticket.category === 'ACCOUNT',
+                    'bg-warning text-dark': ticket.category === 'INTERNSHIP_POSTING',
+                    'bg-success': ticket.category === 'PAYMENT'
+                  }">
+                  {{ ticket.category.replace('_', ' ') }}
+                </span>
+              </div>
+            </div>
+            <div class="row mb-3">
+              <div class="col-md-3 fw-bold">Created:</div>
+              <div class="col-md-9">{{ ticket.createdAt | date:'medium' }}</div>
+            </div>
+            <div class="row mb-3">
+              <div class="col-md-3 fw-bold">Last Updated:</div>
+              <div class="col-md-9">{{ ticket.updatedAt | date:'medium' }}</div>
+            </div>
+            <div class="row mb-3">
+              <div class="col-md-3 fw-bold">Submitted By:</div>
+              <div class="col-md-9">
+                {{ (ticket.submitter ? ticket.submitter.firstName + ' ' + ticket.submitter.lastName : 
+                   ticket.student ? ticket.student.firstName + ' ' + ticket.student.lastName : 'Unknown') }}
+              </div>
+            </div>
+            <div class="row mb-3">
+              <div class="col-md-3 fw-bold">Assigned To:</div>
+              <div class="col-md-9">
+                {{ (ticket.assignedAdmin ? ticket.assignedAdmin.firstName + ' ' + ticket.assignedAdmin.lastName : 
+                   ticket.admin ? ticket.admin.firstName + ' ' + ticket.admin.lastName : 'Not assigned') }}
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-md-3 fw-bold">Description:</div>
+              <div class="col-md-9">
+                <p class="text-pre-wrap">{{ ticket.description }}</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Attachments Panel -->
+      <div class="col-md-4">
+        <div class="card">
+          <div class="card-header">
+            <h5 class="card-title mb-0">Attachments</h5>
+          </div>
+          <div class="card-body">
+            <div *ngIf="isLoadingAttachments" class="d-flex justify-content-center py-3">
+              <div class="spinner-border spinner-border-sm text-primary" role="status">
+                <span class="visually-hidden">Loading attachments...</span>
+              </div>
+            </div>
+
+            <div *ngIf="!isLoadingAttachments && attachments.length === 0" class="text-center text-muted py-3">
+              No attachments available
+            </div>
+
+            <ul *ngIf="!isLoadingAttachments && attachments.length > 0" class="list-group attachment-list mb-3">
+              <li *ngFor="let attachment of attachments" class="list-group-item d-flex justify-content-between align-items-center">
+                <div class="d-flex align-items-center">
+                  <i class="material-icons me-2 text-primary">attachment</i>
+                  <div>
+                    <div>{{ attachment.fileName }}</div>
+                    <small class="text-muted">{{ attachment.fileSize | number }} bytes</small>
+                  </div>
+                </div>
+                <div class="btn-group">
+                  <button 
+                    class="btn btn-sm btn-outline-primary" 
+                    (click)="downloadAttachment(attachment.id!)"
+                    title="Download">
+                    <i class="material-icons">download</i>
+                  </button>
+                  <button 
+                    *ngIf="canModifyTicket()" 
+                    class="btn btn-sm btn-outline-danger"
+                    (click)="deleteAttachment(attachment.id!)"
+                    title="Delete">
+                    <i class="material-icons">delete</i>
+                  </button>
+                </div>
+              </li>
+            </ul>
+
+            <!-- Upload Attachment Form -->
+            <div *ngIf="canModifyTicket()" class="upload-form">
+              <h6 class="mb-2">Upload Attachment</h6>
+              <div class="mb-3">
+                <input 
+                  type="file" 
+                  class="form-control" 
+                  id="file" 
+                  (change)="handleFileInput($event)">
+              </div>
+              <div *ngIf="uploadError" class="alert alert-danger mb-3 py-2">
+                {{ uploadError }}
+              </div>
+              <div *ngIf="isUploading" class="progress mb-3">
+                <div 
+                  class="progress-bar" 
+                  role="progressbar" 
+                  [style.width.%]="uploadProgress" 
+                  aria-valuenow="uploadProgress" 
+                  aria-valuemin="0" 
+                  aria-valuemax="100">
+                  {{ uploadProgress }}%
+                </div>
+              </div>
+              <button 
+                class="btn btn-primary btn-sm" 
+                [disabled]="!fileToUpload || isUploading"
+                (click)="uploadFile()">
+                <i class="material-icons me-1">cloud_upload</i> Upload
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Comments Section -->
+    <div class="card mb-4">
+      <div class="card-header">
+        <h5 class="card-title mb-0">Comments</h5>
+      </div>
+      <div class="card-body">
+        <div *ngIf="isLoadingComments" class="d-flex justify-content-center py-3">
+          <div class="spinner-border spinner-border-sm text-primary" role="status">
+            <span class="visually-hidden">Loading comments...</span>
+          </div>
+        </div>
+
+        <div *ngIf="!isLoadingComments && comments.length === 0" class="text-center text-muted py-3">
+          No comments available
+        </div>
+
+        <div *ngIf="!isLoadingComments && comments.length > 0" class="comments-list mb-4">
+          <ng-container *ngFor="let comment of comments">
+            <!-- Show all comments to admin, but only non-internal comments to regular users -->
+            <ng-container *ngIf="currentUser?.role === 'admin' || (!comment.internal && currentUser?.role !== 'admin')">
+              <div class="comment mb-3">
+                <div class="comment-header d-flex justify-content-between">
+                  <div class="d-flex align-items-center">
+                    <div class="avatar me-2">
+                      <i class="material-icons">account_circle</i>
+                    </div>
+                    <div>
+                      <div class="fw-bold">
+                        {{ comment.user?.firstName }} {{ comment.user?.lastName }}
+                      </div>
+                    </div>
+                  </div>
+                  <div>
+                    <span *ngIf="comment.internal" class="badge bg-secondary me-2">Internal</span>
+                    <div class="dropdown d-inline-block ms-2" *ngIf="currentUser?.id_User === comment.user?.id_User || currentUser?.id_User === comment.author?.id_User || currentUser?.role === 'admin'">
+                      <button class="btn btn-sm btn-link p-0" type="button" data-bs-toggle="dropdown">
+                        <i class="material-icons">more_vert</i>
+                      </button>
+                      <ul class="dropdown-menu dropdown-menu-end">
+                        <!-- Show edit only for comment owner -->
+                        <li *ngIf="currentUser?.id_User === comment.user?.id_User || currentUser?.id_User === comment.author?.id_User">
+                          <button class="dropdown-item" (click)="editComment(comment)">Edit</button>
+                        </li>
+                        <!-- Show delete for comment owner or admin (except when admin tries to delete another admin's comment) -->
+                        <li *ngIf="currentUser?.id_User === comment.user?.id_User || currentUser?.id_User === comment.author?.id_User || (currentUser?.role === 'admin' && (comment.user?.role !== 'admin' && comment.author?.role !== 'admin'))">
+                          <button class="dropdown-item text-danger" (click)="deleteComment(comment)">Delete</button>
+                        </li>
+                      </ul>
+                    </div>
+                  </div>
+                </div>
+                <div *ngIf="editingCommentId === comment.id">
+                  <form [formGroup]="editCommentForm" (ngSubmit)="updateComment(comment)" class="mt-2">
+                    <div class="mb-3">
+                      <textarea 
+                        class="form-control" 
+                        formControlName="content" 
+                        rows="3"></textarea>
+                      <div *ngIf="editCommentForm.get('content')?.invalid && editCommentForm.get('content')?.touched" class="text-danger small">
+                        Comment content is required
+                      </div>
+                    </div>
+                    <div class="d-flex gap-2">
+                      <button type="submit" class="btn btn-primary btn-sm" [disabled]="editCommentForm.invalid">
+                        Save Changes
+                      </button>
+                      <button type="button" class="btn btn-secondary btn-sm" (click)="cancelEdit()">
+                        Cancel
+                      </button>
+                    </div>
+                  </form>
+                </div>
+                <div *ngIf="editingCommentId !== comment.id" class="comment-body mt-2">
+                  <p class="text-pre-wrap mb-0">{{ comment.content }}</p>
+                </div>
+              </div>
+            </ng-container>
+          </ng-container>
+        </div>
+
+        <!-- Add Comment Form -->
+        <div *ngIf="ticket && ticket.status !== 'CLOSED'">
+          <h6 class="mb-3">Add Comment</h6>
+          <form [formGroup]="commentForm" (ngSubmit)="submitComment()">
+            <div class="mb-3">
+              <textarea 
+                class="form-control" 
+                formControlName="content" 
+                rows="3" 
+                placeholder="Write your comment here..."></textarea>
+              <div *ngIf="commentForm.get('content')?.invalid && commentForm.get('content')?.touched" class="text-danger">
+                Comment content is required
+              </div>
+            </div>
+            <button 
+              type="submit" 
+              class="btn btn-primary" 
+              [disabled]="commentForm.invalid">
+              <i class="material-icons me-1">send</i> Submit
+            </button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div> 

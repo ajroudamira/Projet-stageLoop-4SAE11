@@ -1,0 +1,64 @@
+<div class="container">
+  <div class="row mb-4">
+    <div class="col">
+      <h1 class="h3 mb-3">Login History</h1>
+      <p class="text-muted">View your recent login activity</p>
+    </div>
+    <div class="col-auto">
+      <button class="btn btn-outline-secondary" (click)="refreshHistory()">
+        <i class="material-icons me-1">refresh</i> Refresh
+      </button>
+    </div>
+  </div>
+
+  <div *ngIf="error" class="alert alert-danger mb-4">{{ error }}</div>
+
+  <div class="row">
+    <div class="col-md-12">
+      <div class="card">
+        <div class="card-header d-flex justify-content-between align-items-center">
+          <h5 class="card-title mb-0">Login Activity</h5>
+          <a routerLink="/user" class="btn btn-sm btn-outline-primary">Back to Dashboard</a>
+        </div>
+        <div class="card-body">
+          <div *ngIf="isLoading" class="d-flex justify-content-center my-5">
+            <div class="spinner-border text-primary" role="status">
+              <span class="visually-hidden">Loading login history...</span>
+            </div>
+          </div>
+
+          <div *ngIf="!isLoading && loginHistory.length === 0" class="alert alert-info">
+            No login history available.
+          </div>
+
+          <div *ngIf="!isLoading && loginHistory.length > 0" class="table-responsive">
+            <table class="table table-striped">
+              <thead>
+                <tr>
+                  <th>Date & Time</th>
+                  <th>IP Address</th>
+                  <th>Browser</th>
+                  <th>Device</th>
+                  <th>Status</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let log of loginHistory">
+                  <td>{{ log.timestamp }}</td>
+                  <td>{{ log.ip || 'N/A' }}</td>
+                  <td>{{ log.location?.country  || 'N/A' }}</td>
+                  <td>{{ log.device || 'N/A' }}</td>
+                  <td>
+                    <span class="badge" [ngClass]="log.success ? 'bg-success' : 'bg-danger'">
+                      {{ log.success ? 'Success' : 'Failed' }}
+                    </span>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div> 

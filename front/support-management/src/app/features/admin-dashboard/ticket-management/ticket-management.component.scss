@@ -1,0 +1,90 @@
+th.mat-header-cell, td.mat-cell {
+  vertical-align: middle;
+}
+
+.material-icons {
+  font-size: 18px;
+  vertical-align: middle;
+}
+
+.badge {
+  padding: 6px 12px;
+  border-radius: 20px;
+  font-weight: normal;
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.status-open {
+  background-color: var(--status-open-bg);
+  color: var(--status-open-text);
+}
+
+.status-inprogress {
+  background-color: var(--status-inprogress-bg);
+  color: var(--status-inprogress-text);
+}
+
+.status-resolved {
+  background-color: var(--status-resolved-bg);
+  color: var(--status-resolved-text);
+}
+
+.status-closed {
+  background-color: var(--status-closed-bg);
+  color: var(--status-closed-text);
+}
+
+// Ticket management styles
+.cursor-pointer {
+  cursor: pointer;
+}
+
+// Table hover states
+.table-hover tbody tr:hover {
+  background-color: rgba(13, 110, 253, 0.05);
+}
+
+// Badge styling
+.badge {
+  font-weight: 500;
+  padding: 0.4em 0.6em;
+}
+
+// Pagination styles
+.page-item {
+  &.active .page-link {
+    background-color: #0d6efd;
+    border-color: #0d6efd;
+  }
+  
+  .page-link {
+    color: #0d6efd;
+    
+    &:hover {
+      background-color: #e9ecef;
+    }
+  }
+  
+  &.disabled .page-link {
+    color: #6c757d;
+    pointer-events: none;
+  }
+}
+
+// Card hover animations
+.card {
+  transition: box-shadow 0.2s ease;
+  
+  &:hover {
+    box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
+  }
+}
+
+// Responsive adjustments
+@media (max-width: 768px) {
+  .pagination {
+    justify-content: center;
+  }
+} 

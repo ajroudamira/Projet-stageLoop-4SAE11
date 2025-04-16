@@ -1,0 +1,133 @@
+<div class="container">
+  <div class="row mb-4">
+    <div class="col">
+      <h1 class="h3 mb-3">My Dashboard</h1>
+      <p class="text-muted">Manage your account and support tickets</p>
+    </div>
+    <div class="col-auto">
+      <button class="btn btn-primary me-2" (click)="createNewTicket()">
+        <i class="material-icons me-1">add</i> New Ticket
+      </button>
+      <button class="btn btn-outline-secondary" (click)="refreshDashboard()">
+        <i class="material-icons me-1">refresh</i> Refresh
+      </button>
+    </div>
+  </div>
+
+  <div *ngIf="error" class="alert alert-danger mb-4">{{ error }}</div>
+  
+  <!-- Dashboard Content -->
+  <div *ngIf="isLoading" class="d-flex justify-content-center my-5">
+    <div class="spinner-border text-primary" role="status">
+      <span class="visually-hidden">Loading...</span>
+    </div>
+  </div>
+
+  <div *ngIf="!isLoading" class="row mb-4">
+    <!-- Ticket Statistics -->
+    <div class="col-md-3 mb-4">
+      <div class="card h-100 dashboard-card">
+        <div class="card-body text-center">
+          <h5 class="card-title text-primary mb-0">Total Tickets</h5>
+          <div class="display-4 fw-bold my-3">{{ ticketStats.total }}</div>
+          <p class="card-text text-muted">All your tickets</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-md-3 mb-4">
+      <div class="card h-100 dashboard-card">
+        <div class="card-body text-center">
+          <h5 class="card-title text-warning mb-0">Open</h5>
+          <div class="display-4 fw-bold my-3">{{ ticketStats.open }}</div>
+          <p class="card-text text-muted">Awaiting response</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-md-3 mb-4">
+      <div class="card h-100 dashboard-card">
+        <div class="card-body text-center">
+          <h5 class="card-title text-info mb-0">In Progress</h5>
+          <div class="display-4 fw-bold my-3">{{ ticketStats.inProgress }}</div>
+          <p class="card-text text-muted">Being worked on</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-md-3 mb-4">
+      <div class="card h-100 dashboard-card">
+        <div class="card-body text-center">
+          <h5 class="card-title text-success mb-0">Resolved</h5>
+          <div class="display-4 fw-bold my-3">{{ ticketStats.resolved }}</div>
+          <p class="card-text text-muted">Completed tickets</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div *ngIf="!isLoading" class="row">
+    <!-- Recent Tickets -->
+    <div class="col-md-12">
+      <div class="card">
+        <div class="card-header d-flex justify-content-between align-items-center">
+          <h5 class="card-title mb-0">Recent Tickets</h5>
+          <a [routerLink]="['/tickets']" class="btn btn-sm btn-outline-primary">View All</a>
+        </div>
+        <div class="card-body p-0">
+          <div *ngIf="recentTickets.length === 0" class="text-center text-muted py-5">
+            You don't have any tickets yet. Click "New Ticket" to create one.
+          </div>
+          <div *ngIf="recentTickets.length > 0" class="table-responsive">
+            <table class="table table-hover">
+              <thead>
+                <tr>
+                  <th scope="col">#</th>
+                  <th scope="col">Title</th>
+                  <th scope="col">Status</th>
+                  <th scope="col">Priority</th>
+                  <th scope="col">Created</th>
+                  <th scope="col">Actions</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let ticket of recentTickets" class="cursor-pointer" (click)="viewTicket(ticket.id!)">
+                  <td>{{ ticket.id }}</td>
+                  <td>{{ ticket.title }}</td>
+                  <td>
+                    <span class="status-badge" 
+                          [ngClass]="{
+                            'status-open': ticket.status === 'OPEN',
+                            'status-in-progress': ticket.status === 'IN_PROGRESS',
+                            'status-resolved': ticket.status === 'RESOLVED',
+                            'status-closed': ticket.status === 'CLOSED'
+                          }">
+                      {{ ticket.status }}
+                    </span>
+                  </td>
+                  <td>
+                    <span class="badge rounded-pill" 
+                          [ngClass]="{
+                            'bg-danger': ticket.priority === 'CRITICAL',
+                            'bg-warning text-dark': ticket.priority === 'HIGH',
+                            'bg-primary': ticket.priority === 'MEDIUM',
+                            'bg-info text-dark': ticket.priority === 'LOW'
+                          }">
+                      {{ ticket.priority }}
+                    </span>
+                  </td>
+                  <td>{{ ticket.createdAt | date:'short' }}</td>
+                  <td>
+                    <button class="btn btn-sm btn-outline-primary me-2" (click)="viewTicket(ticket.id!); $event.stopPropagation()">
+                      <i class="material-icons">visibility</i>
+                    </button>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div> 

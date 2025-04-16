@@ -1,0 +1,90 @@
+.chart-container {
+  min-height: 300px;
+  position: relative;
+}
+
+.card {
+  transition: all 0.3s ease;
+  
+  &:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 .5rem 1rem rgba(0,0,0,.15) !important;
+  }
+}
+
+.material-icons {
+  vertical-align: middle;
+  font-size: 18px;
+}
+
+/* Border styles for cards */
+.border-left-primary {
+  border-left: 0.25rem solid #4e73df !important;
+}
+.border-left-success {
+  border-left: 0.25rem solid #1cc88a !important;
+}
+.border-left-warning {
+  border-left: 0.25rem solid #f6c23e !important;
+}
+.border-left-info {
+  border-left: 0.25rem solid #36b9cc !important;
+}
+.border-left-danger {
+  border-left: 0.25rem solid #e74a3b !important;
+}
+
+/* Text utilities */
+.text-xs {
+  font-size: 0.7rem;
+}
+.text-gray-300 {
+  color: #dddfeb !important;
+}
+.text-gray-800 {
+  color: #5a5c69 !important;
+}
+
+/* Progress bar customization */
+.progress {
+  height: 0.5rem;
+  border-radius: 0.25rem;
+}
+
+/* Dashboard card spacing */
+.display-4 {
+  font-size: 2.5rem !important;
+}
+
+/* Card headers */
+.card-header {
+  border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+/* Charts container */
+.chart-container {
+  position: relative;
+  height: 300px;
+  width: 100%;
+}
+
+/* Progress bar animations */
+.progress-bar {
+  transition: width 1s ease-in-out;
+}
+
+/* Make text more readable */
+.font-weight-bold {
+  font-weight: 600;
+}
+
+/* Spacing for metric numbers */
+.h5 {
+  font-size: 1.5rem;
+  margin-top: 0.25rem;
+}
+
+/* Card body padding */
+.card-body {
+  padding: 1.25rem;
+}

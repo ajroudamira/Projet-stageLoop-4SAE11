@@ -1,0 +1,21 @@
+
+
+# Allow Spring Boot backend
+!Back/
+!Back/**
+!keycloak-23.0.6/
+!keycloak-23.0.6/**
+# Ignore Maven/Gradle build outputs
+Back/target/
+Back/build/
+
+# Allow Angular frontend
+!front/
+!front/support-management/
+!front/support-management/**
+
+# Ignore Angular build and dependencies
+front/support-management/node_modules/
+front/support-management/dist/
+front/support-management/.angular/
+front/support-management/.env

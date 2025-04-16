@@ -1,0 +1,122 @@
+<div class="container-fluid">
+  <div class="row mb-4">
+    <div class="col">
+      <h1 class="h3 mb-2">My Profile</h1>
+      <p class="text-muted">View and update your profile information</p>
+    </div>
+  </div>
+
+  <div *ngIf="successMessage" class="alert alert-success mb-4">{{ successMessage }}</div>
+  <div *ngIf="error" class="alert alert-danger mb-4">{{ error }}</div>
+
+  <div *ngIf="isLoading" class="d-flex justify-content-center my-5">
+    <div class="spinner-border text-primary" role="status">
+      <span class="visually-hidden">Loading...</span>
+    </div>
+  </div>
+
+  <div *ngIf="!isLoading" class="row">
+    <div class="col-md-4 mb-4">
+      <div class="card">
+        <div class="card-body text-center">
+          <div class="avatar-circle mb-3">
+            <span class="initials">{{ currentUser?.firstName?.charAt(0) || '' }}{{ currentUser?.lastName?.charAt(0) || '' }}</span>
+          </div>
+          <h4 class="mb-1">{{ currentUser?.firstName }} {{ currentUser?.lastName }}</h4>
+          <p class="text-muted">{{ currentUser?.role || 'User' }}</p>
+          <div class="d-flex justify-content-center mt-3">
+            <a class="btn btn-outline-primary btn-sm me-2" href="mailto:{{ currentUser?.email }}">
+              <i class="material-icons small me-1">email</i> Email
+            </a>
+          </div>
+        </div>
+        <div class="card-footer bg-light">
+          <div class="row">
+            <div class="col text-start">
+              <strong>Username:</strong>
+            </div>
+            <div class="col text-end">
+              {{ currentUser?.login }}
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-md-8">
+      <div class="card">
+        <div class="card-header">
+          <h5 class="card-title mb-0">Profile Details</h5>
+        </div>
+        <div class="card-body">
+          <form [formGroup]="profileForm" (ngSubmit)="onSubmit()">
+            <div class="row mb-3">
+              <div class="col-md-6">
+                <label for="firstName" class="form-label">First Name</label>
+                <input 
+                  type="text" 
+                  class="form-control" 
+                  id="firstName" 
+                  formControlName="firstName"
+                  [ngClass]="{'is-invalid': profileForm.get('firstName')?.invalid && (profileForm.get('firstName')?.dirty || profileForm.get('firstName')?.touched)}">
+                <div class="invalid-feedback" *ngIf="profileForm.get('firstName')?.errors?.['required']">
+                  First name is required
+                </div>
+              </div>
+              
+              <div class="col-md-6">
+                <label for="lastName" class="form-label">Last Name</label>
+                <input 
+                  type="text" 
+                  class="form-control" 
+                  id="lastName" 
+                  formControlName="lastName"
+                  [ngClass]="{'is-invalid': profileForm.get('lastName')?.invalid && (profileForm.get('lastName')?.dirty || profileForm.get('lastName')?.touched)}">
+                <div class="invalid-feedback" *ngIf="profileForm.get('lastName')?.errors?.['required']">
+                  Last name is required
+                </div>
+              </div>
+            </div>
+
+            <div class="row mb-3">
+              <div class="col-md-6">
+                <label for="email" class="form-label">Email</label>
+                <input 
+                  type="email" 
+                  class="form-control" 
+                  id="email" 
+                  formControlName="email"
+                  [ngClass]="{'is-invalid': profileForm.get('email')?.invalid && (profileForm.get('email')?.dirty || profileForm.get('email')?.touched)}">
+                <div class="invalid-feedback" *ngIf="profileForm.get('email')?.errors?.['required']">
+                  Email is required
+                </div>
+                <div class="invalid-feedback" *ngIf="profileForm.get('email')?.errors?.['email']">
+                  Please enter a valid email address
+                </div>
+              </div>
+              
+              <div class="col-md-6">
+                <label for="num_tel" class="form-label">Phone Number</label>
+                <input 
+                  type="text" 
+                  class="form-control" 
+                  id="num_tel" 
+                  formControlName="num_tel">
+              </div>
+            </div>
+
+            <div class="d-flex justify-content-end mt-4">
+              <button 
+                type="submit" 
+                class="btn btn-primary" 
+                [disabled]="profileForm.invalid || isSubmitting">
+                Update Profile
+                <span *ngIf="isSubmitting" class="spinner-border spinner-border-sm ms-1" role="status" aria-hidden="true"></span>
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,39 @@
+<div class="container">
+  <div class="row justify-content-center align-items-center min-vh-100">
+    <div class="col-md-6 col-lg-5">
+      <div class="card shadow">
+        <div class="card-body p-5">
+          <div class="text-center mb-4">
+            <h2 class="card-title">Create a New Account</h2>
+            <p class="card-text text-muted">Register to access the support system</p>
+          </div>
+
+          <div class="d-grid gap-2 mt-4">
+            <button 
+              class="btn btn-primary btn-lg" 
+              type="button" 
+              (click)="register()" 
+              [disabled]="isLoading">
+              <span *ngIf="isLoading" class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>
+              <i *ngIf="!isLoading" class="material-icons me-2" style="vertical-align: middle;">person_add</i>
+              Register with Keycloak
+            </button>
+            
+            <button 
+              class="btn btn-outline-secondary" 
+              type="button" 
+              (click)="navigateToLogin()">
+              Already have an account? Sign in
+            </button>
+          </div>
+
+          <hr class="my-4">
+
+          <div class="text-center text-muted">
+            <small>By registering, you agree to our Terms of Service and Privacy Policy.</small>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div> 

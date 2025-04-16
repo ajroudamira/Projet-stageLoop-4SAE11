@@ -1,0 +1,66 @@
+<app-main-layout>
+  <div class="container-fluid">
+    <div class="row">
+      <!-- Sidebar Navigation -->
+      <nav class="col-md-3 col-lg-2 d-md-block bg-light sidebar">
+        <div class="position-sticky pt-3">
+          <h5 class="sidebar-heading d-flex justify-content-between align-items-center px-3 mt-4 mb-1 text-muted">
+            <span>Admin Dashboard</span>
+          </h5>
+          <ul class="nav flex-column">
+            <li class="nav-item">
+              <a class="nav-link" [routerLink]="['/admin/overview']" routerLinkActive="active">
+                <i class="material-icons align-text-bottom me-2">dashboard</i>
+                Dashboard Overview
+              </a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" [routerLink]="['/admin/tickets']" routerLinkActive="active">
+                <i class="material-icons align-text-bottom me-2">assignment</i>
+                Ticket Management
+              </a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" [routerLink]="['/admin/users']" routerLinkActive="active">
+                <i class="material-icons align-text-bottom me-2">people</i>
+                User Management
+              </a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" [routerLink]="['/admin/reports']" routerLinkActive="active">
+                <i class="material-icons align-text-bottom me-2">bar_chart</i>
+                Reports & Analytics
+              </a>
+            </li>
+          </ul>
+          
+          <h6 class="sidebar-heading d-flex justify-content-between align-items-center px-3 mt-4 mb-1 text-muted">
+            <span>User Information</span>
+          </h6>
+          <div class="px-3 py-2">
+            <div class="mb-2">
+              <strong>{{userName}}</strong>
+            </div>
+            <div class="badge bg-primary">{{userRole}}</div>
+            <button class="btn btn-sm btn-outline-danger mt-3 w-100" (click)="logout()">
+              <i class="material-icons align-text-bottom me-1">logout</i> Logout
+            </button>
+          </div>
+        </div>
+      </nav>
+
+      <!-- Main Content Area -->
+      <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
+        <div *ngIf="error" class="alert alert-danger mt-3">{{error}}</div>
+        
+        <div *ngIf="isLoading" class="d-flex justify-content-center my-5">
+          <div class="spinner-border text-primary" role="status">
+            <span class="visually-hidden">Loading...</span>
+          </div>
+        </div>
+
+        <router-outlet></router-outlet>
+      </main>
+    </div>
+  </div>
+</app-main-layout> 

@@ -1,0 +1,23 @@
+.card {
+  border-radius: 10px;
+  border: none;
+}
+
+.card-title {
+  font-weight: 600;
+}
+
+.btn-primary {
+  background-color: #3f51b5;
+  border-color: #3f51b5;
+  transition: all 0.3s;
+}
+
+.btn-primary:hover {
+  background-color: #303f9f;
+  border-color: #303f9f;
+}
+
+.min-vh-100 {
+  min-height: 100vh;
+} 

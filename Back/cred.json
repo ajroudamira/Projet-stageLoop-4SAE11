@@ -1,0 +1,13 @@
+{
+  "type": "service_account",
+  "project_id": "eternal-wonder-420419",
+  "private_key_id": "2bd7164c32a6fc21760ffc853430a958a5f6ad60",
+  "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvQIBADANBgkqhkiG9w0BAQEFAASCBKcwggSjAgEAAoIBAQDJL9CUPGPpHbm6\nwG/uB0modHKEE4VEdRSZeC0C4qHm62r3oP3Uyr7aEWq8o8Lp3azBy6tdWxz+DetW\nKFO90erJp1DP8HAMASSffJdHs9rXq/UloNSi+EJnx8wtKQV90L+h5ILRfszqN3X8\nBqBqCTBmDFxZ1RYGKLQEw9IbvYR+7JX9w4r9MsWv+kZGqURarzZ9EMHVqfwyWvCx\nn2hptB7YA8KxiMelBoc7rTzX0PdfkHATlNXkUeEM9tKWVF8wKN452ZEfr9Nzhe4T\nzeCplv0zrv17y4ZN/90Xi9V/HuuNCMtFgQ+Cv5+WTdsRX5peRVr7FWowgWvKwlO2\nCrE2wOSfAgMBAAECggEABaWUSJfBVWmCikw/tRlXoTDH4+BmNERqFw4ZXJikkZeV\nPqcmrRVnWqoXNcMlGwRl+uyxybcCPX6ByzNHp+NcoDhUXlYdep6YgLxgfv1wycAq\nX6t0I7EKU2ExgymGrtdY6Zop+FwO7iYvRE3+8kaY14dSYPsZk1U5f4xgOSYCmu4R\nuFavQbvnmTJiRP5BhYPgZbH7yzXNY+M2rxX8swOVLwXmNg/8aBUCazzNCOorVl+y\nCr85CYlONJgbMXXdEvxPhPUBxKrA/lKn3pZFqNTaevHhC+fdTZp5EgVKpxyfArwE\nFmZm4gTwbrZMOQZHefkmy7qlMuhetrZdVaosHFcowQKBgQDwpx5S8HM/upmXfeYv\nrWXoM9Ni+BlJhMSKKWzcywbRWXthEW2LR8xjtOEyofyMmYXGj2sQZqYfhb95J5qj\nryLPrxHsJz47eAt6m3CTK1n1IGdxQinztBf4HuWBc3RXcVML0X0wPQuE53IJ/Lku\nSNvS3ra9sdZn2N6owsOZpS20TwKBgQDWBGBl3hpoH6m7zR36EE78b9NrDDS8XK7D\nvEFnRUOhmJ9JajT0iseRlvLEgx4XpoVhCOik0a7UEIxGDzU3mlZaEzitarG8XxKn\nHqRsT8J0LTD6U8UVPlyt970vbNvNj90u/FXUiQ/lCV7WQtX5eOVWi1rTMjV7DT6h\nAHQqEgSmsQKBgCfWcnWmal21ZTGn3NAtsz4CPk8W5RC/ks2QV/4g+er0FjGWcfzp\nkNM8oT8Bg84+p9+b5ExdwchcGrtSrA3Gs0uQHrZqNKohkDzmuHcUaRrkF1uvaUR3\nnrQrYTDRzQOgte+x6ThwEpUYv08Z8AnSc9lvlu7GHskoJIvpWfn4Vx2PAoGAc2mc\nypKBzxD0KZCtz8Kntb5gVuQYNFQO8wM8igJyPFzf2Wlq8U093id29751pe9pEjEJ\ntIhXLYlW/BkLa9bRJnYjJHHbM2hZ2MHPjZFdneUY+oXeTFx7Al4NKdwclLg2YTY2\n2wynA66P9B/K4GPv2UIBUs9Kw/cahRyHiIB6/aECgYEA5ea6DkIcBXDGTImI2Fwk\n2mEa6hz/I4wEIdQCRyGLl5/GQjpNUsjnW/JcWhUqqEvM4sdBQqttZZdYJtF2oBjK\nh2WsigdFP+0CLdRSjCFJLk+JiQsjDVW229XZyJvuZf51kF5+20E1BGYEj4ZV1Joz\nyUXljT39M2qzgtCDjg71pjU=\n-----END PRIVATE KEY-----\n",
+  "client_email": "googledrivefile@eternal-wonder-420419.iam.gserviceaccount.com",
+  "client_id": "117564578846513305040",
+  "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+  "token_uri": "https://oauth2.googleapis.com/token",
+  "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+  "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/googledrivefile%40eternal-wonder-420419.iam.gserviceaccount.com",
+  "universe_domain": "googleapis.com"
+}

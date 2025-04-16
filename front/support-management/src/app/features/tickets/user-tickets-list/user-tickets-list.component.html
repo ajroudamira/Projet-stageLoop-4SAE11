@@ -1,0 +1,170 @@
+<div class="container">
+  <div class="row mb-4">
+    <div class="col">
+      <h1 class="h3 mb-3">My Tickets</h1>
+      <p class="text-muted">Manage your support tickets</p>
+    </div>
+    <div class="col-auto">
+      <button class="btn btn-primary" (click)="createTicket()">
+        <i class="material-icons me-1">add</i> New Ticket
+      </button>
+    </div>
+  </div>
+
+  <!-- Filters -->
+  <div class="card mb-4">
+    <div class="card-body">
+      <div class="row g-3">
+        <div class="col-md-4">
+          <label for="search" class="form-label">Search</label>
+          <div class="input-group">
+            <span class="input-group-text">
+              <i class="material-icons small">search</i>
+            </span>
+            <input 
+              type="text"
+              class="form-control"
+              id="search"
+              placeholder="Search tickets..."
+              [(ngModel)]="searchQuery"
+              (ngModelChange)="onSearchChange($event)"
+            >
+          </div>
+        </div>
+        <div class="col-md-4">
+          <label for="statusFilter" class="form-label">Status</label>
+          <select 
+            class="form-select" 
+            id="statusFilter" 
+            [(ngModel)]="statusFilter"
+            (ngModelChange)="onStatusFilterChange($event)"
+          >
+            <option value="">All Statuses</option>
+            <option value="OPEN">Open</option>
+            <option value="IN_PROGRESS">In Progress</option>
+            <option value="RESOLVED">Resolved</option>
+            <option value="CLOSED">Closed</option>
+          </select>
+        </div>
+        <div class="col-md-4">
+          <label for="sortBy" class="form-label">Sort By</label>
+          <select 
+            class="form-select"
+            id="sortBy"
+            [ngModel]="sortField"
+            (ngModelChange)="onSortChange($event)"
+          >
+            <option value="createdAt">Created Date</option>
+            <option value="updatedAt">Last Updated</option>
+            <option value="priority">Priority</option>
+            <option value="status">Status</option>
+          </select>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Loading indicator -->
+  <div *ngIf="loading" class="d-flex justify-content-center my-5">
+    <div class="spinner-border text-primary" role="status">
+      <span class="visually-hidden">Loading...</span>
+    </div>
+  </div>
+
+  <!-- Error message -->
+  <div *ngIf="error && !loading" class="alert alert-danger mb-4">
+    {{ error }}
+  </div>
+
+  <!-- No tickets message -->
+  <div *ngIf="!loading && !error && filteredTickets.length === 0" class="alert alert-info mb-4">
+    You don't have any tickets yet. Click "New Ticket" to create one.
+  </div>
+
+  <!-- Tickets list -->
+  <div *ngIf="!loading && filteredTickets.length > 0" class="row">
+    <div class="col-12">
+      <div class="card">
+        <div class="card-body p-0">
+          <div class="table-responsive">
+            <table class="table table-hover">
+              <thead>
+                <tr>
+                  <th scope="col">#</th>
+                  <th scope="col">Title</th>
+                  <th scope="col">Category</th>
+                  <th scope="col">Status</th>
+                  <th scope="col">Priority</th>
+                  <th scope="col">Created</th>
+                  <th scope="col">Actions</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let ticket of filteredTickets" class="cursor-pointer" (click)="viewTicket(ticket.id!)">
+                  <td>{{ ticket.id }}</td>
+                  <td>{{ ticket.title }}</td>
+                  <td>{{ ticket.category }}</td>
+                  <td>
+                    <span class="status-badge" 
+                          [ngClass]="{
+                            'status-open': ticket.status === 'OPEN',
+                            'status-in-progress': ticket.status === 'IN_PROGRESS',
+                            'status-resolved': ticket.status === 'RESOLVED',
+                            'status-closed': ticket.status === 'CLOSED'
+                          }">
+                      {{ ticket.status }}
+                    </span>
+                  </td>
+                  <td>
+                    <span class="badge rounded-pill" 
+                          [ngClass]="{
+                            'bg-danger': ticket.priority === 'CRITICAL',
+                            'bg-warning text-dark': ticket.priority === 'HIGH',
+                            'bg-primary': ticket.priority === 'MEDIUM',
+                            'bg-info text-dark': ticket.priority === 'LOW'
+                          }">
+                      {{ ticket.priority }}
+                    </span>
+                  </td>
+                  <td>{{ ticket.createdAt | date:'short' }}</td>
+                  <td>
+                    <div class="btn-group">
+                      <button class="btn btn-sm btn-outline-primary" (click)="viewTicket(ticket.id!); $event.stopPropagation()">
+                        <i class="material-icons">visibility</i>
+                      </button>
+                      <button *ngIf="canModifyTicket(ticket)" class="btn btn-sm btn-outline-secondary" (click)="editTicket(ticket.id!, $event)">
+                        <i class="material-icons">edit</i>
+                      </button>
+                      <button *ngIf="canModifyTicket(ticket)" class="btn btn-sm btn-outline-danger" (click)="deleteTicket(ticket.id!, $event)">
+                        <i class="material-icons">delete</i>
+                      </button>
+                    </div>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Pagination -->
+  <div *ngIf="!loading && totalPages > 1" class="d-flex justify-content-center mt-4">
+    <nav aria-label="Ticket pagination">
+      <ul class="pagination">
+        <li class="page-item" [class.disabled]="currentPage === 0">
+          <a class="page-link" href="javascript:void(0)" (click)="onPageChange(currentPage - 1)">Previous</a>
+        </li>
+        <li *ngFor="let page of [].constructor(totalPages); let i = index" 
+            class="page-item" 
+            [class.active]="currentPage === i">
+          <a class="page-link" href="javascript:void(0)" (click)="onPageChange(i)">{{ i + 1 }}</a>
+        </li>
+        <li class="page-item" [class.disabled]="currentPage === totalPages - 1">
+          <a class="page-link" href="javascript:void(0)" (click)="onPageChange(currentPage + 1)">Next</a>
+        </li>
+      </ul>
+    </nav>
+  </div>
+</div> 

@@ -1,0 +1,14 @@
+<div class="app-container">
+  <!-- Loading indicator -->
+  <div *ngIf="isLoading" class="loading-overlay">
+    <div class="spinner-container">
+      <div class="spinner-border text-primary" role="status">
+        <span class="visually-hidden">Loading...</span>
+      </div>
+      <p class="mt-2">Loading...</p>
+    </div>
+  </div>
+
+  <!-- Main content -->
+  <router-outlet></router-outlet>
+</div> 

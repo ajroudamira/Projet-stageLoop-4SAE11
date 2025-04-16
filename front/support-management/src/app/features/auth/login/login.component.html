@@ -1,0 +1,36 @@
+<div class="container">
+  <div class="row justify-content-center align-items-center min-vh-100">
+    <div class="col-md-6 col-lg-5">
+      <div class="card shadow">
+        <div class="card-body p-5">
+          <div class="text-center mb-4">
+            <h2 class="card-title">Support Management System</h2>
+            <p class="card-text text-muted">Sign in to your account</p>
+          </div>
+
+          <div *ngIf="errorMessage" class="alert alert-danger" role="alert">
+            {{ errorMessage }}
+          </div>
+
+          <div class="d-grid gap-2 mt-4">
+            <button 
+              class="btn btn-primary btn-lg" 
+              type="button" 
+              (click)="login()" 
+              [disabled]="isLoading">
+              <span *ngIf="isLoading" class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>
+              <i *ngIf="!isLoading" class="material-icons me-2" style="vertical-align: middle;">login</i>
+              Sign in with Keycloak
+            </button>
+          </div>
+
+          <hr class="my-4">
+
+          <div class="text-center text-muted">
+            <small>By logging in, you agree to our Terms of Service and Privacy Policy.</small>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div> 
