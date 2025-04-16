@@ -26,7 +26,6 @@ import { TransportFeeComponent } from './components/transport-fee/transport-fee.
 @NgModule({
   declarations: [
     AppComponent,
-    FormationListComponent,
     FormationFormComponent,
     EventListComponent,
     EventFormComponent,

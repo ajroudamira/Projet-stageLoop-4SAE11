@@ -11,7 +11,6 @@ import { RegisterComponent } from './register/register.component';
 import { LayoutStaticComponent } from './back-office/layout-static/layout-static.component';
 import { LayoutSidenavLightComponent } from './back-office/layout-sidenav-light/layout-sidenav-light.component';
 import { HomeComponent } from './home/home.component';
-import { EventListComponent } from './components/event-list/event-list.component';
 import { CreateEvaluationComponent } from './components/create-evaluation/create-evaluation.component';
 import { AfficherEvaluationComponent } from './components/afficher-evaluation/afficher-evaluation.component';
 import { AfficherModerationComponent } from './components/afficher-moderation/afficher-moderation.component';

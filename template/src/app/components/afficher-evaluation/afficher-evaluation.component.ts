@@ -4,11 +4,12 @@ import { Evaluation } from '../../models/evaluation';
 import EvaluationService from '../../services/evaluationApi';
 import { RouterModule } from '@angular/router';
 import { ReactiveFormsModule, FormsModule } from '@angular/forms';
+import { CommonModule } from '@angular/common'; 
 
 @Component({
   selector: 'app-afficher-evaluation',
   standalone: true,
-  imports: [ReactiveFormsModule, FormsModule, RouterModule],
+  imports: [ReactiveFormsModule, FormsModule, RouterModule, CommonModule], // Ajoutez CommonModule ici
   templateUrl: './afficher-evaluation.component.html',
   styleUrls: ['./afficher-evaluation.component.css']
 })
@@ -87,7 +88,7 @@ export class AfficherEvaluationComponent implements OnInit {
   }
 
   filterEvaluations(): void {
-    const searchQuery = this.searchControl.value.toLowerCase();  // Récupération de la valeur du champ de recherche
+    const searchQuery = this.searchControl.value?.toLowerCase() || '';  // Récupération de recherche
     this.filteredEvaluations = this.evaluations.filter(evaluation =>
       evaluation.studentName.toLowerCase().includes(searchQuery) ||
       evaluation.score.toString().includes(searchQuery) ||

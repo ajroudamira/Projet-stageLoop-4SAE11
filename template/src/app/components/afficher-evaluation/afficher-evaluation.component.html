@@ -1,63 +1,62 @@
 <div class="container">
-    <h2>Liste des Évaluations</h2>
-  
-    <!-- Champ de recherche avec un FormControl -->
-    <input type="text" [formControl]="searchControl" (input)="filterEvaluations()" placeholder="Rechercher par nom, score ou commentaire" class="search-bar" />
-  
-    <table border="1" class="table">
-      <thead>
-        <tr>
-          <th>ID</th>
-          <th>Nom de l'Étudiant</th>
-          <th>Score</th>
-          <th>Commentaires</th>
-          <th>Actions</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr *ngFor="let evaluation of filteredEvaluations">
-          <td>{{ evaluation.id }}</td>
-  
-          <!-- Nom Étudiant -->
-          <td *ngIf="!evaluation.editMode">{{ evaluation.studentName }}</td>
-          <td *ngIf="evaluation.editMode" [formGroup]="editForms[evaluation.id]">
-            <input type="text" formControlName="studentName" />
-            <div *ngIf="isFieldInvalid(evaluation.id, 'studentName')" class="error">
-              Le nom doit contenir au moins 3 caractères.
-            </div>
-          </td>
-  
-          <!-- Score -->
-          <td *ngIf="!evaluation.editMode">{{ evaluation.score }}</td>
-          <td *ngIf="evaluation.editMode" [formGroup]="editForms[evaluation.id]">
-            <input type="number" formControlName="score" min="0" max="100" />
-            <div *ngIf="isFieldInvalid(evaluation.id, 'score')" class="error">
-              Le score doit être entre 0 et 100.
-            </div>
-          </td>
-  
-          <!-- Commentaires -->
-          <td *ngIf="!evaluation.editMode">{{ evaluation.comments }}</td>
-          <td *ngIf="evaluation.editMode" [formGroup]="editForms[evaluation.id]">
-            <textarea formControlName="comments"></textarea>
-            <div *ngIf="isFieldInvalid(evaluation.id, 'comments')" class="error">
-              Le commentaire ne peut pas dépasser 255 caractères.
-            </div>
-          </td>
-  
-          <!-- Boutons -->
-          <td>
-            <button *ngIf="!evaluation.editMode" (click)="editEvaluation(evaluation)" class="btn-edit">Éditer</button>
-            <button *ngIf="evaluation.editMode" (click)="updateEvaluation(evaluation)" class="btn-save" 
-                    [disabled]="editForms[evaluation.id].invalid">
-              Sauvegarder
-            </button>
-            <button (click)="deleteEvaluation(evaluation.id)" class="btn-delete">Supprimer</button>
-          </td>
-        </tr>
-      </tbody>
-    </table>
-  
-    <button class="btn-add" [routerLink]="['/create-evaluation']">➕ Ajouter une évaluation</button>
-  </div>
-  
+  <h2>Liste des Évaluations</h2>
+
+  <!-- Champ de recherche avec un FormControl -->
+  <input type="text" [formControl]="searchControl" (input)="filterEvaluations()" placeholder="Rechercher par nom, score ou commentaire" class="search-bar" />
+
+  <table border="1" class="table">
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>Nom de l'Étudiant</th>
+        <th>Score</th>
+        <th>Commentaires</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let evaluation of filteredEvaluations">
+        <td>{{ evaluation.id }}</td>
+
+        <!-- Nom Étudiant -->
+        <td *ngIf="!evaluation.editMode">{{ evaluation.studentName }}</td>
+        <td *ngIf="evaluation.editMode" [formGroup]="editForms[evaluation.id]">
+          <input type="text" formControlName="studentName" />
+          <div *ngIf="isFieldInvalid(evaluation.id, 'studentName')" class="error">
+            Le nom doit contenir au moins 3 caractères.
+          </div>
+        </td>
+
+        <!-- Score -->
+        <td *ngIf="!evaluation.editMode">{{ evaluation.score }}</td>
+        <td *ngIf="evaluation.editMode" [formGroup]="editForms[evaluation.id]">
+          <input type="number" formControlName="score" min="0" max="100" />
+          <div *ngIf="isFieldInvalid(evaluation.id, 'score')" class="error">
+            Le score doit être entre 0 et 100.
+          </div>
+        </td>
+
+        <!-- Commentaires -->
+        <td *ngIf="!evaluation.editMode">{{ evaluation.comments }}</td>
+        <td *ngIf="evaluation.editMode" [formGroup]="editForms[evaluation.id]">
+          <textarea formControlName="comments"></textarea>
+          <div *ngIf="isFieldInvalid(evaluation.id, 'comments')" class="error">
+            Le commentaire ne peut pas dépasser 255 caractères.
+          </div>
+        </td>
+
+        <!-- Boutons -->
+        <td>
+          <button *ngIf="!evaluation.editMode" (click)="editEvaluation(evaluation)" class="btn-edit">Éditer</button>
+          <button *ngIf="evaluation.editMode" (click)="updateEvaluation(evaluation)" class="btn-save" 
+                  [disabled]="editForms[evaluation.id].invalid">
+            Sauvegarder
+          </button>
+          <button (click)="deleteEvaluation(evaluation.id)" class="btn-delete">Supprimer</button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+
+  <button class="btn-add" [routerLink]="['/create-evaluation']">➕ Ajouter une évaluation</button>
+</div>

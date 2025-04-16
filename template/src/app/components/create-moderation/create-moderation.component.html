@@ -12,10 +12,10 @@
                 minlength="5" 
                 maxlength="500" 
                 #contentInput="ngModel"></textarea>
-            <div *ngIf="contentInput.invalid && (contentInput.dirty || contentInput.touched)">
-                <div *ngIf="contentInput.errors?.['required']" class="error-message">Le contenu est requis.</div>
-                <div *ngIf="contentInput.errors?.['minlength']" class="error-message">Le contenu doit contenir au moins 5 caractères.</div>
-                <div *ngIf="contentInput.errors?.['maxlength']" class="error-message">Le contenu ne peut pas dépasser 500 caractères.</div>
+            <div *If="contentInput.invalid && (contentInput.dirty || contentInput.touched)">
+                <div *If="contentInput.errors?.['required']" class="error-message">Le contenu est requis.</div>
+                <div *If="contentInput.errors?.['minlength']" class="error-message">Le contenu doit contenir au moins 5 caractères.</div>
+                <div *If="contentInput.errors?.['maxlength']" class="error-message">Le contenu ne peut pas dépasser 500 caractères.</div>
             </div>
         </div>
   
@@ -30,7 +30,7 @@
                 <option [value]="true">Oui</option>
                 <option [value]="false">Non</option>
             </select>
-            <div *ngIf="approvedInput.invalid && (approvedInput.dirty || approvedInput.touched)" class="error-message">
+            <div *If="approvedInput.invalid && (approvedInput.dirty || approvedInput.touched)" class="error-message">
                 L'approbation est requise.
             </div>
         </div>

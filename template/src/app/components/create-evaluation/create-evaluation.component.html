@@ -1,14 +1,24 @@
 <div class="container">
     <h2>Créer une Évaluation</h2>
-    <form (submit)="createEvaluation()" #evaluationForm="ngForm">
+    <form (ngSubmit)="createEvaluation()" #evaluationForm="ngForm">
+        <!-- Nom de l'étudiant -->
         <div>
             <label for="studentName">Nom de l'étudiant :</label>
-            <input id="studentName" [(ngModel)]="evaluation.studentName" name="studentName" required />
-            <div *ngIf="evaluationForm.submitted && !evaluation.studentName" class="error">
-                Le nom de l'étudiant est requis.
+            <input
+                id="studentName"
+                [(ngModel)]="evaluation.studentName"
+                name="studentName"
+                required
+                pattern="^[A-Za-zÀ-ÖØ-öø-ÿ\s]+$"
+                #studentName="ngModel"
+            />
+            <div *If="evaluationForm.submitted && studentName.invalid" class="error">
+                <p *If="studentName.errors?.required">Le nom de l'étudiant est requis.</p>
+                <p *If="studentName.errors?.pattern">Le nom doit contenir uniquement des lettres.</p>
             </div>
         </div>
 
+        <!-- Score -->
         <div>
             <label for="score">Score :</label>
             <input
@@ -19,19 +29,21 @@
                 required
                 min="0"
                 max="100"
+                #score="ngModel"
             />
-            <div *ngIf="evaluationForm.submitted && (evaluation.score < 0 || evaluation.score > 100)" class="error">
-                Le score doit être entre 0 et 100.
+            <div *If="evaluationForm.submitted && score.invalid" class="error">
+                <p *If="score.errors?.required">Le score est requis.</p>
+                <p *If="score.errors?.min || score.errors?.max">Le score doit être entre 0 et 100.</p>
             </div>
         </div>
 
+        <!-- Commentaires -->
         <div>
             <label for="comments">Commentaires :</label>
             <textarea id="comments" [(ngModel)]="evaluation.comments" name="comments"></textarea>
         </div>
 
-        <button type="submit" [disabled]="!evaluationForm.valid">Créer</button>
+        <!-- Bouton de soumission -->
+        <button type="submit" [disabled]="evaluationForm.invalid">Créer</button>
     </form>
-
-  
 </div>

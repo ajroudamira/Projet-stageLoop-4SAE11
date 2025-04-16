@@ -1,8 +1,13 @@
 import { Component } from '@angular/core';
 import { Evaluation } from '../../models/evaluation';
 import EvaluationService from '../../services/evaluationApi';
+import { ReactiveFormsModule, FormsModule } from '@angular/forms';
+import { CommonModule } from '@angular/common'; // Pour *ngIf, *ngFor, ngClass
+import { RouterModule } from '@angular/router';
 
 @Component({
+    standalone: true,
+    imports: [ReactiveFormsModule, FormsModule, RouterModule],
   selector: 'app-create-evaluation',
   templateUrl: './create-evaluation.component.html',
   styleUrls: ['./create-evaluation.component.css']

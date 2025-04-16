@@ -1,8 +1,12 @@
 import { Component } from '@angular/core';
 import { Moderation } from '../../models/moderation';
 import { ModerationService } from '../../services/moderationApi';
+import { ReactiveFormsModule, FormsModule } from '@angular/forms';
+import { RouterModule } from '@angular/router';
 
 @Component({
+  standalone: true,
+  imports: [ReactiveFormsModule, FormsModule, RouterModule],
   selector: 'app-create-moderation',
   templateUrl: './create-moderation.component.html',
   styleUrls: ['./create-moderation.component.css']

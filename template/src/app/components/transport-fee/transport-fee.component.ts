@@ -1,44 +1,34 @@
 import { Component } from '@angular/core';
-import { TransportFeeService, TransportFee } from '../../services/transport-fee.service';
-
+import { CommonModule } from '@angular/common'; // Pour *ngIf, *ngFor, ngClass
+import { FormsModule } from '@angular/forms'; // Pour ngModel
 @Component({
   selector: 'app-transport-fee',
+   standalone: true,
+    imports: [CommonModule, FormsModule],
   templateUrl: './transport-fee.component.html',
   styleUrls: ['./transport-fee.component.css']
 })
 export class TransportFeeComponent {
   homeLocation: string = '';
   companyLocation: string = '';
-  transportFee?: TransportFee;
+  transportFee: any = null;
   errorMessage: string = '';
 
-  constructor(private transportFeeService: TransportFeeService) {}
-
-  // Méthode pour créer un frais de transport
   calculateFee() {
-    this.transportFeeService.createTransportFee(this.homeLocation, this.companyLocation).subscribe(
-      (feeData: TransportFee) => {
-        this.transportFee = feeData;
-        this.errorMessage = ''; // Clear any previous error
-      },
-      (error: any) => {
-        this.errorMessage = 'Une erreur est survenue lors du calcul des frais de transport.';
-        console.error(error);
-      }
-    );
-  }
+    if (!this.homeLocation || !this.companyLocation) {
+      this.errorMessage = 'Les emplacements de départ et de destination sont obligatoires.';
+      return;
+    }
 
-  // Méthode pour obtenir un frais de transport par ID
-  getFeeById(id: number) {
-    this.transportFeeService.getTransportFee(id).subscribe(
-      (feeData) => {
-        this.transportFee = feeData;
-        this.errorMessage = ''; // Clear any previous error
-      },
-      (error) => {
-        this.errorMessage = 'Une erreur est survenue lors de la récupération des détails.';
-        console.error(error);
-      }
-    );
+    // Simulate a calculation of transport fee
+    this.transportFee = {
+      id: 1,
+      homeLocation: this.homeLocation,
+      companyLocation: this.companyLocation,
+      distance: 500, // Example distance
+      fee: 10 // Example fee per day
+    };
+
+    this.errorMessage = '';
   }
 }
