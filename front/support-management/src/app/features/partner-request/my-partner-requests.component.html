@@ -1,0 +1,27 @@
+<div class="container mt-4">
+  <h3>My Partner Requests</h3>
+  <div *ngIf="loading" class="text-center my-4">
+    <mat-spinner></mat-spinner>
+  </div>
+  <div *ngIf="error" class="alert alert-danger">{{ error }}</div>
+  <div *ngIf="!loading && !error && requests.length === 0" class="alert alert-info">
+    You have not submitted any partner requests yet.
+  </div>
+  <div *ngIf="requests.length > 0">
+    <div *ngFor="let req of requests" class="card mb-3">
+      <div class="card-body">
+        <h5 class="card-title">{{ req.companyName }}</h5>
+        <p class="mb-1"><strong>Status:</strong> <span [ngClass]="{
+          'text-warning': req.status === 'PENDING',
+          'text-success': req.status === 'APPROVED',
+          'text-danger': req.status === 'REJECTED'
+        }">{{ req.status }}</span></p>
+        <p class="mb-1"><strong>Business Sector:</strong> {{ req.businessSector }}</p>
+        <p class="mb-1"><strong>Submitted:</strong> {{ req.createdAt | date:'medium' }}</p>
+        <p *ngIf="req.status === 'REJECTED' && req.rejectionReason" class="text-danger mb-0">
+          <strong>Rejection Reason:</strong> {{ req.rejectionReason }}
+        </p>
+      </div>
+    </div>
+  </div>
+</div> 

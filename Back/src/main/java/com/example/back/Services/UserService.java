@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Optional;
 
 import com.example.back.Entities.User;
+import com.example.back.Entities.UserWrapper;
 
 public interface    UserService {
 
@@ -16,6 +17,8 @@ public interface    UserService {
     public List<User> AddUsers(List<User> users);
 
     public User UpdateUser(User u );
+
+    public User UpdateUser(com.example.back.Entities.UserWrapper userWrapper);
 
     public void DeleteUserByUserName(String username) ;
 
@@ -31,4 +34,6 @@ public interface    UserService {
     User findById(Long idadmin);
 
     User findByIsTicketManager(boolean isTicketManager);
+
+    List<User> findByRole(String role);
 }

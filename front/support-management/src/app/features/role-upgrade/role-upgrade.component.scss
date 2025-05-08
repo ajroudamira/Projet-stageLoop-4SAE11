@@ -1,0 +1,101 @@
+.role-card {
+  cursor: pointer;
+  transition: all 0.3s ease;
+  border: 2px solid transparent;
+
+  &:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    border-color: #007bff;
+  }
+
+  .large-icon {
+    font-size: 48px;
+    color: #007bff;
+  }
+}
+
+.form-label {
+  font-weight: 500;
+  color: #495057;
+}
+
+.form-control, .form-select {
+  &:focus {
+    border-color: #007bff;
+    box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+  }
+}
+
+.text-danger {
+  font-size: 0.875rem;
+  margin-top: 0.25rem;
+}
+
+.btn-primary {
+  &:disabled {
+    cursor: not-allowed;
+  }
+}
+
+.card {
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+.card-header {
+  border-bottom: none;
+}
+
+textarea {
+  resize: vertical;
+  min-height: 100px;
+}
+
+select[multiple] {
+  height: 120px;
+}
+
+.role-option {
+  flex: 1;
+  padding: 1.5rem;
+  border: 2px solid #e0e0e0;
+  border-radius: 8px;
+  text-align: center;
+  cursor: pointer;
+  transition: all 0.3s ease;
+
+  &:hover {
+    border-color: #2196f3;
+    background-color: #f5f9ff;
+  }
+
+  &.selected {
+    border-color: #2196f3;
+    background-color: #e3f2fd;
+  }
+
+  .material-icons {
+    font-size: 48px;
+    color: #2196f3;
+    margin-bottom: 1rem;
+  }
+
+  h6 {
+    margin-bottom: 0.5rem;
+    color: #333;
+  }
+
+  p {
+    font-size: 0.9rem;
+    margin-bottom: 0;
+  }
+}
+
+.alert {
+  display: flex;
+  align-items: center;
+  
+  .material-icons {
+    margin-right: 0.5rem;
+  }
+} 

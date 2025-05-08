@@ -5,9 +5,12 @@ import com.example.back.Entities.Enums.TicketPriority;
 import com.example.back.Entities.Enums.TicketStatus;
 import com.example.back.Entities.Ticket;
 import com.example.back.Entities.User;
+import com.example.back.Entities.Comment;
 import com.example.back.ExceptionHandling.ApiResponse;
 import com.example.back.Services.TicketService;
 import com.example.back.Services.UserService;
+import com.example.back.Services.TicketRecommendationService;
+import com.example.back.Models.AdminRecommendation;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -23,6 +26,10 @@ import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import java.util.Map;
+import java.time.Duration;
+import java.time.LocalDateTime;
+import java.util.HashMap;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/service/ticket")
@@ -30,12 +37,14 @@ public class TicketController {
 
     private final TicketService ticketService;
     private final UserService userService;
+    private final TicketRecommendationService recommendationService;
     private static final Logger log = LoggerFactory.getLogger(TicketController.class);
     
     // Explicit constructor to resolve initialization issue
-    public TicketController(TicketService ticketService, UserService userService) {
+    public TicketController(TicketService ticketService, UserService userService, TicketRecommendationService recommendationService) {
         this.ticketService = ticketService;
         this.userService = userService;
+        this.recommendationService = recommendationService;
     }
 
     @GetMapping("/all")
@@ -466,5 +475,57 @@ public class TicketController {
             response.setData(null);
             return ResponseEntity.badRequest().body(response);
         }
+    }
+
+    @GetMapping("/{id}/recommendations")
+    @PreAuthorize("hasAuthority('admin')")
+    public ResponseEntity<ApiResponse> getAdminRecommendations(@PathVariable Long id) {
+        try {
+            // Get the ticket
+            Ticket ticket = ticketService.getTicketById(id);
+            
+            // Get recommendations based on description
+            List<AdminRecommendation> recommendations = recommendationService.getAdminRecommendations(ticket.getDescription());
+            
+            // The 'exists' flag in each AdminRecommendation indicates if the recommended admin exists in the system.
+            // Frontend should use this flag to disable or hide the Assign button for non-existing admins.
+            ApiResponse response = new ApiResponse(true, "Admin recommendations retrieved successfully");
+            response.setData(recommendations);
+            return ResponseEntity.ok(response);
+            
+        } catch (Exception e) {
+            ApiResponse response = new ApiResponse(false, e.getMessage());
+            response.setData(null);
+            return ResponseEntity.badRequest().body(response);
+        }
+    }
+
+    @GetMapping("/{id}/metrics")
+    @PreAuthorize("hasAuthority('admin') or hasAuthority('user') or hasAuthority('partner') or hasAuthority('student')")
+    public ResponseEntity<?> getTicketMetrics(@PathVariable Long id) {
+        Ticket ticket = ticketService.getTicketById(id);
+        Map<String, Object> metrics = new HashMap<>();
+        // First response time
+        Optional<LocalDateTime> firstAdminComment = ticket.getComments().stream()
+            .filter(c -> c.getUser() != null && "admin".equalsIgnoreCase(c.getUser().getRole()))
+            .map(Comment::getCreatedAt)
+            .min(LocalDateTime::compareTo);
+        metrics.put("firstResponseTime", firstAdminComment.isPresent() ?
+            java.time.Duration.between(ticket.getCreatedAt(), firstAdminComment.get()).toHours() : null);
+        // Resolution time
+        metrics.put("resolutionTime", ticket.getResolvedAt() != null ?
+            java.time.Duration.between(ticket.getCreatedAt(), ticket.getResolvedAt()).toHours() : null);
+        // Customer satisfaction
+        metrics.put("customerSatisfaction", ticket.getCustomerSatisfaction());
+        return ResponseEntity.ok(metrics);
+    }
+
+    @PostMapping("/{id}/rate")
+    @PreAuthorize("hasAuthority('user') or hasAuthority('partner') or hasAuthority('student')")
+    public ResponseEntity<?> rateTicket(@PathVariable Long id, @RequestParam Integer rating) {
+        Ticket ticket = ticketService.getTicketById(id);
+        ticket.setCustomerSatisfaction(rating);
+        ticketService.updateTicket(ticket);
+        return ResponseEntity.ok().build();
     }
 }

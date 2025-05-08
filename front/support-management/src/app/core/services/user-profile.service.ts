@@ -31,6 +31,10 @@ export class UserProfileService {
     return this.currentUserValue?.role === 'admin';
   }
 
+  public isPartner(): boolean {
+    return this.currentUserValue?.role === 'partner';
+  }
+
   // Helper method to check if user has a user-level role
   public async isUserRole(): Promise<boolean> {
     try {

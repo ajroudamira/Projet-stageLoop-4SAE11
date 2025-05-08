@@ -1,0 +1,100 @@
+<div class="internship-form-container">
+  <button mat-stroked-button color="primary" class="back-btn" (click)="cancel()">
+    <mat-icon>arrow_back</mat-icon>
+    Back
+  </button>
+  <mat-card class="internship-details-card">
+    <mat-card-header>
+      <mat-card-title>
+        <mat-icon class="internship-icon">work</mat-icon>
+        {{ isEditMode ? (readOnly ? 'Internship Details' : 'Edit Internship') : 'Create Internship' }}
+      </mat-card-title>
+    </mat-card-header>
+    <mat-card-content>
+      <div class="header-spacer"></div>
+      <div *ngIf="loading" class="loading">
+        <mat-spinner></mat-spinner>
+      </div>
+
+      <div *ngIf="error" class="error-message">
+        {{ error }}
+      </div>
+
+      <form [formGroup]="internshipForm" (ngSubmit)="onSubmit()" class="form">
+        <mat-form-field appearance="outline">
+          <mat-label>Title</mat-label>
+          <input matInput formControlName="title" required>
+          <mat-error *ngIf="internshipForm.get('title')?.hasError('required')">
+            Title is required
+          </mat-error>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Description</mat-label>
+          <textarea matInput formControlName="description" required rows="4"></textarea>
+          <mat-error *ngIf="internshipForm.get('description')?.hasError('required')">
+            Description is required
+          </mat-error>
+        </mat-form-field>
+
+        <div class="date-fields">
+          <mat-form-field appearance="outline">
+            <mat-label>Start Date</mat-label>
+            <input matInput [matDatepicker]="startPicker" formControlName="startDate" required>
+            <mat-datepicker-toggle matSuffix [for]="startPicker"></mat-datepicker-toggle>
+            <mat-datepicker #startPicker></mat-datepicker>
+            <mat-error *ngIf="internshipForm.get('startDate')?.hasError('required')">
+              Start date is required
+            </mat-error>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline">
+            <mat-label>End Date</mat-label>
+            <input matInput [matDatepicker]="endPicker" formControlName="endDate" required>
+            <mat-datepicker-toggle matSuffix [for]="endPicker"></mat-datepicker-toggle>
+            <mat-datepicker #endPicker></mat-datepicker>
+            <mat-error *ngIf="internshipForm.get('endDate')?.hasError('required')">
+              End date is required
+            </mat-error>
+          </mat-form-field>
+        </div>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Type</mat-label>
+          <mat-select formControlName="type" required>
+            <mat-option *ngFor="let type of internshipTypes" [value]="type">
+              {{ type }}
+            </mat-option>
+          </mat-select>
+          <mat-error *ngIf="internshipForm.get('type')?.hasError('required')">
+            Type is required
+          </mat-error>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" *ngIf="isAdmin">
+          <mat-label>Status</mat-label>
+          <mat-select formControlName="status">
+            <mat-option *ngFor="let status of internshipStatuses" [value]="status">
+              {{ status | titlecase }}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Required Skills</mat-label>
+          <textarea matInput formControlName="requiredSkills" required rows="3"></textarea>
+          <mat-error *ngIf="internshipForm.get('requiredSkills')?.hasError('required')">
+            Required skills is required
+          </mat-error>
+        </mat-form-field>
+
+        <div class="form-actions" *ngIf="!readOnly">
+          <button mat-button type="button" (click)="cancel()">Cancel</button>
+          <button mat-raised-button color="primary" type="submit" [disabled]="!internshipForm.valid || loading">
+            {{ isEditMode ? 'Update' : 'Create' }}
+          </button>
+        </div>
+      </form>
+    </mat-card-content>
+  </mat-card>
+</div> 

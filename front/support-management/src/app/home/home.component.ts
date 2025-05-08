@@ -24,14 +24,19 @@ export class HomeComponent implements OnInit {
     try {
       this.isLoggedIn = await this.keycloakService.isLoggedIn();
       console.log('isAuthenticated:', this.isLoggedIn);
-      
+      if (!this.isLoggedIn) {
+        // Force login if not authenticated
+        await this.keycloakService.login({
+          redirectUri: window.location.origin
+        });
+        return;
+      }
       if (this.isLoggedIn) {
         try {
           this.userProfile = await this.keycloakService.loadUserProfile();
           console.log('User profile loaded:', this.userProfile);
           this.userRoles = await this.keycloakService.getUserRoles();
           console.log('User roles:', this.userRoles);
-          
           // Redirect based on role
           if (this.userRoles.includes('admin')) {
             this.router.navigate(['/admin']);

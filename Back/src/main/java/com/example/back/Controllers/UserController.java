@@ -86,7 +86,7 @@ public class UserController {
 
 
     @PutMapping("/UpdateUser")
-    @PreAuthorize("hasAnyAuthority('admin', 'user')")
+    @PreAuthorize("hasAnyAuthority('admin', 'user', 'partner')")
     public ResponseEntity<ApiResponse> updateUser(@RequestBody UserWrapper user) {
         try {
             User updatedUser = userService.UpdateUser(user.getUser());

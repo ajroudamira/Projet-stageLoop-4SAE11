@@ -331,34 +331,9 @@
       </div>
     </div>
 
-    <!-- Right column: Activity and Support info -->
+    <!-- Right column: Metrics, Activity, Similar Tickets, Recommendations -->
     <div class="col-lg-4">
-      <!-- Ticket Activity -->
-      <div class="card mb-4">
-        <div class="card-header">
-          <h5 class="card-title mb-0">Ticket Activity</h5>
-        </div>
-        <div class="card-body p-0">
-          <ul class="list-group list-group-flush">
-            <li class="list-group-item" *ngFor="let activity of ticketActivities">
-              <div class="d-flex">
-                <div class="avatar-circle-sm me-3 bg-light text-primary">
-                  <i class="material-icons small">{{ getActivityIcon(activity.type) }}</i>
-                </div>
-                <div>
-                  <div class="mb-1">{{ activity.message }}</div>
-                  <small class="text-muted">{{ activity.timestamp | date:'short' }}</small>
-                </div>
-              </div>
-            </li>
-            <li *ngIf="ticketActivities.length === 0" class="list-group-item text-center text-muted py-3">
-              No activity recorded
-            </li>
-          </ul>
-        </div>
-      </div>
-
-      <!-- Ticket Metrics -->
+      <!-- Ticket Metrics for admins (move to top) -->
       <div class="card mb-4">
         <div class="card-header">
           <h5 class="card-title mb-0">Ticket Metrics</h5>
@@ -367,60 +342,80 @@
           <div class="mb-3">
             <div class="d-flex justify-content-between mb-1">
               <span>Response Time</span>
-              <span>4 hours</span>
+              <span>{{ firstResponseTime !== null ? firstResponseTime + ' hours' : 'Not yet responded' }}</span>
             </div>
             <div class="progress" style="height: 6px;">
-              <div class="progress-bar bg-success" role="progressbar" style="width: 80%"></div>
+              <div class="progress-bar bg-success" role="progressbar" [style.width.%]="firstResponseTime ? 100 : 0"></div>
             </div>
           </div>
           <div class="mb-3">
             <div class="d-flex justify-content-between mb-1">
               <span>Resolution Time</span>
-              <span>2 days</span>
+              <span>{{ resolutionTime !== null ? resolutionTime + ' hours' : 'Not yet resolved' }}</span>
             </div>
             <div class="progress" style="height: 6px;">
-              <div class="progress-bar bg-warning" role="progressbar" style="width: 60%"></div>
+              <div class="progress-bar bg-warning" role="progressbar" [style.width.%]="resolutionTime ? 100 : 0"></div>
             </div>
           </div>
           <div class="mb-0">
-            <div class="d-flex justify-content-between mb-1">
+            <div class="d-flex justify-content-between mb-1 align-items-center">
               <span>Customer Satisfaction</span>
-              <span>Not rated</span>
+              <span class="d-flex align-items-center">
+                <ng-container *ngIf="customerSatisfaction !== null; else notRated">
+                  <ng-container *ngFor="let star of [1,2,3,4,5]">
+                    <i class="material-icons text-warning" [ngClass]="{'opacity-50': star > customerSatisfaction}">star</i>
+                  </ng-container>
+                  <span class="ms-2">{{ customerSatisfaction }}/5</span>
+                </ng-container>
+                <ng-template #notRated>Not rated</ng-template>
+              </span>
             </div>
             <div class="progress" style="height: 6px;">
-              <div class="progress-bar bg-info" role="progressbar" style="width: 0%"></div>
+              <div class="progress-bar bg-info" role="progressbar" [style.width.%]="customerSatisfaction ? customerSatisfaction * 20 : 0"></div>
             </div>
           </div>
         </div>
       </div>
-
-      <!-- Similar Tickets -->
-      <div class="card">
+      <!-- Admin Recommendations Section -->
+      <div class="card mb-4" *ngIf="isTicketManager && !ticket.assignedAdmin">
         <div class="card-header">
-          <h5 class="card-title mb-0">Similar Tickets</h5>
+          <h5 class="mb-0">
+            <i class="material-icons align-middle me-2">recommend</i>
+            Recommended Admins
+          </h5>
         </div>
-        <div class="card-body p-0">
-          <ul class="list-group list-group-flush">
-            <li class="list-group-item">
-              <a href="#" class="text-decoration-none">
-                <div class="d-flex justify-content-between">
-                  <span>Ticket #123: Login Issue</span>
-                  <span class="badge bg-success">Resolved</span>
+        <div class="card-body">
+          <div *ngIf="loadingRecommendations" class="text-center py-3">
+            <div class="spinner-border text-primary" role="status">
+              <span class="visually-hidden">Loading recommendations...</span>
+            </div>
+          </div>
+          
+          <div *ngIf="!loadingRecommendations && recommendations.length === 0" class="alert alert-info">
+            No recommendations available at this time.
+          </div>
+          
+          <div *ngIf="!loadingRecommendations && recommendations.length > 0" class="list-group">
+            <div *ngFor="let rec of recommendations" class="list-group-item list-group-item-action">
+              <div class="d-flex justify-content-between align-items-center">
+                <div>
+                  <strong>{{ rec.adminId }}</strong>
+                  <div class="small text-muted">
+                    Confidence: {{ (rec.confidence * 100).toFixed(1) }}%
+                  </div>
+                  <div *ngIf="!rec.exists" class="text-danger small">
+                    (User does not exist)
+                  </div>
                 </div>
-              </a>
-            </li>
-            <li class="list-group-item">
-              <a href="#" class="text-decoration-none">
-                <div class="d-flex justify-content-between">
-                  <span>Ticket #456: Configuration Problem</span>
-                  <span class="badge bg-primary">Open</span>
-                </div>
-              </a>
-            </li>
-            <li class="list-group-item text-center">
-              <button class="btn btn-sm btn-link">View More Similar Tickets</button>
-            </li>
-          </ul>
+                <button class="btn btn-primary btn-sm"
+                        (click)="assignTicket(rec.adminId)"
+                        [disabled]="isAssigning || !rec.exists">
+                  <i class="material-icons align-middle">person_add</i>
+                  Assign
+                </button>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     </div>
@@ -476,7 +471,7 @@
             type="button" 
             class="btn btn-primary" 
             [disabled]="!assignForm.valid || isAssigning"
-            (click)="assignTicket()">
+            (click)="assignTicket(assignForm.value.assigneeId)">
             <span *ngIf="isAssigning" class="spinner-border spinner-border-sm me-1" role="status" aria-hidden="true"></span>
             Assign
           </button>
@@ -576,4 +571,21 @@
       </div>
     </div>
   </div>
-</div> 
+</div>
+
+<style>
+.star-rating .material-icons {
+  cursor: pointer;
+  font-size: 2rem;
+  transition: color 0.2s;
+}
+.star-rating .material-icons.text-warning {
+  color: #ffc107 !important;
+}
+.star-rating .material-icons.text-secondary {
+  color: #e4e5e9 !important;
+}
+.star-rating .material-icons.star-hover {
+  filter: brightness(1.2);
+}
+</style> 

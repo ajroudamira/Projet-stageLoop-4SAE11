@@ -1,0 +1,78 @@
+.internship-form-container {
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  padding: 40px 0;
+}
+
+.internship-details-card {
+  width: 100%;
+  max-width: 650px;
+  box-shadow: 0 4px 24px rgba(30, 64, 175, 0.10);
+  border-radius: 18px;
+  padding: 0 0 18px 0;
+}
+
+mat-card-header {
+  padding-bottom: 0;
+}
+
+mat-card-title {
+  display: flex;
+  align-items: center;
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #1e293b;
+}
+
+.internship-icon {
+  font-size: 2rem;
+  margin-right: 10px;
+  color: #1976d2;
+}
+
+mat-card-content {
+  padding-top: 0;
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 22px;
+}
+
+.date-fields {
+  display: flex;
+  gap: 18px;
+}
+
+.form-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+  margin-top: 18px;
+}
+
+.loading {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 120px;
+}
+
+.error-message {
+  color: #f44336;
+  padding: 10px;
+  margin: 10px 0;
+  background-color: #ffebee;
+  border-radius: 4px;
+}
+
+.back-btn {
+  margin-bottom: 18px;
+  margin-left: 2px;
+}
+
+.header-spacer {
+  height: 18px;
+} 

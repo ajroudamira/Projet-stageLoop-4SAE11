@@ -1,0 +1,64 @@
+<div class="candidature-list-container">
+  <div class="header">
+    <h2>Internship Candidatures</h2>
+  </div>
+
+  <div class="loading-container" *ngIf="loading">
+    <mat-spinner></mat-spinner>
+  </div>
+
+  <div *ngIf="!loading" class="candidature-grid">
+    <mat-card *ngFor="let candidature of candidatures" class="candidature-card fade-in" tabindex="0">
+      <div class="accent-bar" [ngClass]="getStatusClass(candidature.status)"></div>
+      <mat-card-header>
+        <mat-card-title class="card-title">
+          <div *ngIf="candidature.internship" class="internship-title">
+            <mat-icon class="internship-icon">work</mat-icon>
+            {{candidature.internship.title}}
+            <button mat-icon-button color="primary" (click)="viewInternship(candidature.internship.idInternship)" matTooltip="View Internship" style="margin-left: 6px;">
+              <mat-icon>visibility</mat-icon>
+            </button>
+          </div>
+          Candidature #{{candidature.id}}
+          <span class="status-badge" [ngClass]="getStatusClass(candidature.status)">
+            <mat-form-field appearance="outline" class="status-dropdown">
+              <mat-select [value]="candidature.status" (selectionChange)="updateStatus(candidature, $event.value)">
+                <mat-option *ngFor="let status of candidatureStatuses" [value]="status">
+                  {{ status | titlecase }}
+                </mat-option>
+              </mat-select>
+            </mat-form-field>
+          </span>
+        </mat-card-title>
+        <mat-card-subtitle>
+          <div><strong>Status:</strong> {{candidature.status}}</div>
+          <div><strong>Application Date:</strong> {{candidature.applicationDate | date:'mediumDate'}}</div>
+          <div *ngIf="candidature.expirationDate"><strong>Expires:</strong> {{candidature.expirationDate | date:'mediumDate'}}</div>
+          <div *ngIf="candidature.createdAt"><strong>Created At:</strong> {{candidature.createdAt | date:'medium'}}</div>
+          <div *ngIf="candidature.updatedAt"><strong>Updated At:</strong> {{candidature.updatedAt | date:'medium'}}</div>
+          <div *ngIf="candidature.userId"><strong>User ID:</strong> {{candidature.userId}}</div>
+          <div *ngIf="candidature.fileUrl"><strong>File URL:</strong> {{candidature.fileUrl}}</div>
+          <div *ngIf="candidature.student"><strong>Student:</strong> {{candidature.student?.login || candidature.student?.username || 'N/A'}}</div>
+        </mat-card-subtitle>
+      </mat-card-header>
+
+      <mat-card-content>
+        <p class="description"><strong>Motivation Letter:</strong>
+          <span [matTooltip]="candidature.motivationLetter" class="truncate">
+            {{candidature.motivationLetter}}
+          </span>
+        </p>
+        <div *ngIf="candidature.cvUrl" class="cv-section">
+          <strong>CV:</strong>
+          <a [href]="getCvDownloadUrl(candidature.cvUrl)" target="_blank" mat-button color="primary">
+            <mat-icon>file_download</mat-icon> Download CV
+          </a>
+        </div>
+      </mat-card-content>
+    </mat-card>
+
+    <div class="no-candidatures" *ngIf="candidatures.length === 0">
+      <p>No candidatures found for your internships.</p>
+    </div>
+  </div>
+</div> 

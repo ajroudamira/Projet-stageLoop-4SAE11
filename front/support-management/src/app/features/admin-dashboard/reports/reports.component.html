@@ -19,6 +19,38 @@
     </div>
   </div>
 
+  <!-- Average Customer Satisfaction (moved to top) -->
+  <div *ngIf="!isLoading" class="row mb-4">
+    <div class="col-xl-4 col-md-6 mb-4">
+      <div class="card border-left-info shadow h-100 py-2">
+        <div class="card-body">
+          <div class="row no-gutters align-items-center">
+            <div class="col mr-2">
+              <div class="text-xs font-weight-bold text-info text-uppercase mb-1">
+                Avg. Customer Satisfaction
+              </div>
+              <div class="h5 mb-0 font-weight-bold text-gray-800">
+                <ng-container *ngIf="avgCustomerSatisfaction > 0; else notRatedAvg">
+                  <ng-container *ngFor="let star of [1,2,3,4,5]">
+                    <i class="material-icons text-warning" [ngClass]="{'opacity-50': star > avgCustomerSatisfaction}">star</i>
+                  </ng-container>
+                  <span class="ms-2">{{ avgCustomerSatisfaction | number:'1.1-2' }}/5</span>
+                </ng-container>
+                <ng-template #notRatedAvg>Not rated</ng-template>
+              </div>
+              <div class="small text-muted mt-2">
+                Average satisfaction rating for all tickets
+              </div>
+            </div>
+            <div class="col-auto">
+              <i class="material-icons text-gray-300 display-4">star_rate</i>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
   <!-- Response Time Metrics -->
   <div *ngIf="!isLoading" class="row mb-4">
     <!-- Total Tickets Overview -->
@@ -52,7 +84,7 @@
                 Avg. First Response Time
               </div>
               <div class="h5 mb-0 font-weight-bold text-gray-800">
-                {{avgResponseTime}} hours
+                {{avgFirstResponseTime}} hours
               </div>
               <div class="small text-muted mt-2">
                 Average time until a ticket receives its first response

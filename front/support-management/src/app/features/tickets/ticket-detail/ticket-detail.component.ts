@@ -32,6 +32,11 @@ export class TicketDetailComponent implements OnInit {
   uploadProgress = 0;
   isUploading = false;
   uploadError = '';
+  firstResponseTime: number | null = null;
+  resolutionTime: number | null = null;
+  customerSatisfaction: number | null = null;
+  selectedRating: number = 5;
+  isCustomer: boolean = false;
 
   constructor(
     private route: ActivatedRoute,
@@ -69,13 +74,17 @@ export class TicketDetailComponent implements OnInit {
   loadTicket(): void {
     this.isLoading = true;
     this.error = '';
-
     this.ticketService.getTicketById(this.ticketId).subscribe(
       response => {
         if (response.success && response.data) {
           this.ticket = response.data;
           this.loadComments();
           this.loadAttachments();
+          // Set isCustomer for all non-admin roles
+          const role = this.currentUser?.role;
+          this.isCustomer = role === 'user' || role === 'student' || role === 'partner';
+          // Fetch metrics
+          this.loadTicketMetrics(this.ticketId);
         } else {
           this.error = response.message || 'Failed to load ticket details';
         }
@@ -87,6 +96,14 @@ export class TicketDetailComponent implements OnInit {
         this.isLoading = false;
       }
     );
+  }
+
+  loadTicketMetrics(ticketId: number): void {
+    this.ticketService.getTicketMetrics(ticketId).subscribe(metrics => {
+      this.firstResponseTime = metrics.firstResponseTime;
+      this.resolutionTime = metrics.resolutionTime;
+      this.customerSatisfaction = metrics.customerSatisfaction;
+    });
   }
 
   loadComments(): void {
@@ -315,5 +332,12 @@ export class TicketDetailComponent implements OnInit {
         }
       });
     }
+  }
+
+  submitRating(): void {
+    if (!this.ticket || !this.ticket.id) return;
+    this.ticketService.rateTicket(this.ticket.id, this.selectedRating).subscribe(() => {
+      this.customerSatisfaction = this.selectedRating;
+    });
   }
 } 

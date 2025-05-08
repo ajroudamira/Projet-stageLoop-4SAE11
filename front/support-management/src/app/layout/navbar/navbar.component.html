@@ -22,15 +22,56 @@
             <i class="material-icons me-1">confirmation_number</i> Tickets
           </a>
         </li>
+        <li class="nav-item" *ngIf="isAdmin">
+          <a class="nav-link" [routerLink]="isAdmin ? '/admin/users' : '/users'" routerLinkActive="active">
+            <i class="material-icons me-1">people</i> Users
+          </a>
+        </li>
+        <li class="nav-item" *ngIf="isAdmin">
+          <a class="nav-link" [routerLink]="'/admin/partner-requests'" routerLinkActive="active">
+            <i class="material-icons me-1">business</i> Partner Requests
+          </a>
+        </li>
+        <li class="nav-item" *ngIf="isAdmin">
+          <a class="nav-link" [routerLink]="'/admin/student-requests'" routerLinkActive="active">
+            <i class="material-icons me-1">school</i> Student Requests
+          </a>
+        </li>
+        <li class="nav-item" *ngIf="isAdmin">
+          <a class="nav-link" [routerLink]="isAdmin ? '/admin/reports' : '/reports'" routerLinkActive="active">
+            <i class="material-icons me-1">analytics</i> Reports
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" [routerLink]="'/internships'" routerLinkActive="active">
+            <i class="material-icons me-1">work</i> Internships
+          </a>
+        </li>
         <ng-container *ngIf="isAdmin">
           <li class="nav-item">
-            <a class="nav-link" [routerLink]="'/admin/users'" routerLinkActive="active">
-              <i class="material-icons me-1">people</i> Users
+            <a class="nav-link" [routerLink]="'/admin/candidatures'" routerLinkActive="active">
+              <i class="material-icons me-1">description</i> Candidatures
             </a>
           </li>
+        </ng-container>
+        <ng-container *ngIf="isUser">
           <li class="nav-item">
-            <a class="nav-link" [routerLink]="'/admin/reports'" routerLinkActive="active">
-              <i class="material-icons me-1">analytics</i> Reports
+            <a class="nav-link" [routerLink]="'/role-upgrade'" routerLinkActive="active">
+              <i class="material-icons me-1">upgrade</i> Upgrade Role
+            </a>
+          </li>
+        </ng-container>
+        <ng-container *ngIf="isStudent">
+          <li class="nav-item">
+            <a class="nav-link" [routerLink]="'/student/candidatures'" routerLinkActive="active">
+              <i class="material-icons me-1">assignment</i> My Candidatures
+            </a>
+          </li>
+        </ng-container>
+        <ng-container *ngIf="isPartner">
+          <li class="nav-item">
+            <a class="nav-link" [routerLink]="'/partner/candidatures'" routerLinkActive="active">
+              <i class="material-icons me-1">assignment</i> My Candidatures
             </a>
           </li>
         </ng-container>

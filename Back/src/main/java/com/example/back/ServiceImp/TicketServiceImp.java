@@ -5,11 +5,14 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -534,50 +537,38 @@ public class TicketServiceImp implements TicketService {
 
     @Override
     public Map<String, Double> calculateResponseTimeMetrics() {
+        List<Ticket> allTickets = ticketRepository.findAll();
         List<Ticket> resolvedTickets = ticketRepository.findByStatus(TicketStatus.RESOLVED);
         List<Ticket> closedTickets = ticketRepository.findByStatus(TicketStatus.CLOSED);
-        
         // Combine resolved and closed tickets for metrics calculation
         List<Ticket> completedTickets = new ArrayList<>();
         completedTickets.addAll(resolvedTickets);
         completedTickets.addAll(closedTickets);
-        
-        if (completedTickets.isEmpty()) {
-            return Map.of(
-                "avgResponseTime", 0.0,
-                "avgResolutionTime", 0.0
-            );
-        }
-        
-        double totalResponseTime = 0;
-        double totalResolutionTime = 0;
-        int count = 0;
-        
-        for (Ticket ticket : completedTickets) {
-            // Calculate response time (time from creation to first admin comment)
-            LocalDateTime firstAdminCommentTime = ticket.getComments().stream()
-                .filter(comment -> "admin".equals(comment.getUser().getRole()))
+        double totalFirstResponseTime = 0;
+        int firstResponseCount = 0;
+        for (Ticket ticket : allTickets) {
+            Optional<LocalDateTime> firstAdminCommentTimeOpt = ticket.getComments().stream()
+                .filter(comment -> comment.getUser() != null && "admin".equalsIgnoreCase(comment.getUser().getRole()))
                 .map(Comment::getCreatedAt)
-                .min(LocalDateTime::compareTo)
-                .orElse(ticket.getResolvedAt());
-                
-            if (firstAdminCommentTime != null) {
-                long responseTimeHours = java.time.Duration.between(ticket.getCreatedAt(), firstAdminCommentTime).toHours();
-                totalResponseTime += responseTimeHours;
+                .min(LocalDateTime::compareTo);
+            if (firstAdminCommentTimeOpt.isPresent()) {
+                long responseTimeHours = java.time.Duration.between(ticket.getCreatedAt(), firstAdminCommentTimeOpt.get()).toHours();
+                totalFirstResponseTime += responseTimeHours;
+                firstResponseCount++;
             }
-            
-            // Calculate resolution time (time from creation to resolution)
+        }
+        double totalResolutionTime = 0;
+        int resolutionCount = 0;
+        for (Ticket ticket : completedTickets) {
             if (ticket.getResolvedAt() != null) {
                 long resolutionTimeHours = java.time.Duration.between(ticket.getCreatedAt(), ticket.getResolvedAt()).toHours();
                 totalResolutionTime += resolutionTimeHours;
-                count++;
+                resolutionCount++;
             }
         }
-        
         Map<String, Double> metrics = new HashMap<>();
-        metrics.put("avgResponseTime", count > 0 ? totalResponseTime / count : 0.0);
-        metrics.put("avgResolutionTime", count > 0 ? totalResolutionTime / count : 0.0);
-        
+        metrics.put("avgFirstResponseTime", firstResponseCount > 0 ? totalFirstResponseTime / firstResponseCount : 0.0);
+        metrics.put("avgResolutionTime", resolutionCount > 0 ? totalResolutionTime / resolutionCount : 0.0);
         return metrics;
     }
 }

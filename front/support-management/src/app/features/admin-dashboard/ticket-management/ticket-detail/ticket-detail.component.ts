@@ -7,13 +7,16 @@ import { CommentService } from '../../../../core/services/comment.service';
 import { AttachmentService } from '../../../../core/services/attachment.service';
 import { UserService } from '../../../../core/services/user.service';
 import { UserProfileService } from '../../../../core/services/user-profile.service';
+import { TicketManagerService } from '../../../../core/services/ticket-manager.service';
 import { Ticket, TicketStatus, TicketPriority } from '../../../../core/models/ticket.model';
 import { Comment } from '../../../../core/models/comment.model';
 import { Attachment } from '../../../../core/models/attachment.model';
 import { User } from '../../../../core/models/user.model';
+import { AdminRecommendation } from '../../../../core/models/admin-recommendation.model';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { TooltipPosition } from '@angular/material/tooltip';
 import { ApiResponse } from '../../../../core/models/api-response.model';
+import { ReportService } from '../../../../core/services/report.service';
 
 // For Modal handling
 declare var bootstrap: any;
@@ -70,6 +73,15 @@ export class TicketDetailComponent implements OnInit {
   currentUser: any = null;
   isTicketManager: boolean = false;
   
+  recommendations: AdminRecommendation[] = [];
+  loadingRecommendations = false;
+  
+  firstResponseTime: number | null = null;
+  resolutionTime: number | null = null;
+  customerSatisfaction: number | null = null;
+  selectedRating: number = 5;
+  isCustomer: boolean = false;
+  
   constructor(
     private route: ActivatedRoute,
     private router: Router,
@@ -78,7 +90,9 @@ export class TicketDetailComponent implements OnInit {
     private attachmentService: AttachmentService,
     private userService: UserService,
     private userProfileService: UserProfileService,
-    private fb: FormBuilder
+    private ticketManagerService: TicketManagerService,
+    private fb: FormBuilder,
+    private reportService: ReportService
   ) {
     this.commentForm = this.fb.group({
       content: ['', Validators.required],
@@ -121,6 +135,7 @@ export class TicketDetailComponent implements OnInit {
     }, 100);
 
     this.checkTicketManagerStatus();
+    this.loadTicketDetails();
   }
 
   loadTicket(ticketId: number): void {
@@ -131,6 +146,11 @@ export class TicketDetailComponent implements OnInit {
       next: (response) => {
         if (response.success && response.data) {
           this.ticket = response.data;
+          // Set isCustomer for all non-admin roles
+          const role = this.currentUser?.role;
+          this.isCustomer = role === 'user' || role === 'student' || role === 'partner';
+          // Fetch metrics
+          this.loadTicketMetrics(ticketId);
           
           // Initialize form values based on ticket
           this.statusForm.patchValue({ status: this.ticket.status });
@@ -154,6 +174,52 @@ export class TicketDetailComponent implements OnInit {
         console.error('Error loading ticket:', err);
         this.error = 'Failed to load ticket. Please try again.';
         this.isLoading = false;
+      }
+    });
+  }
+
+  loadTicketDetails(): void {
+    const id = this.route.snapshot.params['id'];
+    if (!id) return;
+
+    this.isLoading = true;
+    this.ticketService.getTicketById(id).pipe(
+      finalize(() => this.isLoading = false)
+    ).subscribe({
+      next: (response) => {
+        if (response.success && response.data) {
+          this.ticket = response.data;
+          this.loadRecommendations();
+        }
+      },
+      error: (error) => {
+        console.error('Error loading ticket:', error);
+      }
+    });
+  }
+
+  loadRecommendations(): void {
+    if (!this.ticket || !this.ticket.id) return;
+    
+    this.loadingRecommendations = true;
+    this.ticketService.getAdminRecommendations(this.ticket.id)
+      .pipe(
+        finalize(() => this.loadingRecommendations = false)
+      )
+      .subscribe({
+        next: (response) => {
+          if (response.success && response.data) {
+            this.recommendations = response.data
+              .filter((rec: any) => rec.exists)
+              .map((rec: any) => ({
+                adminId: rec.admin_id,
+                confidence: rec.confidence,
+                exists: rec.exists
+              }));
+          }
+        },
+        error: (error) => {
+          console.error('Error loading recommendations:', error);
       }
     });
   }
@@ -336,6 +402,8 @@ export class TicketDetailComponent implements OnInit {
           this.comments.unshift(response.data);
           // Reset the form
           this.commentForm.reset({ content: '', internal: false });
+          // Refresh metrics using the service
+          this.reportService.loadReportData().subscribe();
         } else {
           console.error('Failed to add comment:', response.message);
         }
@@ -495,28 +563,22 @@ export class TicketDetailComponent implements OnInit {
     });
   }
 
-  assignTicket(): void {
+  assignTicket(adminId: string): void {
     if (!this.ticket || !this.ticket.id) return;
     
     this.isAssigning = true;
-    const adminUsername = this.assignForm.value.assigneeId;
     
-    // The adminUsername is now directly the login value from the form
-    // No need to search for the admin user since we've changed the select value
-    
-    this.ticketService.assignTicket(this.ticket.id, adminUsername).pipe(
+    this.ticketService.assignTicket(this.ticket.id, adminId).pipe(
       finalize(() => {
         this.isAssigning = false;
-        // Close the modal
-        if (this.assignModal) {
-          this.assignModal.hide();
-        }
       })
     ).subscribe({
       next: (response) => {
         if (response.success && response.data) {
           // Update the ticket with the new assignee
           this.ticket = response.data;
+          // Clear recommendations since ticket is now assigned
+          this.recommendations = [];
         } else {
           console.error('Failed to assign ticket:', response.message);
         }
@@ -802,18 +864,19 @@ export class TicketDetailComponent implements OnInit {
   }
 
   private checkTicketManagerStatus() {
-    this.userService.findByIsTicketManager(true).subscribe({
-      next: (response: ApiResponse<User[]>) => {
+    this.ticketManagerService.getCurrentTicketManager().subscribe({
+      next: (response) => {
         if (response.success && response.data) {
-          const ticketManagers = response.data;
-          this.isTicketManager = ticketManagers.some(manager => manager.id_User === this.currentUser?.id_User);
+          const ticketManager = response.data;
+          if (this.currentUser) {
+            this.isTicketManager = this.currentUser.id_User === ticketManager.id_User;
+          }
         } else {
-          console.error('Failed to fetch ticket managers:', response.message);
           this.isTicketManager = false;
         }
       },
-      error: (error: Error) => {
-        console.error('Error fetching ticket managers:', error);
+      error: (error) => {
+        console.error('Error checking ticket manager status:', error);
         this.isTicketManager = false;
       }
     });
@@ -825,5 +888,20 @@ export class TicketDetailComponent implements OnInit {
 
   getDeleteButtonTooltip(): string {
     return this.isTicketManager ? 'Delete ticket' : 'Only ticket managers can delete tickets';
+  }
+
+  loadTicketMetrics(ticketId: number): void {
+    this.ticketService.getTicketMetrics(ticketId).subscribe(metrics => {
+      this.firstResponseTime = metrics.firstResponseTime;
+      this.resolutionTime = metrics.resolutionTime;
+      this.customerSatisfaction = metrics.customerSatisfaction;
+    });
+  }
+
+  submitRating(): void {
+    if (!this.ticket || !this.ticket.id) return;
+    this.ticketService.rateTicket(this.ticket.id, this.selectedRating).subscribe(() => {
+      this.customerSatisfaction = this.selectedRating;
+    });
   }
 } 

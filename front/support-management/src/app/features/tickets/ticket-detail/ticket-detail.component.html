@@ -190,6 +190,73 @@
       </div>
     </div>
 
+    <!-- Ticket Metrics for regular users -->
+    <div class="row mb-4">
+      <div class="col-md-8">
+        <div class="card mb-4">
+          <div class="card-header">
+            <h5 class="card-title mb-0">Ticket Metrics</h5>
+          </div>
+          <div class="card-body">
+            <div class="mb-3">
+              <div class="d-flex justify-content-between mb-1">
+                <span>Response Time</span>
+                <span>{{ firstResponseTime !== null ? firstResponseTime + ' hours' : 'Not yet responded' }}</span>
+              </div>
+              <div class="progress" style="height: 6px;">
+                <div class="progress-bar bg-success" role="progressbar" [style.width.%]="firstResponseTime ? 100 : 0"></div>
+              </div>
+            </div>
+            <div class="mb-3">
+              <div class="d-flex justify-content-between mb-1">
+                <span>Resolution Time</span>
+                <span>{{ resolutionTime !== null ? resolutionTime + ' hours' : 'Not yet resolved' }}</span>
+              </div>
+              <div class="progress" style="height: 6px;">
+                <div class="progress-bar bg-warning" role="progressbar" [style.width.%]="resolutionTime ? 100 : 0"></div>
+              </div>
+            </div>
+            <div class="mb-0">
+              <div class="d-flex justify-content-between mb-1">
+                <span>Customer Satisfaction</span>
+                <span>
+                  <ng-container *ngIf="customerSatisfaction !== null; else notRated">
+                    <ng-container *ngFor="let star of [1,2,3,4,5]">
+                      <i class="material-icons text-warning" [ngClass]="{'opacity-50': star > customerSatisfaction}">star</i>
+                    </ng-container>
+                    <span class="ms-2">{{ customerSatisfaction }}/5</span>
+                  </ng-container>
+                  <ng-template #notRated>Not rated</ng-template>
+                </span>
+              </div>
+              <div class="progress" style="height: 6px;">
+                <div class="progress-bar bg-info" role="progressbar" [style.width.%]="customerSatisfaction ? customerSatisfaction * 20 : 0"></div>
+              </div>
+              <!-- Advanced Star Rating UI -->
+              <div *ngIf="isCustomer && customerSatisfaction === null" class="mt-3">
+                <label class="me-2">Rate your experience:</label>
+                <span class="star-rating">
+                  <ng-container *ngFor="let star of [1,2,3,4,5]">
+                    <i class="material-icons"
+                       [ngClass]="{'text-warning': star <= selectedRating, 'text-secondary': star > selectedRating, 'star-hover': star <= selectedRating}"
+                       (mouseenter)="selectedRating = star"
+                       (mouseleave)="selectedRating = selectedRating"
+                       (click)="selectedRating = star">
+                      star
+                    </i>
+                  </ng-container>
+                </span>
+                <button class="btn btn-primary btn-sm ms-2" (click)="submitRating()">Submit</button>
+              </div>
+              <div *ngIf="isCustomer && customerSatisfaction !== null" class="mt-3 text-success">
+                Thank you for your feedback!
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
     <!-- Comments Section -->
     <div class="card mb-4">
       <div class="card-header">
@@ -295,4 +362,21 @@
       </div>
     </div>
   </div>
-</div> 
+</div>
+
+<style>
+.star-rating .material-icons {
+  cursor: pointer;
+  font-size: 2rem;
+  transition: color 0.2s;
+}
+.star-rating .material-icons.text-warning {
+  color: #ffc107 !important;
+}
+.star-rating .material-icons.text-secondary {
+  color: #e4e5e9 !important;
+}
+.star-rating .material-icons.star-hover {
+  filter: brightness(1.2);
+}
+</style> 

@@ -76,14 +76,74 @@ public class UserServiceImp implements UserService {
 
             // ✅ Send the update request to Keycloak
             keycloak.realm("constructionRealm").users().get(keycloakUserId).update(keycloakUser);
-            log.info("✅ User updated in Keycloak: " + updatedUser.getLogin());
+            log.info("✅ User basic info updated in Keycloak: " + updatedUser.getLogin());
+
+            // Get the old user data to check for role changes
+            User oldUser = userRepository.findByLogin(updatedUser.getLogin());
+            String oldRole = oldUser != null ? oldUser.getRole() : null;
+            String newRole = updatedUser.getRole();
+
+            // If role has changed, update it in Keycloak
+            if (oldRole != null && !oldRole.equals(newRole)) {
+                log.info("Role change detected: {} -> {}", oldRole, newRole);
+                
+                // Remove old role
+                List<RoleRepresentation> oldRoles = new ArrayList<>();
+                RoleRepresentation oldRoleRep = keycloak.realm("constructionRealm")
+                    .roles()
+                    .get(oldRole)
+                    .toRepresentation();
+                oldRoles.add(oldRoleRep);
+                
+                keycloak.realm("constructionRealm")
+                    .users()
+                    .get(keycloakUserId)
+                    .roles()
+                    .realmLevel()
+                    .remove(oldRoles);
+
+                // Add new role
+                List<RoleRepresentation> newRoles = new ArrayList<>();
+                RoleRepresentation newRoleRep = keycloak.realm("constructionRealm")
+                    .roles()
+                    .get(newRole)
+                    .toRepresentation();
+                newRoles.add(newRoleRep);
+                
+                keycloak.realm("constructionRealm")
+                    .users()
+                    .get(keycloakUserId)
+                    .roles()
+                    .realmLevel()
+                    .add(newRoles);
+
+                log.info("✅ User role updated in Keycloak for user: {}", updatedUser.getLogin());
+
+                // Notify admins about role change to student
+                if ("student".equalsIgnoreCase(newRole)) {
+                    List<User> admins = userRepository.findByRole("admin");
+                    String message = "User '" + updatedUser.getLogin() + "' has been updated to student role.";
+                    for (User admin : admins) {
+                        notificationService.createNotification(message, admin, "ROLE_UPDATE", null);
+                    }
+                }
+            }
 
             // ✅ After successful Keycloak update, update the database
             return userRepository.save(updatedUser);
         } catch (Exception e) {
-            log.error("❌ Failed to update user in Keycloak: " + e.getMessage());
-            throw new RuntimeException("Failed to update user in Keycloak");
+            log.error("❌ Failed to update user: " + e.getMessage());
+            throw new RuntimeException("Failed to update user: " + e.getMessage());
         }
+    }
+
+    @Override
+    public User UpdateUser(com.example.back.Entities.UserWrapper userWrapper) {
+        if (userWrapper == null || userWrapper.getUser() == null) {
+            throw new IllegalArgumentException("UserWrapper or contained User is null");
+        }
+        // Optionally, you can use keycloakUser from the wrapper if needed
+        return UpdateUser(userWrapper.getUser());
     }
 
     @Override
@@ -286,5 +346,10 @@ public class UserServiceImp implements UserService {
     @Override
     public User findByIsTicketManager(boolean isTicketManager) {
         return userRepository.findByIsTicketManager(isTicketManager);
+    }
+
+    @Override
+    public List<User> findByRole(String role) {
+        return userRepository.findByRole(role);
     }
 }

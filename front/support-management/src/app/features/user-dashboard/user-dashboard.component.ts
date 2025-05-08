@@ -97,4 +97,17 @@ export class UserDashboardComponent implements OnInit {
       this.loadUserTickets(this.currentUser.login);
     }
   }
+
+  get canAccessCandidatures(): boolean {
+    return this.currentUser?.role === 'student' || this.currentUser?.role === 'partner';
+  }
+
+  get candidaturesRoute(): string {
+    if (this.currentUser?.role === 'student') {
+      return '/student/candidatures';
+    } else if (this.currentUser?.role === 'partner') {
+      return '/partner/candidatures';
+    }
+    return '';
+  }
 } 

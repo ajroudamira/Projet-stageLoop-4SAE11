@@ -1,0 +1,164 @@
+<div class="internship-list-container">
+  <div class="header">
+    <h2>Internships</h2>
+    <button *ngIf="isAdmin || isPartner" mat-raised-button color="primary" (click)="createInternship()">
+      <mat-icon>add</mat-icon>
+      Create Internship
+    </button>
+  </div>
+
+  <!-- Type Filter Combobox for Students and Users -->
+  <div *ngIf="isStudent || isUser" class="search-bar-wrapper">
+    <mat-form-field appearance="outline" class="search-bar">
+      <mat-label>Filter by Type</mat-label>
+      <mat-select [(ngModel)]="selectedType" (selectionChange)="filterInternships()">
+        <mat-option value="">All Types</mat-option>
+        <mat-option *ngFor="let type of internshipTypes" [value]="type">{{ type }}</mat-option>
+      </mat-select>
+    </mat-form-field>
+  </div>
+
+  <!-- Statistics Section (only for admin and partner) -->
+  <div *ngIf="isAdmin || isPartner" class="statistics">
+    <mat-card class="stat-card total">
+      <mat-icon class="stat-icon total">dashboard</mat-icon>
+      <div class="stat-value">{{ filteredInternships.length }}</div>
+      <div class="stat-label">Total Internships</div>
+    </mat-card>
+    <mat-card class="stat-card internship">
+      <mat-icon class="stat-icon internship">work</mat-icon>
+      <div class="stat-value">{{ countByType('INTERNSHIP') }}</div>
+      <div class="stat-label">Internship</div>
+    </mat-card>
+    <mat-card class="stat-card end">
+      <mat-icon class="stat-icon end">school</mat-icon>
+      <div class="stat-value">{{ countByType('END_OF_STUDIES_PROJECT') }}</div>
+      <div class="stat-label">End of Studies</div>
+    </mat-card>
+    <mat-card class="stat-card research">
+      <mat-icon class="stat-icon research">science</mat-icon>
+      <div class="stat-value">{{ countByType('RESEARCH') }}</div>
+      <div class="stat-label">Research</div>
+    </mat-card>
+    <mat-card class="stat-card industrial">
+      <mat-icon class="stat-icon industrial">factory</mat-icon>
+      <div class="stat-value">{{ countByType('INDUSTRIAL') }}</div>
+      <div class="stat-label">Industrial</div>
+    </mat-card>
+  </div>
+  <div *ngIf="isAdmin || isPartner" class="statistics">
+    <mat-card class="stat-card status pending">
+      <mat-icon class="stat-icon pending">hourglass_empty</mat-icon>
+      <div class="stat-value">{{ countByStatus('PENDING') }}</div>
+      <div class="stat-label">Pending</div>
+    </mat-card>
+    <mat-card class="stat-card status approved">
+      <mat-icon class="stat-icon approved">check_circle</mat-icon>
+      <div class="stat-value">{{ countByStatus('APPROVED') }}</div>
+      <div class="stat-label">Approved</div>
+    </mat-card>
+    <mat-card class="stat-card status rejected">
+      <mat-icon class="stat-icon rejected">cancel</mat-icon>
+      <div class="stat-value">{{ countByStatus('REJECTED') }}</div>
+      <div class="stat-label">Rejected</div>
+    </mat-card>
+    <mat-card class="stat-card status in-progress">
+      <mat-icon class="stat-icon in-progress">autorenew</mat-icon>
+      <div class="stat-value">{{ countByStatus('IN_PROGRESS') }}</div>
+      <div class="stat-label">In Progress</div>
+    </mat-card>
+    <mat-card class="stat-card status completed">
+      <mat-icon class="stat-icon completed">done_all</mat-icon>
+      <div class="stat-value">{{ countByStatus('COMPLETED') }}</div>
+      <div class="stat-label">Completed</div>
+    </mat-card>
+  </div>
+
+  <!-- Search Bar -->
+  <div class="search-bar-wrapper">
+    <mat-form-field appearance="outline" class="search-bar">
+      <mat-icon matPrefix>search</mat-icon>
+      <input matInput [(ngModel)]="searchTerm" (ngModelChange)="filterInternships()" placeholder="Search by type, title, or skills...">
+      <button mat-icon-button matSuffix *ngIf="searchTerm" (click)="clearSearch()">
+        <mat-icon>close</mat-icon>
+      </button>
+    </mat-form-field>
+  </div>
+
+  <!-- Show upgrade message for user role -->
+  <div *ngIf="isUser" class="alert alert-info mt-3" style="max-width: 700px; margin: 0 auto 24px auto;">
+    <i class="material-icons me-2" style="vertical-align: middle;">info</i>
+    To access all features, please <b>upgrade your role</b> using the <b>Upgrade Role</b> button in the top menu. If you encounter any issues, you can <b>send us a support ticket</b>.
+  </div>
+
+  <div *ngIf="loading" class="loading">
+    <mat-spinner></mat-spinner>
+  </div>
+
+  <div *ngIf="error" class="error-message">
+    {{ error }}
+  </div>
+
+  <div *ngIf="!loading && !error" class="internship-grid">
+    <mat-card *ngFor="let internship of filteredInternships" class="internship-card fade-in" tabindex="0">
+      <div class="accent-bar" [ngClass]="internship.type && internship.type.toLowerCase()"></div>
+      <mat-card-header>
+        <mat-card-title class="card-title">{{ internship.title }}</mat-card-title>
+        <mat-card-subtitle>
+          <span [class]="getStatusClass(internship.status)">
+            <ng-container *ngIf="!isAdmin">
+              {{ internship.status }}
+            </ng-container>
+            <ng-container *ngIf="isAdmin">
+              <mat-form-field appearance="outline" class="status-dropdown">
+                <mat-select [value]="internship.status" (selectionChange)="updateInternshipStatus(internship, $event.value)">
+                  <mat-option *ngFor="let status of internshipStatuses" [value]="status">
+                    {{ status | titlecase }}
+                  </mat-option>
+                </mat-select>
+              </mat-form-field>
+            </ng-container>
+          </span>
+        </mat-card-subtitle>
+      </mat-card-header>
+
+      <mat-card-content>
+        <p class="description" [matTooltip]="internship.description">
+          {{ internship.description | slice:0:120 }}<span *ngIf="internship.description.length > 120">...</span>
+        </p>
+        <div class="details">
+          <p><strong>Type:</strong> {{ internship.type }}</p>
+          <p><strong>Start Date:</strong> {{ internship.startDate | date }}</p>
+          <p><strong>End Date:</strong> {{ internship.endDate | date }}</p>
+          <p><strong>Required Skills:</strong> {{ internship.requiredSkills }}</p>
+        </div>
+      </mat-card-content>
+
+      <mat-card-actions>
+        <button mat-stroked-button color="primary" (click)="viewInternship(internship.idInternship)">
+          <mat-icon>visibility</mat-icon>
+          View
+        </button>
+        <!-- Postulate button for students (enabled) -->
+        <button *ngIf="isStudent" mat-raised-button color="primary" (click)="openPostulateDialog(internship)">
+          <mat-icon>send</mat-icon>
+          Postulate
+        </button>
+        <!-- Postulate button for users (disabled) -->
+        <button *ngIf="isUser" mat-raised-button color="primary" disabled matTooltip="Upgrade your role to postulate">
+          <mat-icon>send</mat-icon>
+          Postulate
+        </button>
+        <!-- Update/Delete only for admin or partner -->
+        <button *ngIf="isAdmin || isPartner" mat-button color="accent" (click)="updateInternship(internship.idInternship)">
+          <mat-icon>edit</mat-icon>
+          Update
+        </button>
+        <button *ngIf="isAdmin || isPartner" mat-button color="warn" (click)="deleteInternship(internship.idInternship)">
+          <mat-icon>delete</mat-icon>
+          Delete
+        </button>
+      </mat-card-actions>
+    </mat-card>
+  </div>
+</div> 

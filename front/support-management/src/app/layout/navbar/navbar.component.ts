@@ -11,6 +11,9 @@ import { User } from '../../core/models/user.model';
 export class NavbarComponent implements OnInit {
   currentUser: User | null = null;
   isAdmin = false;
+  isPartner = false;
+  isUser = false;
+  isStudent = false;
 
   constructor(
     private userProfileService: UserProfileService,
@@ -21,12 +24,19 @@ export class NavbarComponent implements OnInit {
     this.userProfileService.currentUser$.subscribe(user => {
       this.currentUser = user;
       this.isAdmin = this.userProfileService.isAdmin();
+      this.isPartner = !!user && user.role === 'partner';
+      this.isUser = !!user && user.role === 'user';
+      this.isStudent = !!user && user.role === 'student';
     });
   }
 
   logout(): void {
     this.userProfileService.logout();
-    this.router.navigate(['/login']);
+    setTimeout(() => {
+      localStorage.clear();
+      sessionStorage.clear();
+      window.location.replace('http://localhost:8080/realms/constructionRealm/protocol/openid-connect/logout?redirect_uri=' + encodeURIComponent(window.location.origin));
+    }, 500);
   }
 
   navigateToDashboard(): void {

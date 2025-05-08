@@ -1,0 +1,70 @@
+<h2 mat-dialog-title>{{data.candidature ? 'Edit' : 'Add'}} Candidature</h2>
+
+<mat-dialog-content>
+  <form [formGroup]="candidatureForm" (ngSubmit)="onSubmit()">
+    <!-- Application Date -->
+    <mat-form-field class="full-width">
+      <mat-label>Application Date</mat-label>
+      <input matInput [value]="today" readonly>
+    </mat-form-field>
+
+    <!-- Status -->
+    <mat-form-field class="full-width">
+      <mat-label>Status</mat-label>
+      <input matInput [value]="'PENDING'" readonly>
+      <mat-hint>Initial status is always PENDING</mat-hint>
+    </mat-form-field>
+
+    <!-- Motivation Letter -->
+    <mat-form-field class="full-width">
+      <mat-label>Motivation Letter</mat-label>
+      <textarea matInput formControlName="motivationLetter" rows="6" 
+                placeholder="Write your motivation letter here..."></textarea>
+      <mat-error *ngIf="candidatureForm.get('motivationLetter')?.hasError('required')">
+        Motivation letter is required
+      </mat-error>
+      <mat-error *ngIf="candidatureForm.get('motivationLetter')?.hasError('minlength')">
+        Motivation letter must be at least 100 characters
+      </mat-error>
+      <mat-hint align="end">
+        {{candidatureForm.get('motivationLetter')?.value?.length || 0}}/100 characters minimum
+      </mat-hint>
+    </mat-form-field>
+
+    <!-- Expiration Date -->
+    <mat-form-field class="full-width">
+      <mat-label>Expiration Date</mat-label>
+      <input matInput type="date" formControlName="expirationDate" [min]="today">
+      <mat-hint>Optional: Set an expiration date for this candidature</mat-hint>
+    </mat-form-field>
+
+    <!-- CV Upload -->
+    <div class="file-upload-section">
+      <label class="file-upload-label">CV Upload (PDF, DOC, DOCX)</label>
+      <div class="file-input-container">
+        <button type="button" mat-stroked-button (click)="fileInput.click()">
+          <mat-icon>attach_file</mat-icon>
+          Choose File
+        </button>
+        <input #fileInput type="file" 
+               (change)="onFileSelected($event)" 
+               accept=".pdf,.doc,.docx"
+               style="display: none">
+        <span class="file-name" *ngIf="selectedFile">
+          {{selectedFile.name}}
+        </span>
+      </div>
+      <mat-hint>Upload your CV in PDF, DOC, or DOCX format</mat-hint>
+    </div>
+  </form>
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+  <button mat-button (click)="close()">Cancel</button>
+  <button mat-raised-button color="primary" 
+          (click)="onSubmit()" 
+          [disabled]="candidatureForm.invalid || isSubmitting">
+    <mat-icon>{{isSubmitting ? 'hourglass_empty' : 'save'}}</mat-icon>
+    {{isSubmitting ? 'Saving...' : 'Save'}}
+  </button>
+</mat-dialog-actions> 

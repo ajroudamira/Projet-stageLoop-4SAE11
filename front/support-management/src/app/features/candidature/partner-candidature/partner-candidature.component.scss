@@ -1,0 +1,131 @@
+.candidature-list-container {
+  max-width: 1200px;
+  margin: 40px auto;
+  padding: 0 16px;
+}
+
+.header {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  margin-bottom: 32px;
+}
+
+.loading-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 200px;
+}
+
+.candidature-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+  gap: 32px;
+}
+
+.candidature-card {
+  position: relative;
+  border-radius: 16px;
+  box-shadow: 0 2px 12px rgba(30, 64, 175, 0.08);
+  transition: box-shadow 0.2s, transform 0.2s;
+  overflow: hidden;
+  min-height: 220px;
+  background: #fff;
+  border: none;
+  margin-bottom: 0;
+}
+
+.candidature-card:hover {
+  box-shadow: 0 6px 24px rgba(30, 64, 175, 0.18);
+  transform: translateY(-4px) scale(1.01);
+}
+
+.fade-in {
+  animation: fadeIn 0.7s;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: none; }
+}
+
+.accent-bar {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 6px;
+  height: 100%;
+  border-radius: 6px 0 0 6px;
+}
+
+.accent-bar.pending { background: #1e40af; }
+.accent-bar.accepted { background: #16a34a; }
+.accent-bar.rejected { background: #dc2626; }
+.accent-bar.expired { background: #a16207; }
+
+.status-badge {
+  margin-left: 16px;
+  padding: 4px 12px;
+  border-radius: 8px;
+  color: #fff;
+  font-weight: bold;
+  font-size: 0.9em;
+  vertical-align: middle;
+}
+
+.status-badge.pending { background: #1e40af; }
+.status-badge.accepted { background: #16a34a; }
+.status-badge.rejected { background: #dc2626; }
+.status-badge.expired { background: #a16207; }
+
+.card-title {
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: #1e293b;
+}
+
+.internship-title {
+  display: flex;
+  align-items: center;
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: #1e40af;
+  margin-bottom: 4px;
+}
+
+.internship-icon {
+  font-size: 1.2rem;
+  margin-right: 6px;
+  color: #1e40af;
+}
+
+.description {
+  margin: 12px 0;
+  color: #334155;
+}
+
+.truncate {
+  display: inline-block;
+  max-width: 100%;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  vertical-align: bottom;
+}
+
+.cv-section {
+  margin: 10px 0;
+}
+
+mat-card-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+}
+
+.no-candidatures {
+  text-align: center;
+  color: #888;
+  margin-top: 40px;
+} 

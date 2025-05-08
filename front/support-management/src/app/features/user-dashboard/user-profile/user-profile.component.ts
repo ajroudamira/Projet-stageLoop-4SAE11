@@ -24,7 +24,10 @@ export class UserProfileComponent implements OnInit {
       lastName: ['', Validators.required],
       email: ['', [Validators.required, Validators.email]],
       num_tel: [''],
-      login: [{ value: '', disabled: true }]
+      login: [{ value: '', disabled: true }],
+      address: [''],
+      skills: [''],
+      businessSector: ['']
     });
   }
 
@@ -43,8 +46,24 @@ export class UserProfileComponent implements OnInit {
       lastName: user.lastName,
       email: user.email,
       num_tel: user.num_tel || '',
-      login: user.login
+      login: user.login,
+      address: user.address || '',
+      skills: user.skills || '',
+      businessSector: user.businessSector || ''
     });
+    if (user.role === 'student') {
+      this.profileForm.get('address')?.enable();
+      this.profileForm.get('skills')?.enable();
+      this.profileForm.get('businessSector')?.disable();
+    } else if (user.role === 'partner') {
+      this.profileForm.get('address')?.enable();
+      this.profileForm.get('businessSector')?.enable();
+      this.profileForm.get('skills')?.disable();
+    } else {
+      this.profileForm.get('address')?.disable();
+      this.profileForm.get('skills')?.disable();
+      this.profileForm.get('businessSector')?.disable();
+    }
   }
 
   updateProfile(): void {
@@ -67,7 +86,10 @@ export class UserProfileComponent implements OnInit {
       firstName: this.profileForm.value.firstName,
       lastName: this.profileForm.value.lastName,
       email: this.profileForm.value.email,
-      num_tel: this.profileForm.value.num_tel
+      num_tel: this.profileForm.value.num_tel,
+      address: this.profileForm.getRawValue().address,
+      skills: this.profileForm.getRawValue().skills,
+      businessSector: this.profileForm.getRawValue().businessSector
     };
 
     // Ensure the role remains unchanged

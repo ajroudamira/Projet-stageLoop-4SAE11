@@ -21,6 +21,9 @@ import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatBadgeModule } from '@angular/material/badge';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
+import { MatTooltipModule } from '@angular/material/tooltip';
+import { MatDatepickerModule } from '@angular/material/datepicker';
+import { MatNativeDateModule } from '@angular/material/core';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -32,29 +35,26 @@ import { SharedModule } from './shared/shared.module';
 
 // Chart.js imports
 import { NgChartsModule } from 'ng2-charts';
+import { CandidatureModule } from './features/candidature/candidature.module';
+import { InternshipListComponent } from './features/internships/internship-list/internship-list.component';
+import { InternshipFormComponent } from './features/internships/internship-form/internship-form.component';
+import { PartnerRequestModule } from './features/partner-request/partner-request.module';
+import { RoleUpgradeComponent } from './features/role-upgrade/role-upgrade.component';
 
 // Custom error handler class
-export class GlobalErrorHandler implements ErrorHandler {
+export class CustomErrorHandler {
   handleError(error: any): void {
-    // Log the error to console
-    console.error('Global error handler caught an error:', error);
-    
-    // You could also log to a monitoring service here
-    // e.g. Sentry, LogRocket, etc.
-    
-    // Prevent the app from crashing completely
-    if (error?.message) {
-      console.warn('Error message:', error.message);
-    }
-    
-    // Don't rethrow the error to keep the application running
+    console.error('An error occurred:', error);
   }
 }
 
 @NgModule({
   declarations: [
     AppComponent,
-    HomeComponent
+    HomeComponent,
+    InternshipListComponent,
+    InternshipFormComponent,
+    RoleUpgradeComponent
   ],
   imports: [
     BrowserModule,
@@ -80,6 +80,9 @@ export class GlobalErrorHandler implements ErrorHandler {
     MatProgressSpinnerModule,
     MatBadgeModule,
     MatSnackBarModule,
+    MatTooltipModule,
+    MatDatepickerModule,
+    MatNativeDateModule,
     // Custom Modules
     LayoutModule,
     SharedModule,
@@ -87,7 +90,9 @@ export class GlobalErrorHandler implements ErrorHandler {
       positionClass: 'toast-top-right',
       preventDuplicates: true,
       timeOut: 3000
-    })
+    }),
+    CandidatureModule,
+    PartnerRequestModule
   ],
   providers: [
     {
@@ -102,9 +107,9 @@ export class GlobalErrorHandler implements ErrorHandler {
       multi: true
     },
     {
-      provide: ErrorHandler,
-      useClass: GlobalErrorHandler
-    }
+      provide: CustomErrorHandler,
+      useClass: CustomErrorHandler
+    },
   ],
   bootstrap: [AppComponent]
 })

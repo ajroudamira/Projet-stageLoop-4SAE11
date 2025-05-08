@@ -92,6 +92,9 @@ public class Ticket {
     @Column(name = "internship_id")
     Long internshipId; // For linking tickets to specific internships
 
+    @Column(name = "customer_satisfaction")
+    private Integer customerSatisfaction;
+
     @PrePersist
     protected void onCreate() {
         createdAt = LocalDateTime.now();
@@ -210,5 +213,13 @@ public class Ticket {
 
     public void setInternshipId(Long internshipId) {
         this.internshipId = internshipId;
+    }
+
+    public Integer getCustomerSatisfaction() {
+        return customerSatisfaction;
+    }
+
+    public void setCustomerSatisfaction(Integer rating) {
+        this.customerSatisfaction = rating;
     }
 }

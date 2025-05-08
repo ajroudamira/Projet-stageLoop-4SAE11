@@ -1,0 +1,120 @@
+<h2 mat-dialog-title>Partner Request Form</h2>
+<mat-dialog-content style="max-height: 65vh; overflow: auto; padding: 0 8px;">
+  <div *ngIf="hasPendingRequest" class="alert alert-info mb-3">
+    <i class="material-icons me-2">info</i>
+    You already have a pending partner request. Please wait for admin approval.
+  </div>
+  <form [formGroup]="partnerForm" (ngSubmit)="submit()" [class.disabled-form]="hasPendingRequest">
+    <div class="mb-3">
+      <label class="form-label">Company Name</label>
+      <input class="form-control" formControlName="companyName" />
+      <div *ngIf="partnerForm.get('companyName')?.invalid && partnerForm.get('companyName')?.touched" class="text-danger">
+        Company name is required (min 2 chars)
+      </div>
+    </div>
+    <div class="mb-3">
+      <label class="form-label">Business Sector</label>
+      <input class="form-control" formControlName="businessSector" />
+      <div *ngIf="partnerForm.get('businessSector')?.invalid && partnerForm.get('businessSector')?.touched" class="text-danger">
+        Business sector is required
+      </div>
+    </div>
+    <div class="mb-3">
+      <label class="form-label">Company Size</label>
+      <select class="form-control" formControlName="companySize">
+        <option value="" disabled selected>Select size</option>
+        <option value="1-10">1-10</option>
+        <option value="11-50">11-50</option>
+        <option value="51-200">51-200</option>
+        <option value="201-500">201-500</option>
+        <option value="500+">500+</option>
+      </select>
+      <div *ngIf="partnerForm.get('companySize')?.invalid && partnerForm.get('companySize')?.touched" class="text-danger">
+        Company size is required
+      </div>
+    </div>
+    <div class="mb-3">
+      <label class="form-label">Years in Business</label>
+      <input type="number" class="form-control" formControlName="yearsInBusiness" />
+      <div *ngIf="partnerForm.get('yearsInBusiness')?.invalid && partnerForm.get('yearsInBusiness')?.touched" class="text-danger">
+        Years in business is required
+      </div>
+    </div>
+    <div class="mb-3">
+      <label class="form-label">Business Email</label>
+      <input type="email" class="form-control" formControlName="businessEmail" />
+      <div *ngIf="partnerForm.get('businessEmail')?.invalid && partnerForm.get('businessEmail')?.touched" class="text-danger">
+        Valid business email is required
+      </div>
+    </div>
+    <div class="mb-3">
+      <label class="form-label">Business Phone</label>
+      <input class="form-control" formControlName="businessPhone" />
+      <div *ngIf="partnerForm.get('businessPhone')?.invalid && partnerForm.get('businessPhone')?.touched" class="text-danger">
+        Valid phone number is required
+      </div>
+    </div>
+    <div class="mb-3">
+      <label class="form-label">Business Address</label>
+      <input class="form-control" formControlName="businessAddress" />
+      <div *ngIf="partnerForm.get('businessAddress')?.invalid && partnerForm.get('businessAddress')?.touched" class="text-danger">
+        Business address is required
+      </div>
+    </div>
+    <div class="mb-3">
+      <label class="form-label">Company Description</label>
+      <textarea class="form-control" formControlName="companyDescription"></textarea>
+      <div *ngIf="partnerForm.get('companyDescription')?.invalid && partnerForm.get('companyDescription')?.touched" class="text-danger">
+        Description is required (min 50 chars)
+      </div>
+    </div>
+    <div class="mb-3">
+      <label class="form-label">Website</label>
+      <input class="form-control" formControlName="website" />
+    </div>
+    <div class="mb-3">
+      <label class="form-label">LinkedIn Profile</label>
+      <input class="form-control" formControlName="linkedinProfile" />
+    </div>
+    <div class="mb-3">
+      <label class="form-label">Internship Positions</label>
+      <select class="form-control" formControlName="internshipPositions">
+        <option value="" disabled selected>Select number</option>
+        <option value="1..10">1..10</option>
+        <option value="10..25">10..25</option>
+        <option value="25..50">25..50</option>
+        <option value="more">more</option>
+      </select>
+      <div *ngIf="partnerForm.get('internshipPositions')?.invalid && partnerForm.get('internshipPositions')?.touched" class="text-danger">
+        Internship positions are required
+      </div>
+    </div>
+    <div class="mb-3">
+      <label class="form-label">Internship Types</label>
+      <select class="form-control" formControlName="internshipTypes">
+        <option value="" disabled selected>Select type</option>
+        <option value="Summer">Summer</option>
+        <option value="Winter">Winter</option>
+        <option value="Part-time">Part-time</option>
+        <option value="Full-time">Full-time</option>
+      </select>
+      <div *ngIf="partnerForm.get('internshipTypes')?.invalid && partnerForm.get('internshipTypes')?.touched" class="text-danger">
+        Internship types are required
+      </div>
+    </div>
+    <div class="mb-3">
+      <label class="form-label">Motivation</label>
+      <textarea class="form-control" formControlName="motivation"></textarea>
+      <div *ngIf="partnerForm.get('motivation')?.invalid && partnerForm.get('motivation')?.touched" class="text-danger">
+        Motivation is required (min 10 chars)
+      </div>
+    </div>
+    <mat-dialog-actions align="end" class="d-flex justify-content-end gap-2">
+      <button type="button" class="btn btn-secondary" (click)="close()">Cancel</button>
+      <button type="submit" class="btn btn-primary" [disabled]="partnerForm.invalid || isSubmitting || hasPendingRequest">
+        <span *ngIf="isSubmitting" class="spinner-border spinner-border-sm me-2"></span>
+        Submit
+      </button>
+    </mat-dialog-actions>
+  </form>
+</mat-dialog-content> 

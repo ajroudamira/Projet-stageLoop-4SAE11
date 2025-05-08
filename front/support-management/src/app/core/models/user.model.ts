@@ -9,4 +9,7 @@ export interface User {
   num_tel?: string;
   imageUrl?: string;
   isTicketManager?: boolean;  // Added for ticket manager functionality
+  address?: string;
+  skills?: string;
+  businessSector?: string;
 } 

@@ -1,0 +1,20 @@
+.full-width {
+  width: 100%;
+  margin-bottom: 20px;
+}
+
+.file-upload {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 20px;
+
+  .file-name {
+    color: #666;
+  }
+}
+
+mat-dialog-actions {
+  padding: 20px 0 0;
+  margin: 0;
+} 

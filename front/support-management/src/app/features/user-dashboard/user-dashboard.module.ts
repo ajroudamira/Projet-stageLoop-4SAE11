@@ -12,6 +12,7 @@ import { MatPaginatorModule } from '@angular/material/paginator';
 import { MatSortModule } from '@angular/material/sort';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatBadgeModule } from '@angular/material/badge';
+import { MatTooltipModule } from '@angular/material/tooltip';
 
 import { LayoutModule } from '../../layout/layout.module';
 import { UserDashboardComponent } from './user-dashboard.component';
@@ -60,6 +61,7 @@ const routes: Routes = [
     MatSortModule,
     MatProgressSpinnerModule,
     MatBadgeModule,
+    MatTooltipModule,
     // Custom
     LayoutModule
   ]

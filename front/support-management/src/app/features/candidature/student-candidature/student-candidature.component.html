@@ -1,0 +1,61 @@
+<div class="candidature-list-container">
+  <div class="header">
+    <h2>My Candidatures</h2>
+  </div>
+
+  <div class="loading-container" *ngIf="loading">
+    <mat-spinner></mat-spinner>
+  </div>
+
+  <div *ngIf="!loading" class="candidature-grid">
+    <mat-card *ngFor="let candidature of candidatures" class="candidature-card fade-in" tabindex="0">
+      <div class="accent-bar" [ngClass]="getStatusClass(candidature.status)"></div>
+      <mat-card-header>
+        <mat-card-title class="card-title">
+          <div *ngIf="candidature.internship" class="internship-title">
+            <mat-icon class="internship-icon">work</mat-icon>
+            {{candidature.internship.title}}
+            <button mat-icon-button color="primary" (click)="viewInternship(candidature.internship.idInternship)" matTooltip="View Internship" style="margin-left: 6px;">
+              <mat-icon>visibility</mat-icon>
+            </button>
+          </div>
+          Candidature #{{candidature.id}}
+          <span class="status-badge" [ngClass]="getStatusClass(candidature.status)">
+            {{candidature.status}}
+          </span>
+        </mat-card-title>
+        <mat-card-subtitle>
+          <div>Application Date: {{candidature.applicationDate | date:'mediumDate'}}</div>
+          <div *ngIf="candidature.expirationDate">Expires: {{candidature.expirationDate | date:'mediumDate'}}</div>
+        </mat-card-subtitle>
+      </mat-card-header>
+
+      <mat-card-content>
+        <p class="description"><strong>Motivation Letter:</strong>
+          <span [matTooltip]="candidature.motivationLetter" class="truncate">
+            {{candidature.motivationLetter | slice:0:120}}{{candidature.motivationLetter.length > 120 ? '...' : ''}}
+          </span>
+        </p>
+        <div *ngIf="candidature.cvUrl" class="cv-section">
+          <strong>CV:</strong>
+          <a [href]="getCvDownloadUrl(candidature.cvUrl)" target="_blank" mat-button color="primary">
+            <mat-icon>file_download</mat-icon> Download CV
+          </a>
+        </div>
+      </mat-card-content>
+
+      <mat-card-actions>
+        <button mat-stroked-button color="accent" (click)="editCandidature(candidature)">
+          <mat-icon>edit</mat-icon> Edit
+        </button>
+        <button mat-stroked-button color="warn" (click)="deleteCandidature(candidature.id!)">
+          <mat-icon>delete</mat-icon> Delete
+        </button>
+      </mat-card-actions>
+    </mat-card>
+
+    <div class="no-candidatures" *ngIf="candidatures.length === 0">
+      <p>You haven't submitted any candidatures yet.</p>
+    </div>
+  </div>
+</div> 

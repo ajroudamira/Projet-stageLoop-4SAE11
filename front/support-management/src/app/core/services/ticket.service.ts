@@ -5,6 +5,7 @@ import { ApiService } from './api.service';
 import { Ticket } from '../models/ticket.model';
 import { ApiResponse } from '../models/api-response.model';
 import { catchError } from 'rxjs/operators';
+import { AdminRecommendation } from '../models/admin-recommendation.model';
 
 @Injectable({
   providedIn: 'root'
@@ -208,5 +209,33 @@ export class TicketService {
           return of({ success: false, message: 'Failed to fetch response time metrics', data: null });
         })
       );
+  }
+
+  getAdminRecommendations(ticketId: number): Observable<ApiResponse<AdminRecommendation[]>> {
+    return this.apiService.get<AdminRecommendation[]>(`${this.path}/${ticketId}/recommendations`)
+      .pipe(
+        catchError(error => {
+          console.error(`Error getting recommendations for ticket #${ticketId}:`, error);
+          return of({ success: false, message: 'Failed to get recommendations', data: [] });
+        })
+      );
+  }
+
+  getTicketMetrics(ticketId: number): Observable<any> {
+    return this.apiService.get<any>(`${this.path}/${ticketId}/metrics`).pipe(
+      catchError(error => {
+        console.error(`Error fetching metrics for ticket #${ticketId}:`, error);
+        return of({ success: false, message: 'Failed to fetch ticket metrics', data: null });
+      })
+    );
+  }
+
+  rateTicket(ticketId: number, rating: number): Observable<any> {
+    return this.apiService.post<any>(`${this.path}/${ticketId}/rate?rating=${rating}`, null).pipe(
+      catchError(error => {
+        console.error(`Error rating ticket #${ticketId}:`, error);
+        return of({ success: false, message: 'Failed to rate ticket', data: null });
+      })
+    );
   }
 } 

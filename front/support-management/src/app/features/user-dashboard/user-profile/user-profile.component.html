@@ -66,6 +66,28 @@
               <small class="form-text text-muted">Role cannot be changed</small>
             </div>
 
+            <div *ngIf="currentUser?.role === 'student'">
+              <div class="mb-3">
+                <label for="address" class="form-label">Address</label>
+                <input type="text" class="form-control" id="address" formControlName="address">
+              </div>
+              <div class="mb-3">
+                <label for="skills" class="form-label">Skills</label>
+                <input type="text" class="form-control" id="skills" formControlName="skills">
+                <small class="form-text text-muted">Comma-separated (e.g. Java, Angular, SQL)</small>
+              </div>
+            </div>
+            <div *ngIf="currentUser?.role === 'partner'">
+              <div class="mb-3">
+                <label for="address" class="form-label">Address</label>
+                <input type="text" class="form-control" id="address" formControlName="address">
+              </div>
+              <div class="mb-3">
+                <label for="businessSector" class="form-label">Business Sector</label>
+                <input type="text" class="form-control" id="businessSector" formControlName="businessSector">
+              </div>
+            </div>
+
             <div class="d-grid gap-2 d-md-flex justify-content-md-end">
               <a routerLink="/user" class="btn btn-outline-secondary me-2">Back to Dashboard</a>
               <button type="submit" class="btn btn-primary" [disabled]="profileForm.invalid || isUpdatingProfile">

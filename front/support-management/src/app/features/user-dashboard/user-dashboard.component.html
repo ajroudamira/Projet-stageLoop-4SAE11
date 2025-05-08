@@ -8,6 +8,12 @@
       <button class="btn btn-primary me-2" (click)="createNewTicket()">
         <i class="material-icons me-1">add</i> New Ticket
       </button>
+      <button class="btn btn-primary me-2"
+              [routerLink]="[candidaturesRoute]"
+              [disabled]="!canAccessCandidatures"
+              [matTooltip]="!canAccessCandidatures ? 'Only available for students and partners' : ''">
+        <i class="material-icons me-1">description</i> My Candidatures
+      </button>
       <button class="btn btn-outline-secondary" (click)="refreshDashboard()">
         <i class="material-icons me-1">refresh</i> Refresh
       </button>
@@ -21,6 +27,12 @@
     <div class="spinner-border text-primary" role="status">
       <span class="visually-hidden">Loading...</span>
     </div>
+  </div>
+
+  <!-- Show upgrade message for user role -->
+  <div *ngIf="currentUser?.role === 'user'" class="alert alert-info mt-3" style="max-width: 700px; margin: 0 auto 24px auto;">
+    <i class="material-icons me-2" style="vertical-align: middle;">info</i>
+    To access all features, please <b>upgrade your role</b> using the <b>Upgrade Role</b> button in the top menu. If you encounter any issues, you can <b>send us a support ticket</b>.
   </div>
 
   <div *ngIf="!isLoading" class="row mb-4">

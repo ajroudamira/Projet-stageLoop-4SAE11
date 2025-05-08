@@ -3,6 +3,7 @@ import { TicketService } from '../../../core/services/ticket.service';
 import { UserService } from '../../../core/services/user.service';
 import { Chart, ChartConfiguration, ChartEvent, ChartData } from 'chart.js';
 import { BaseChartDirective } from 'ng2-charts';
+import { ReportService } from '../../../core/services/report.service';
 
 @Component({
   selector: 'app-reports',
@@ -19,7 +20,7 @@ export class ReportsComponent implements OnInit {
   error = '';
 
   // Response time metrics
-  avgResponseTime = 0;
+  avgFirstResponseTime = 0;
   avgResolutionTime = 0;
 
   // Pie chart for status distribution
@@ -74,9 +75,12 @@ export class ReportsComponent implements OnInit {
     }
   };
 
+  avgCustomerSatisfaction = 0;
+
   constructor(
     private ticketService: TicketService,
-    private userService: UserService
+    private userService: UserService,
+    private reportService: ReportService
   ) { }
 
   ngOnInit(): void {
@@ -86,85 +90,28 @@ export class ReportsComponent implements OnInit {
   loadReportData(): void {
     this.isLoading = true;
     this.error = '';
-
-    // Set default empty data structures
     this.ticketAnalytics = {};
     this.ticketsByStatus = {};
     this.ticketsByPriority = {};
-
-    // Use a counter to track when all requests are complete
-    let completedRequests = 0;
-    const totalRequests = 4; // Analytics, Status, Priority, Response Times
-    
-    const markRequestComplete = () => {
-      completedRequests++;
-      if (completedRequests >= totalRequests) {
+    this.reportService.loadReportData().subscribe({
+      next: (data) => {
+        this.ticketAnalytics = data.ticketAnalytics;
+        this.ticketsByStatus = data.ticketsByStatus;
+        this.ticketsByPriority = data.ticketsByPriority;
+        this.avgFirstResponseTime = Math.round(data.responseTimes.avgFirstResponseTime);
+        this.avgResolutionTime = Math.round(data.responseTimes.avgResolutionTime);
+        this.updateStatusChart();
+        this.updatePriorityChart();
+        this.reportService.getAverageCustomerSatisfaction().subscribe(avg => {
+          this.avgCustomerSatisfaction = avg;
+          this.isLoading = false;
+        });
+      },
+      error: (error) => {
+        this.error = 'Failed to load report data.';
         this.isLoading = false;
       }
-    };
-
-    // Load ticket analytics
-    this.ticketService.getAllTickets().subscribe({
-      next: response => {
-        if (response.success) {
-          this.ticketAnalytics = response.data || {};
-        } else {
-          console.warn('Ticket analytics response not successful:', response.message);
-        }
-        markRequestComplete();
-      },
-      error: error => {
-        console.error('Error loading ticket analytics:', error);
-        this.error = 'Failed to load ticket analytics.';
-        markRequestComplete();
-      }
     });
-
-    // Load tickets by status
-    this.ticketService.getTicketsByStatusForAdmin().subscribe({
-      next: response => {
-        if (response.success) {
-          this.ticketsByStatus = response.data || {};
-          this.updateStatusChart();
-        } else {
-          console.warn('Tickets by status response not successful:', response.message);
-        }
-        markRequestComplete();
-      },
-      error: error => {
-        console.error('Error loading tickets by status:', error);
-        markRequestComplete();
-      }
-    });
-
-    // Load tickets by priority
-    this.ticketService.getTicketsByPriorityForAdmin().subscribe({
-      next: response => {
-        if (response.success) {
-          this.ticketsByPriority = response.data || {};
-          this.updatePriorityChart();
-        } else {
-          console.warn('Tickets by priority response not successful:', response.message);
-        }
-        markRequestComplete();
-      },
-      error: error => {
-        console.error('Error loading tickets by priority:', error);
-        markRequestComplete();
-      }
-    });
-
-    // Load response time metrics
-    this.calculateResponseTimeMetrics();
-    markRequestComplete();
-
-    // Add a safety timeout to ensure loading state always completes
-    setTimeout(() => {
-      if (this.isLoading) {
-        console.warn('Forcing loading state to complete after timeout');
-        this.isLoading = false;
-      }
-    }, 5000);
   }
 
   updateStatusChart(): void {
@@ -189,26 +136,5 @@ export class ReportsComponent implements OnInit {
         this.ticketsByPriority.CRITICAL || 0
       ];
     }
-  }
-
-  calculateResponseTimeMetrics(): void {
-    this.ticketService.getResponseTimeMetrics().subscribe({
-      next: (response: { success: boolean; message?: string; data?: { avgResponseTime: number; avgResolutionTime: number } }) => {
-        if (response.success && response.data) {
-          const metrics = response.data;
-          this.avgResponseTime = Math.round(metrics.avgResponseTime);
-          this.avgResolutionTime = Math.round(metrics.avgResolutionTime);
-        } else {
-          console.error('Failed to fetch response time metrics:', response.message);
-          this.avgResponseTime = 0;
-          this.avgResolutionTime = 0;
-        }
-      },
-      error: (error: Error) => {
-        console.error('Error fetching response time metrics:', error);
-        this.avgResponseTime = 0;
-        this.avgResolutionTime = 0;
-      }
-    });
   }
 } 

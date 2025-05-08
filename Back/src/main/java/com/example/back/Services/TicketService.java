@@ -11,6 +11,7 @@ import com.example.back.Entities.Enums.TicketPriority;
 import com.example.back.Entities.Enums.TicketStatus;
 import com.example.back.Entities.Ticket;
 import com.example.back.Entities.User;
+import com.example.back.Entities.Comment;
 
 public interface TicketService {
     Ticket createTicket(Ticket ticket);
